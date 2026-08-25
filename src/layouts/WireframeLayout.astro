@@ -1,0 +1,38 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const navigation = [
+  { label: 'ホーム', href: '/' },
+  { label: 'ニュース', href: '/news/' },
+  { label: 'チーム', href: '/team/' },
+  { label: 'マシン', href: '/machine/' },
+  { label: 'スポンサー', href: '/sponsors/' },
+];
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={`WFP ウェブサイト構成案：${title}`} />
+    <title>{title} | WFP 構成案</title>
+  </head>
+  <body>
+    <header>
+      <a href="/">WFP</a>
+      <nav aria-label="メインナビゲーション">
+        {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

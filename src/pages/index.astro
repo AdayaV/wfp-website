@@ -1,0 +1,18 @@
+---
+import WireframeLayout from '../layouts/WireframeLayout.astro';
+
+const pages = [
+  { label: 'ニュース', href: '/news/' },
+  { label: 'チーム', href: '/team/' },
+  { label: 'マシン', href: '/machine/' },
+  { label: 'スポンサー', href: '/sponsors/' },
+];
+---
+
+<WireframeLayout title="ホーム">
+  <h1>ホーム</h1>
+  <p>ページ一覧</p>
+  <ul>
+    {pages.map((page) => <li><a class="button" href={page.href}>{page.label}</a></li>)}
+  </ul>
+</WireframeLayout>
