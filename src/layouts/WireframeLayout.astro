@@ -6,13 +6,14 @@ interface Props {
 }
 
 const { title } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 const navigation = [
-  { label: 'ホーム', href: '/' },
-  { label: 'ニュース', href: '/news/' },
-  { label: 'チーム', href: '/team/' },
-  { label: 'マシン', href: '/machine/' },
-  { label: 'スポンサー', href: '/sponsors/' },
+  { label: 'ホーム', href: base },
+  { label: 'ニュース', href: `${base}news/` },
+  { label: 'チーム', href: `${base}team/` },
+  { label: 'マシン', href: `${base}machine/` },
+  { label: 'スポンサー', href: `${base}sponsors/` },
 ];
 ---
 
@@ -26,7 +27,7 @@ const navigation = [
   </head>
   <body>
     <header>
-      <a href="/">WFP</a>
+      <a href={base}>WFP</a>
       <nav aria-label="メインナビゲーション">
         {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
       </nav>
