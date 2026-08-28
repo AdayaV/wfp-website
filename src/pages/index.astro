@@ -72,7 +72,17 @@ const events = [
         cards[currentIndex]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
       };
 
-      requestAnimationFrame(() => requestAnimationFrame(() => showCard(currentIndex, 'auto')));
+      const centerInitialCard = () => {
+        const card = cards[currentIndex];
+        if (!(card instanceof HTMLElement)) return;
+        carousel.scrollLeft = card.offsetLeft - (carousel.clientWidth - card.clientWidth) / 2;
+      };
+
+      if (document.readyState === 'complete') {
+        requestAnimationFrame(centerInitialCard);
+      } else {
+        window.addEventListener('load', () => requestAnimationFrame(centerInitialCard), { once: true });
+      }
 
       controls.forEach((control) => {
         control.addEventListener('click', () => {
