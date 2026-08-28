@@ -3,10 +3,10 @@ import WireframeLayout from '../layouts/WireframeLayout.astro';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
 const stories = [
-  { category: 'NEWS', title: 'トップニュースの見出しを掲載予定です。', href: siteRoot + 'news/' },
-  { category: 'TEST', title: 'テスト走行の記録を掲載予定です。', href: siteRoot + 'news/' },
-  { category: 'MACHINE', title: 'マシン開発の進捗を掲載予定です。', href: siteRoot + 'machine/' },
-  { category: 'TEAM', title: 'チームの活動を掲載予定です。', href: siteRoot + 'team/' },
+  { title: 'ニュース記事 01', href: siteRoot + 'news/' },
+  { title: 'ニュース記事 02', href: siteRoot + 'news/' },
+  { title: 'ニュース記事 03', href: siteRoot + 'news/' },
+  { title: 'ニュース記事 04', href: siteRoot + 'news/' },
 ];
 ---
 
@@ -16,7 +16,7 @@ const stories = [
       <span>FEATURE IMAGE</span>
     </div>
     <div class="news-hero-content">
-      <p class="section-label">{stories[0].category}</p>
+      <p class="section-label">LATEST NEWS</p>
       <h1>{stories[0].title}</h1>
       <a class="button button-light" href={stories[0].href}>ニュースを見る</a>
     </div>
@@ -25,7 +25,7 @@ const stories = [
         <li>
           <a href={story.href}>
             <span>0{index + 1}</span>
-            <p class="section-label">{story.category}</p>
+            <p class="section-label">NEWS</p>
             <strong>{story.title}</strong>
           </a>
         </li>
