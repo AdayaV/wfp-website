@@ -2,43 +2,47 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
-const updates = [
-  { label: 'ニュース', text: '最新の活動記録', href: siteRoot + 'news/' },
-  { label: 'マシン', text: '車両開発と設計', href: siteRoot + 'machine/' },
-  { label: 'チーム', text: 'メンバーとチームづくり', href: siteRoot + 'team/' },
+const stories = [
+  { category: 'NEWS', title: 'トップニュースの見出しを掲載予定です。', href: siteRoot + 'news/' },
+  { category: 'TEST', title: 'テスト走行の記録を掲載予定です。', href: siteRoot + 'news/' },
+  { category: 'MACHINE', title: 'マシン開発の進捗を掲載予定です。', href: siteRoot + 'machine/' },
+  { category: 'TEAM', title: 'チームの活動を掲載予定です。', href: siteRoot + 'team/' },
 ];
 ---
 
 <WireframeLayout title="ホーム">
-  <section class="home-feature">
-    <p class="section-label">FEATURED</p>
-    <h1>Waseda Formula Project</h1>
-    <p class="home-lead">学生フォーミュラに挑戦する、早稲田大学の学生チームです。</p>
-    <a class="button" href={siteRoot + 'machine/'}>マシンを見る</a>
-  </section>
-
-  <section class="home-section">
-    <div class="section-heading">
-      <p class="section-label">UPDATES</p>
-      <h2>プロジェクト</h2>
+  <section class="news-hero">
+    <div class="news-hero-media" aria-hidden="true">
+      <span>FEATURE IMAGE</span>
     </div>
-    <div class="home-grid">
-      {updates.map((item) => (
-        <a class="home-card" href={item.href}>
-          <p class="section-label">{item.label}</p>
-          <h3>{item.text}</h3>
-          <span>見る →</span>
-        </a>
+    <div class="news-hero-content">
+      <p class="section-label">{stories[0].category}</p>
+      <h1>{stories[0].title}</h1>
+      <a class="button button-light" href={stories[0].href}>ニュースを見る</a>
+    </div>
+    <ol class="story-selector">
+      {stories.map((story, index) => (
+        <li>
+          <a href={story.href}>
+            <span>0{index + 1}</span>
+            <p class="section-label">{story.category}</p>
+            <strong>{story.title}</strong>
+          </a>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
 
-  <section class="home-section home-next">
+  <section class="up-next">
     <div class="section-heading">
       <p class="section-label">UP NEXT</p>
-      <h2>FSAEJ までのロードマップ</h2>
+      <h2>FSAEJ に向けた予定</h2>
     </div>
-    <p>テスト走行、マシンのチェックポイント、大会までの予定をまとめます。</p>
+    <div class="schedule-preview">
+      <div><span>TBD</span><strong>TEST RUN</strong></div>
+      <div><span>TBD</span><strong>MACHINE CHECKPOINT</strong></div>
+      <div><span>TBD</span><strong>FSAEJ</strong></div>
+    </div>
     <a class="button" href={siteRoot + 'schedule/'}>スケジュールを見る</a>
   </section>
 </WireframeLayout>
