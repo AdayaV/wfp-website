@@ -20,9 +20,7 @@ const events = [
 
 <WireframeLayout title="ホーム">
   <section class="news-hero">
-    <div class="news-hero-media" aria-hidden="true">
-      <span>FEATURE IMAGE</span>
-    </div>
+    <div class="news-hero-media" aria-hidden="true"><span>FEATURE IMAGE</span></div>
     <div class="news-hero-content">
       <p class="section-label">LATEST NEWS</p>
       <h1>{stories[0].title}</h1>
@@ -30,29 +28,23 @@ const events = [
     </div>
     <ol class="story-selector">
       {stories.map((story, index) => (
-        <li>
-          <a href={story.href}>
-            <span>0{index + 1}</span>
-            <p class="section-label">NEWS</p>
-            <strong>{story.title}</strong>
-          </a>
-        </li>
+        <li><a href={story.href}>
+          <span>0{index + 1}</span>
+          <p class="section-label">NEWS</p>
+          <strong>{story.title}</strong>
+        </a></li>
       ))}
     </ol>
   </section>
 
   <section class="up-next">
     <div class="up-next-heading">
-      <div>
-        <p class="section-label">UP NEXT</p>
-        <h2>FSAEJ に向けた予定</h2>
-      </div>
+      <div><p class="section-label">UP NEXT</p><h2>FSAEJ に向けた予定</h2></div>
       <div class="carousel-controls" aria-label="予定を移動">
         <button type="button" data-carousel-direction="-1" aria-label="前の予定">←</button>
         <button type="button" data-carousel-direction="1" aria-label="次の予定">→</button>
       </div>
     </div>
-
     <div class="event-carousel" data-event-carousel>
       {events.map((event) => (
         <article class="event-card" aria-current={event.isNext ? 'date' : undefined}>
@@ -63,25 +55,37 @@ const events = [
         </article>
       ))}
     </div>
-
     <a class="button schedule-link" href={siteRoot + 'schedule/'}>全予定を見る</a>
   </section>
 
   <script>
-    const carousel = document.querySelector('[data-event-carousel]');
-    const controls = document.querySelectorAll('[data-carousel-direction]');
-    const nextEvent = carousel?.querySelector('[aria-current="date"]');
+    function setupEventCarousel() {
+      const carousel = document.querySelector('[data-event-carousel]');
+      if (!(carousel instanceof HTMLElement)) return;
 
-    nextEvent?.scrollIntoView({ inline: 'center', block: 'nearest' });
+      const cards = Array.from(carousel.querySelectorAll('.event-card'));
+      const controls = document.querySelectorAll('[data-carousel-direction]');
+      let currentIndex = Math.max(0, cards.findIndex((card) => card.getAttribute('aria-current') === 'date'));
 
-    controls.forEach((control) => {
-      control.addEventListener('click', () => {
-        const direction = Number(control.getAttribute('data-carousel-direction'));
-        carousel?.scrollBy({
-          left: direction * Math.min(carousel.clientWidth * 0.7, 540),
-          behavior: 'smooth',
+      const showCard = (index, behavior = 'smooth') => {
+        currentIndex = Math.max(0, Math.min(cards.length - 1, index));
+        cards[currentIndex]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+      };
+
+      requestAnimationFrame(() => requestAnimationFrame(() => showCard(currentIndex, 'auto')));
+
+      controls.forEach((control) => {
+        control.addEventListener('click', () => {
+          const direction = Number(control.getAttribute('data-carousel-direction'));
+          showCard(currentIndex + direction);
         });
       });
-    });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupEventCarousel, { once: true });
+    } else {
+      setupEventCarousel();
+    }
   </script>
 </WireframeLayout>
