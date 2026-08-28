@@ -7,13 +7,13 @@ interface Props {
 
 const { title } = Astro.props;
 const siteRoot = 'https://adayav.github.io/wfp-website/';
-
 const navigation = [
   { label: 'ホーム', href: siteRoot },
-  { label: 'ニュース', href: `${siteRoot}news/` },
-  { label: 'チーム', href: `${siteRoot}team/` },
-  { label: 'マシン', href: `${siteRoot}machine/` },
-  { label: 'スポンサー', href: `${siteRoot}sponsors/` },
+  { label: 'ニュース', href: siteRoot + 'news/' },
+  { label: 'チーム', href: siteRoot + 'team/' },
+  { label: 'マシン', href: siteRoot + 'machine/' },
+  { label: 'スポンサー', href: siteRoot + 'sponsors/' },
+  { label: 'スケジュール', href: siteRoot + 'schedule/' },
 ];
 ---
 
@@ -22,7 +22,7 @@ const navigation = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={`WFP ウェブサイト構成案：${title}`} />
+    <meta name="description" content={'WFP ウェブサイト構成案：' + title} />
     <title>{title} | WFP 構成案</title>
   </head>
   <body>
