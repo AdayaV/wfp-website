@@ -2,19 +2,43 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
-const pages = [
-  { label: 'ニュース', href: siteRoot + 'news/' },
-  { label: 'チーム', href: siteRoot + 'team/' },
-  { label: 'マシン', href: siteRoot + 'machine/' },
-  { label: 'スポンサー', href: siteRoot + 'sponsors/' },
-  { label: 'スケジュール', href: siteRoot + 'schedule/' },
+const updates = [
+  { label: 'ニュース', text: '最新の活動記録', href: siteRoot + 'news/' },
+  { label: 'マシン', text: '車両開発と設計', href: siteRoot + 'machine/' },
+  { label: 'チーム', text: 'メンバーとチームづくり', href: siteRoot + 'team/' },
 ];
 ---
 
 <WireframeLayout title="ホーム">
-  <h1>ホーム</h1>
-  <p>ページ一覧</p>
-  <ul>
-    {pages.map((page) => <li><a class="button" href={page.href}>{page.label}</a></li>)}
-  </ul>
+  <section class="home-feature">
+    <p class="section-label">FEATURED</p>
+    <h1>Waseda Formula Project</h1>
+    <p class="home-lead">学生フォーミュラに挑戦する、早稲田大学の学生チームです。</p>
+    <a class="button" href={siteRoot + 'machine/'}>マシンを見る</a>
+  </section>
+
+  <section class="home-section">
+    <div class="section-heading">
+      <p class="section-label">UPDATES</p>
+      <h2>プロジェクト</h2>
+    </div>
+    <div class="home-grid">
+      {updates.map((item) => (
+        <a class="home-card" href={item.href}>
+          <p class="section-label">{item.label}</p>
+          <h3>{item.text}</h3>
+          <span>見る →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="home-section home-next">
+    <div class="section-heading">
+      <p class="section-label">UP NEXT</p>
+      <h2>FSAEJ までのロードマップ</h2>
+    </div>
+    <p>テスト走行、マシンのチェックポイント、大会までの予定をまとめます。</p>
+    <a class="button" href={siteRoot + 'schedule/'}>スケジュールを見る</a>
+  </section>
 </WireframeLayout>
