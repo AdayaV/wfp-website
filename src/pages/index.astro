@@ -73,9 +73,7 @@ const events = [
       };
 
       const centerInitialCard = () => {
-        const card = cards[currentIndex];
-        if (!(card instanceof HTMLElement)) return;
-        carousel.scrollLeft = card.offsetLeft - (carousel.clientWidth - card.clientWidth) / 2;
+        window.setTimeout(() => showCard(currentIndex, 'auto'), 150);
       };
 
       if (document.readyState === 'complete') {
