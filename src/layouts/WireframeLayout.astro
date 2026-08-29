@@ -22,12 +22,12 @@ const navigation = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={'WFP ウェブサイト構成案：' + title} />
-    <title>{title} | WFP 構成案</title>
+    <meta name="description" content="Waseda Formula Project（WFP）の公式ウェブサイト" />
+    <title>{title} | Waseda Formula Project</title>
   </head>
   <body>
-    <header>
-      <a href={siteRoot}>WFP</a>
+    <header class="site-header">
+      <a class="site-mark" href={siteRoot}>WFP</a>
       <nav aria-label="メインナビゲーション">
         {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
       </nav>
@@ -35,5 +35,16 @@ const navigation = [
     <main>
       <slot />
     </main>
+    <footer class="site-footer">
+      <div>
+        <p class="section-label">WASEDA FORMULA PROJECT</p>
+        <p>早稲田大学 西早稲田キャンパス</p>
+      </div>
+      <nav aria-label="外部リンク">
+        <a href="mailto:wfp@list.waseda.jp">メール</a>
+        <a href="https://x.com/wasedafp">X</a>
+        <a href="https://www.instagram.com/wasedaformulaproject/">Instagram</a>
+      </nav>
+    </footer>
   </body>
 </html>
