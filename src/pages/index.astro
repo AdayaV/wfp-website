@@ -1,60 +1,62 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { newsArticles } from '../data/news';
+import { scheduleItems } from '../data/schedule';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
-const stories = [
-  { title: 'ニュース記事 01', href: siteRoot + 'news/' },
-  { title: 'ニュース記事 02', href: siteRoot + 'news/' },
-  { title: 'ニュース記事 03', href: siteRoot + 'news/' },
-  { title: 'ニュース記事 04', href: siteRoot + 'news/' },
-];
-
-const events = [
-  { date: 'TBD', title: 'TEST RUN 01', state: 'PAST' },
-  { date: 'TBD', title: 'MACHINE CHECKPOINT 01', state: 'PAST' },
-  { date: 'TBD', title: 'NEXT TEST RUN', state: 'NEXT', isNext: true },
-  { date: 'TBD', title: 'MACHINE CHECKPOINT 02', state: 'UPCOMING' },
-  { date: 'TBD', title: 'FSAEJ', state: 'UPCOMING' },
-];
+const latestArticle = newsArticles[0];
 ---
 
 <WireframeLayout title="ホーム">
-  <section class="news-hero">
-    <div class="news-hero-media" aria-hidden="true"><span>FEATURE IMAGE</span></div>
-    <div class="news-hero-content">
-      <p class="section-label">LATEST NEWS</p>
-      <h1>{stories[0].title}</h1>
-      <a class="button" href={stories[0].href}>ニュースを見る</a>
-    </div>
-    <ol class="story-selector">
-      {stories.map((story, index) => (
-        <li><a href={story.href}>
-          <span>0{index + 1}</span>
-          <p class="section-label">NEWS</p>
-          <strong>{story.title}</strong>
-        </a></li>
-      ))}
-    </ol>
-  </section>
+  {latestArticle ? (
+    <section class="news-hero">
+      {latestArticle.image && <img class="news-hero-media" src={latestArticle.image} alt="" />}
+      <div class="news-hero-content">
+        <p class="section-label">LATEST NEWS</p>
+        <h1>{latestArticle.title}</h1>
+        <a class="button" href={latestArticle.href}>ニュースを見る</a>
+      </div>
+      {newsArticles.length > 1 && (
+        <ol class="story-selector">
+          {newsArticles.slice(0, 4).map((story, index) => (
+            <li><a href={story.href}>
+              <span>0{index + 1}</span>
+              <p class="section-label">{story.category}</p>
+              <strong>{story.title}</strong>
+            </a></li>
+          ))}
+        </ol>
+      )}
+    </section>
+  ) : (
+    <section class="home-lead">
+      <p class="section-label">WASEDA FORMULA PROJECT</p>
+      <h1>WFP</h1>
+    </section>
+  )}
 
   <section class="up-next">
     <div class="up-next-heading">
       <div><p class="section-label">UP NEXT</p><h2>FSAEJ に向けた予定</h2></div>
-      <div class="carousel-controls" aria-label="予定を移動">
-        <button type="button" data-carousel-direction="-1" aria-label="前の予定">←</button>
-        <button type="button" data-carousel-direction="1" aria-label="次の予定">→</button>
+      {scheduleItems.length > 0 && (
+        <div class="carousel-controls" aria-label="予定を移動">
+          <button type="button" data-carousel-direction="-1" aria-label="前の予定">←</button>
+          <button type="button" data-carousel-direction="1" aria-label="次の予定">→</button>
+        </div>
+      )}
+    </div>
+    {scheduleItems.length > 0 && (
+      <div class="event-carousel" data-event-carousel>
+        {scheduleItems.map((event) => (
+          <article class="event-card" aria-current={event.isNext ? 'date' : undefined}>
+            <p class="event-date">{event.date}</p>
+            <p class="section-label">{event.phase}</p>
+            {event.image && <img class="event-card-image" src={event.image} alt="" />}
+            <h3>{event.title}</h3>
+          </article>
+        ))}
       </div>
-    </div>
-    <div class="event-carousel" data-event-carousel>
-      {events.map((event) => (
-        <article class="event-card" aria-current={event.isNext ? 'date' : undefined}>
-          <p class="event-date">{event.date}</p>
-          <p class="section-label">{event.state}</p>
-          <div class="event-image-placeholder">EVENT IMAGE</div>
-          <h3>{event.title}</h3>
-        </article>
-      ))}
-    </div>
+    )}
     <a class="button schedule-link" href={siteRoot + 'schedule/'}>全予定を見る</a>
   </section>
 
