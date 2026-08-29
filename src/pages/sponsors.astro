@@ -1,9 +1,33 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { sponsorTiers } from '../data/sponsors';
 ---
 
 <WireframeLayout title="スポンサー">
-  <h1>スポンサー</h1>
-  <p>空ページ</p>
-  <a class="button" href="https://adayav.github.io/wfp-website/">ホームへ戻る</a>
+  <section class="sponsors-page">
+    <header class="sponsors-intro">
+      <p class="section-label">PARTNERS</p>
+      <h1>スポンサー</h1>
+    </header>
+
+    <div class="sponsor-tiers">
+      {sponsorTiers.map((tier) => (
+        <section class={`sponsor-tier sponsor-tier--${tier.id}`} aria-labelledby={`${tier.id}-heading`}>
+          <header class="sponsor-tier-heading">
+            <div>
+              <p class="section-label">{tier.labelEn}</p>
+              <h2 id={`${tier.id}-heading`}>{tier.label}</h2>
+            </div>
+            <p class="sponsor-count"><strong>{tier.sponsors.length}</strong><span>社</span></p>
+          </header>
+
+          <ul class="sponsor-grid">
+            {tier.sponsors.map((sponsor) => (
+              <li><span class="sponsor-logo-placeholder" aria-hidden="true">ロゴ</span><strong>{sponsor}</strong></li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </section>
 </WireframeLayout>
