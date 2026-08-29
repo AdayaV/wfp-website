@@ -245,6 +245,92 @@ h2 {
   margin: 8px 32px 0;
 }
 
+.sponsors-page {
+  padding: 12px 0 40px;
+}
+
+.sponsors-intro {
+  padding: 32px 0 48px;
+}
+
+.sponsors-intro h1 {
+  margin-bottom: 0;
+}
+
+.sponsor-tiers {
+  border-top: 1px solid #000;
+}
+
+.sponsor-tier {
+  padding: 40px 0 56px;
+  border-bottom: 1px solid #000;
+}
+
+.sponsor-tier-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.sponsor-count {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 0;
+}
+
+.sponsor-count strong {
+  font-size: 32px;
+  font-weight: normal;
+}
+
+.sponsor-count span {
+  font-size: 12px;
+}
+
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  list-style: none;
+}
+
+.sponsor-grid li {
+  min-height: 176px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.sponsor-logo-placeholder {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  background: #eee;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.sponsor-grid strong {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.sponsor-tier--gold .sponsor-logo-placeholder {
+  background: #f4f4f4;
+}
+
 @media (max-width: 700px) {
   header {
     align-items: flex-start;
@@ -285,5 +371,26 @@ h2 {
   .event-card,
   .event-card[aria-current="date"] {
     flex-basis: 82vw;
+  }
+
+  .sponsors-intro {
+    padding: 16px 0 36px;
+  }
+
+  .sponsor-tier {
+    padding: 32px 0 40px;
+  }
+
+  .sponsor-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sponsor-grid li {
+    min-height: 156px;
+    padding: 12px;
+  }
+
+  .sponsor-logo-placeholder {
+    min-height: 72px;
   }
 }
