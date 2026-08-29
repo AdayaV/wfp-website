@@ -1,9 +1,29 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+
+const sections = [
+  { label: 'CURRENT MACHINE', title: '2027年度マシン' },
+  { label: 'DEVELOPMENT', title: '開発' },
+  { label: 'ARCHIVE', title: '歴代マシン' },
+];
 ---
 
 <WireframeLayout title="マシン">
-  <h1>マシン</h1>
-  <p>空ページ</p>
-  <a class="button" href="https://adayav.github.io/wfp-website/">ホームへ戻る</a>
+  <header class="page-intro">
+    <p class="section-label">MACHINE</p>
+    <h1>マシン</h1>
+  </header>
+
+  <div class="section-list">
+    {sections.map((section, index) => (
+      <section class="content-section content-section--split" aria-labelledby={`machine-section-${index}`}>
+        <header class="section-heading">
+          <p class="section-index">0{index + 1}</p>
+          <div><p class="section-label">{section.label}</p><h2 id={`machine-section-${index}`}>{section.title}</h2></div>
+        </header>
+        <div class="section-media-slot" aria-hidden="true"></div>
+        <div class="section-copy-slot" aria-hidden="true"></div>
+      </section>
+    ))}
+  </div>
 </WireframeLayout>

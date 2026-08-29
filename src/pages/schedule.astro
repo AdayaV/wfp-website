@@ -1,10 +1,36 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { scheduleItems } from '../data/schedule';
+
+const phases = [
+  { id: 'development', label: 'DEVELOPMENT', title: '設計・製作' },
+  { id: 'test', label: 'TEST', title: '走行・検証' },
+  { id: 'event', label: 'EVENT', title: '大会・イベント' },
+];
 ---
 
 <WireframeLayout title="スケジュール">
-  <h1>スケジュール</h1>
-  <p>FSAEJに向けたロードマップを準備中です。</p>
-  <p>テスト走行やマシンのチェックポイントを順次掲載します。</p>
-  <a class="button" href="https://adayav.github.io/wfp-website/">ホームへ戻る</a>
+  <header class="page-intro">
+    <p class="section-label">SCHEDULE</p>
+    <h1>スケジュール</h1>
+  </header>
+
+  <div class="section-list">
+    {phases.map((phase, index) => {
+      const items = scheduleItems.filter((item) => item.phase.toLowerCase() === phase.id);
+      return (
+        <section class="content-section" aria-labelledby={`${phase.id}-heading`}>
+          <header class="section-heading">
+            <p class="section-index">0{index + 1}</p>
+            <div><p class="section-label">{phase.label}</p><h2 id={`${phase.id}-heading`}>{phase.title}</h2></div>
+          </header>
+          <ol class="schedule-list">
+            {items.map((item) => (
+              <li><time>{item.date}</time><strong>{item.title}</strong></li>
+            ))}
+          </ol>
+        </section>
+      );
+    })}
+  </div>
 </WireframeLayout>

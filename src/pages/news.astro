@@ -1,9 +1,30 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { newsArticles } from '../data/news';
 ---
 
 <WireframeLayout title="ニュース">
-  <h1>ニュース</h1>
-  <p>空ページ</p>
-  <a class="button" href="https://adayav.github.io/wfp-website/">ホームへ戻る</a>
+  <header class="page-intro">
+    <p class="section-label">NEWS</p>
+    <h1>ニュース</h1>
+  </header>
+
+  <section class="content-section" aria-labelledby="news-list-heading">
+    <header class="section-heading">
+      <p class="section-index">01</p>
+      <div><p class="section-label">ALL STORIES</p><h2 id="news-list-heading">記事一覧</h2></div>
+    </header>
+
+    <div class="news-index">
+      {newsArticles.map((article) => (
+        <article class="news-card">
+          {article.image && <img src={article.image} alt="" />}
+          <div>
+            <p class="section-label">{article.category} / {article.publishedAt}</p>
+            <h3><a href={article.href}>{article.title}</a></h3>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
 </WireframeLayout>
