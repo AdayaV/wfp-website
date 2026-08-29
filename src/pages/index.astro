@@ -2,9 +2,22 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { newsArticles } from '../data/news';
 import { scheduleItems } from '../data/schedule';
+import { sponsorTiers } from '../data/sponsors';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
 const latestArticle = newsArticles[0];
+const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
+const competition = {
+  target: '2027-08-23T00:00:00+09:00',
+  dates: '2027.08.23 — 08.28',
+  venue: 'Aichi Sky Expo',
+  source: 'https://www.jsae.or.jp/files_publish/page/521/2026-05_Competition%20News_20260727.pdf',
+};
+const schedulePhases = [
+  { label: 'DEVELOPMENT', title: '設計・製作' },
+  { label: 'TEST', title: '走行・検証' },
+  { label: 'EVENT', title: '大会・イベント' },
+];
 ---
 
 <WireframeLayout title="ホーム">
@@ -29,73 +42,109 @@ const latestArticle = newsArticles[0];
       )}
     </section>
   ) : (
-    <section class="home-lead">
-      <p class="section-label">WASEDA FORMULA PROJECT</p>
-      <h1>WFP</h1>
+    <section class="home-news-empty">
+      <div><p class="section-label">LATEST NEWS</p><h1>ニュース</h1></div>
+      <a class="button" href={siteRoot + 'news/'}>記事一覧を見る</a>
     </section>
   )}
 
-  <section class="up-next">
-    <div class="up-next-heading">
-      <div><p class="section-label">UP NEXT</p><h2>FSAEJ に向けた予定</h2></div>
-      {scheduleItems.length > 0 && (
-        <div class="carousel-controls" aria-label="予定を移動">
-          <button type="button" data-carousel-direction="-1" aria-label="前の予定">←</button>
-          <button type="button" data-carousel-direction="1" aria-label="次の予定">→</button>
-        </div>
-      )}
+  <section class="home-section home-section--split" aria-labelledby="home-team-heading">
+    <header class="home-section-heading">
+      <p class="section-label">TEAM</p>
+      <h2 id="home-team-heading">Waseda Formula Project</h2>
+    </header>
+    <div class="home-section-copy">
+      <p>学生が自らフォーミュラカーを設計・製作し、学生フォーミュラ日本大会に挑む早稲田大学のチームです。</p>
+      <a class="button" href={siteRoot + 'team/'}>チームを見る</a>
     </div>
-    {scheduleItems.length > 0 && (
-      <div class="event-carousel" data-event-carousel>
-        {scheduleItems.map((event) => (
-          <article class="event-card" aria-current={event.isNext ? 'date' : undefined}>
-            <p class="event-date">{event.date}</p>
-            <p class="section-label">{event.phase}</p>
-            {event.image && <img class="event-card-image" src={event.image} alt="" />}
-            <h3>{event.title}</h3>
-          </article>
+  </section>
+
+  <section class="home-section home-section--split" aria-labelledby="home-machine-heading">
+    <header class="home-section-heading">
+      <p class="section-label">MACHINE</p>
+      <h2 id="home-machine-heading">2027年度マシン</h2>
+    </header>
+    <div class="home-section-copy">
+      <p>設計、製作、走行検証を通して、次の大会に向けたマシン開発を進めています。</p>
+      <a class="button" href={siteRoot + 'machine/'}>マシンを見る</a>
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="home-schedule-heading">
+    <header class="home-section-heading home-section-heading--row">
+      <div><p class="section-label">SCHEDULE</p><h2 id="home-schedule-heading">大会までの予定</h2></div>
+      <a class="button" href={siteRoot + 'schedule/'}>全予定を見る</a>
+    </header>
+
+    {scheduleItems.length > 0 ? (
+      <ol class="home-schedule-list">
+        {scheduleItems.slice(0, 4).map((item) => (
+          <li><time>{item.date}</time><span class="section-label">{item.phase}</span><strong>{item.title}</strong></li>
         ))}
-      </div>
+      </ol>
+    ) : (
+      <ol class="home-phase-list">
+        {schedulePhases.map((phase, index) => (
+          <li><span>0{index + 1}</span><p class="section-label">{phase.label}</p><strong>{phase.title}</strong></li>
+        ))}
+      </ol>
     )}
-    <a class="button schedule-link" href={siteRoot + 'schedule/'}>全予定を見る</a>
+  </section>
+
+  <section class="home-countdown" data-countdown={competition.target} aria-labelledby="countdown-heading">
+    <header>
+      <p class="section-label">FORMULA SAE JAPAN 2027</p>
+      <h2 id="countdown-heading">大会初日まで</h2>
+    </header>
+    <div class="countdown-values" aria-label="大会初日までの残り時間">
+      <p><strong data-countdown-days>---</strong><span>DAYS</span></p>
+      <p><strong data-countdown-hours>--</strong><span>HOURS</span></p>
+      <p><strong data-countdown-minutes>--</strong><span>MINUTES</span></p>
+    </div>
+    <div class="countdown-meta">
+      <p><time datetime="2027-08-23">{competition.dates}</time><br />{competition.venue}（予定）</p>
+      <a href={competition.source}>公式通知を見る</a>
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="home-sponsors-heading">
+    <header class="home-section-heading home-section-heading--row">
+      <div><p class="section-label">PLATINUM PARTNERS</p><h2 id="home-sponsors-heading">プラチナスポンサー</h2></div>
+      <a class="button" href={siteRoot + 'sponsors/'}>すべて見る</a>
+    </header>
+    <ul class="home-sponsor-grid">
+      {platinumSponsors.map((sponsor) => (
+        <li><span aria-hidden="true">ロゴ</span><strong>{sponsor}</strong></li>
+      ))}
+    </ul>
   </section>
 
   <script>
-    function setupEventCarousel() {
-      const carousel = document.querySelector('[data-event-carousel]');
-      if (!(carousel instanceof HTMLElement)) return;
+    function setupCountdown() {
+      const countdown = document.querySelector('[data-countdown]');
+      if (!(countdown instanceof HTMLElement)) return;
 
-      const cards = Array.from(carousel.querySelectorAll('.event-card'));
-      const controls = document.querySelectorAll('[data-carousel-direction]');
-      let currentIndex = Math.max(0, cards.findIndex((card) => card.getAttribute('aria-current') === 'date'));
+      const target = new Date(countdown.dataset.countdown ?? '').getTime();
+      const days = countdown.querySelector('[data-countdown-days]');
+      const hours = countdown.querySelector('[data-countdown-hours]');
+      const minutes = countdown.querySelector('[data-countdown-minutes]');
 
-      const showCard = (index, behavior = 'smooth') => {
-        currentIndex = Math.max(0, Math.min(cards.length - 1, index));
-        cards[currentIndex]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+      const update = () => {
+        const remaining = Math.max(0, target - Date.now());
+        const totalMinutes = Math.floor(remaining / 60000);
+        if (days) days.textContent = String(Math.floor(totalMinutes / 1440));
+        if (hours) hours.textContent = String(Math.floor((totalMinutes % 1440) / 60)).padStart(2, '0');
+        if (minutes) minutes.textContent = String(totalMinutes % 60).padStart(2, '0');
       };
 
-      const centerInitialCard = () => {
-        window.setTimeout(() => showCard(currentIndex, 'auto'), 150);
-      };
-
-      if (document.readyState === 'complete') {
-        requestAnimationFrame(centerInitialCard);
-      } else {
-        window.addEventListener('load', () => requestAnimationFrame(centerInitialCard), { once: true });
-      }
-
-      controls.forEach((control) => {
-        control.addEventListener('click', () => {
-          const direction = Number(control.getAttribute('data-carousel-direction'));
-          showCard(currentIndex + direction);
-        });
-      });
+      update();
+      window.setInterval(update, 60000);
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupEventCarousel, { once: true });
+      document.addEventListener('DOMContentLoaded', setupCountdown, { once: true });
     } else {
-      setupEventCarousel();
+      setupCountdown();
     }
   </script>
 </WireframeLayout>
