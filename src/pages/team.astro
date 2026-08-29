@@ -1,9 +1,29 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+
+const sections = [
+  { label: 'ABOUT', title: 'WFPについて' },
+  { label: 'ORGANIZATION', title: 'チーム体制' },
+  { label: 'ACTIVITY', title: '活動について' },
+];
 ---
 
 <WireframeLayout title="チーム">
-  <h1>チーム</h1>
-  <p>空ページ</p>
-  <a class="button" href="https://adayav.github.io/wfp-website/">ホームへ戻る</a>
+  <header class="page-intro">
+    <p class="section-label">TEAM</p>
+    <h1>チーム</h1>
+  </header>
+
+  <div class="section-list">
+    {sections.map((section, index) => (
+      <section class="content-section content-section--split" aria-labelledby={`team-section-${index}`}>
+        <header class="section-heading">
+          <p class="section-index">0{index + 1}</p>
+          <div><p class="section-label">{section.label}</p><h2 id={`team-section-${index}`}>{section.title}</h2></div>
+        </header>
+        <div class="section-media-slot" aria-hidden="true"></div>
+        <div class="section-copy-slot" aria-hidden="true"></div>
+      </section>
+    ))}
+  </div>
 </WireframeLayout>
