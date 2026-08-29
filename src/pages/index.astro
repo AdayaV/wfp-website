@@ -2,149 +2,103 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { newsArticles } from '../data/news';
 import { scheduleItems } from '../data/schedule';
-import { sponsorTiers } from '../data/sponsors';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
-const latestArticle = newsArticles[0];
-const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
-const competition = {
-  target: '2027-08-23T00:00:00+09:00',
-  dates: '2027.08.23 — 08.28',
-  venue: 'Aichi Sky Expo',
-  source: 'https://www.jsae.or.jp/files_publish/page/521/2026-05_Competition%20News_20260727.pdf',
-};
-const schedulePhases = [
-  { label: 'DEVELOPMENT', title: '設計・製作' },
-  { label: 'TEST', title: '走行・検証' },
-  { label: 'EVENT', title: '大会・イベント' },
+const stories = newsArticles.length ? newsArticles.slice(0, 4) : [
+  { title: 'ニュース記事 01', category: 'TEAM', href: siteRoot + 'news/', publishedAt: 'TBD' },
+  { title: 'ニュース記事 02', category: 'DEVELOPMENT', href: siteRoot + 'news/', publishedAt: 'TBD' },
+  { title: 'ニュース記事 03', category: 'EVENT', href: siteRoot + 'news/', publishedAt: 'TBD' },
+  { title: 'ニュース記事 04', category: 'SPONSOR', href: siteRoot + 'news/', publishedAt: 'TBD' },
+];
+const events = scheduleItems.length ? scheduleItems : [
+  { date: 'TBD', title: 'DESIGN CHECKPOINT', phase: 'DEVELOPMENT' },
+  { date: 'TBD', title: 'MACHINE CHECKPOINT 01', phase: 'DEVELOPMENT' },
+  { date: 'TBD', title: 'NEXT TEST RUN', phase: 'TEST', isNext: true },
+  { date: 'TBD', title: 'MACHINE CHECKPOINT 02', phase: 'DEVELOPMENT' },
+  { date: 'TBD', title: 'TEST RUN 02', phase: 'TEST' },
+  { date: 'TBD', title: 'FORMULA SAE JAPAN', phase: 'EVENT' },
 ];
 ---
 
 <WireframeLayout title="ホーム">
-  {latestArticle ? (
-    <section class="news-hero">
-      {latestArticle.image && <img class="news-hero-media" src={latestArticle.image} alt="" />}
-      <div class="news-hero-content">
-        <p class="section-label">LATEST NEWS</p>
-        <h1>{latestArticle.title}</h1>
-        <a class="button" href={latestArticle.href}>ニュースを見る</a>
-      </div>
-      {newsArticles.length > 1 && (
-        <ol class="story-selector">
-          {newsArticles.slice(0, 4).map((story, index) => (
-            <li><a href={story.href}>
-              <span>0{index + 1}</span>
-              <p class="section-label">{story.category}</p>
-              <strong>{story.title}</strong>
-            </a></li>
-          ))}
-        </ol>
-      )}
-    </section>
-  ) : (
-    <section class="home-news-empty">
-      <div><p class="section-label">LATEST NEWS</p><h1>ニュース</h1></div>
-      <a class="button" href={siteRoot + 'news/'}>記事一覧を見る</a>
-    </section>
-  )}
-
-  <section class="home-section home-section--split" aria-labelledby="home-team-heading">
-    <header class="home-section-heading">
-      <p class="section-label">TEAM</p>
-      <h2 id="home-team-heading">Waseda Formula Project</h2>
-    </header>
-    <div class="home-section-copy">
-      <p>学生が自らフォーミュラカーを設計・製作し、学生フォーミュラ日本大会に挑む早稲田大学のチームです。</p>
-      <a class="button" href={siteRoot + 'team/'}>チームを見る</a>
+  <section class="home-lead" aria-labelledby="lead-news-title">
+    <div class="home-lead-media" aria-hidden="true">MAIN NEWS IMAGE</div>
+    <div class="home-lead-copy">
+      <p class="section-label">{stories[0].category} / LATEST NEWS</p>
+      <h1 id="lead-news-title">{stories[0].title}</h1>
+      <a class="home-arrow-link" href={stories[0].href} aria-label="記事を見る">↗</a>
     </div>
-  </section>
-
-  <section class="home-section home-section--split" aria-labelledby="home-machine-heading">
-    <header class="home-section-heading">
-      <p class="section-label">MACHINE</p>
-      <h2 id="home-machine-heading">2027年度マシン</h2>
-    </header>
-    <div class="home-section-copy">
-      <p>設計、製作、走行検証を通して、次の大会に向けたマシン開発を進めています。</p>
-      <a class="button" href={siteRoot + 'machine/'}>マシンを見る</a>
+    <div class="home-lead-controls" aria-label="メインニュースを移動">
+      <button type="button" aria-label="前のニュース">←</button><button type="button" aria-label="次のニュース">→</button>
     </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="home-schedule-heading">
-    <header class="home-section-heading home-section-heading--row">
-      <div><p class="section-label">SCHEDULE</p><h2 id="home-schedule-heading">大会までの予定</h2></div>
-      <a class="button" href={siteRoot + 'schedule/'}>全予定を見る</a>
-    </header>
-
-    {scheduleItems.length > 0 ? (
-      <ol class="home-schedule-list">
-        {scheduleItems.slice(0, 4).map((item) => (
-          <li><time>{item.date}</time><span class="section-label">{item.phase}</span><strong>{item.title}</strong></li>
-        ))}
-      </ol>
-    ) : (
-      <ol class="home-phase-list">
-        {schedulePhases.map((phase, index) => (
-          <li><span>0{index + 1}</span><p class="section-label">{phase.label}</p><strong>{phase.title}</strong></li>
-        ))}
-      </ol>
-    )}
-  </section>
-
-  <section class="home-countdown" data-countdown={competition.target} aria-labelledby="countdown-heading">
-    <header>
-      <p class="section-label">FORMULA SAE JAPAN 2027</p>
-      <h2 id="countdown-heading">大会初日まで</h2>
-    </header>
-    <div class="countdown-values" aria-label="大会初日までの残り時間">
-      <p><strong data-countdown-days>---</strong><span>DAYS</span></p>
-      <p><strong data-countdown-hours>--</strong><span>HOURS</span></p>
-      <p><strong data-countdown-minutes>--</strong><span>MINUTES</span></p>
-    </div>
-    <div class="countdown-meta">
-      <p><time datetime="2027-08-23">{competition.dates}</time><br />{competition.venue}（予定）</p>
-      <a href={competition.source}>公式通知を見る</a>
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="home-sponsors-heading">
-    <header class="home-section-heading home-section-heading--row">
-      <div><p class="section-label">PLATINUM PARTNERS</p><h2 id="home-sponsors-heading">プラチナスポンサー</h2></div>
-      <a class="button" href={siteRoot + 'sponsors/'}>すべて見る</a>
-    </header>
-    <ul class="home-sponsor-grid">
-      {platinumSponsors.map((sponsor) => (
-        <li><span aria-hidden="true">ロゴ</span><strong>{sponsor}</strong></li>
+    <ol class="home-lead-stories">
+      {stories.map((story, index) => (
+        <li><a href={story.href} aria-current={index === 0 ? 'true' : undefined}>
+          <span>0{index + 1}</span><small>{story.category}</small><strong>{story.title}</strong>
+        </a></li>
       ))}
-    </ul>
+    </ol>
+  </section>
+
+  <section class="home-latest" aria-labelledby="latest-news-heading">
+    <header class="home-block-heading">
+      <div><p class="section-label">LATEST NEWS</p><h2 id="latest-news-heading">WFP NEWS</h2></div>
+      <div class="home-small-controls" aria-label="最新ニュースを移動">
+        <button type="button" aria-label="前のニュース">←</button><button type="button" aria-label="次のニュース">→</button>
+      </div>
+    </header>
+    <div class="home-latest-layout">
+      <div class="home-latest-media" aria-hidden="true">NEWS IMAGE</div>
+      <ol class="home-latest-list">
+        {stories.map((story, index) => (
+          <li><a href={story.href}>
+            <span class="home-latest-number">0{index + 1}</span>
+            <div><small>{story.category} · {story.publishedAt}</small><strong>{story.title}</strong><p>記事の概要が入るスペースです。</p></div>
+            <span aria-hidden="true">↗</span>
+          </a></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-roadmap" aria-labelledby="roadmap-heading">
+    <header class="home-roadmap-heading">
+      <div><p class="section-label">ROAD TO FSAEJ</p><h2 id="roadmap-heading">大会までのスケジュール</h2></div>
+      <div class="home-roadmap-controls" aria-label="予定を移動">
+        <button type="button" data-roadmap-direction="-1" aria-label="前の予定">←</button><button type="button" data-roadmap-direction="1" aria-label="次の予定">→</button>
+      </div>
+    </header>
+    <div class="home-roadmap-track" data-roadmap-track>
+      {events.map((event) => (
+        <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
+          <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
+          <h3>{event.title}</h3>
+          <div class="home-roadmap-image" aria-hidden="true">EVENT IMAGE</div>
+          {event.isNext && <a href={siteRoot + 'schedule/'}>予定を見る →</a>}
+        </article>
+      ))}
+    </div>
+    <a class="home-roadmap-all" href={siteRoot + 'schedule/'}>全予定を見る</a>
   </section>
 
   <script>
-    function setupCountdown() {
-      const countdown = document.querySelector('[data-countdown]');
-      if (!(countdown instanceof HTMLElement)) return;
-
-      const target = new Date(countdown.dataset.countdown ?? '').getTime();
-      const days = countdown.querySelector('[data-countdown-days]');
-      const hours = countdown.querySelector('[data-countdown-hours]');
-      const minutes = countdown.querySelector('[data-countdown-minutes]');
-
-      const update = () => {
-        const remaining = Math.max(0, target - Date.now());
-        const totalMinutes = Math.floor(remaining / 60000);
-        if (days) days.textContent = String(Math.floor(totalMinutes / 1440));
-        if (hours) hours.textContent = String(Math.floor((totalMinutes % 1440) / 60)).padStart(2, '0');
-        if (minutes) minutes.textContent = String(totalMinutes % 60).padStart(2, '0');
+    function setupRoadmap() {
+      const track = document.querySelector('[data-roadmap-track]');
+      if (!(track instanceof HTMLElement)) return;
+      const cards = Array.from(track.querySelectorAll('.home-roadmap-card'));
+      let current = Math.max(0, cards.findIndex((card) => card.getAttribute('aria-current') === 'date'));
+      const show = (index, behavior = 'smooth') => {
+        current = Math.max(0, Math.min(cards.length - 1, index));
+        cards[current]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
       };
-
-      update();
-      window.setInterval(update, 60000);
+      document.querySelectorAll('[data-roadmap-direction]').forEach((button) => {
+        button.addEventListener('click', () => show(current + Number(button.getAttribute('data-roadmap-direction'))));
+      });
+      const centerInitial = () => window.setTimeout(() => show(current, 'auto'), 150);
+      if (document.readyState === 'complete') centerInitial();
+      else window.addEventListener('load', centerInitial, { once: true });
     }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupCountdown, { once: true });
-    } else {
-      setupCountdown();
-    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupRoadmap, { once: true });
+    else setupRoadmap();
   </script>
 </WireframeLayout>
