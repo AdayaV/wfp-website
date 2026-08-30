@@ -8,7 +8,7 @@ const siteRoot = 'https://adayav.github.io/wfp-website/';
 const stories = newsArticles.slice(0, 4);
 const leadStory = stories[0];
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
-const calendarItems = scheduleItems.length ? scheduleItems.slice(0, 3) : [
+const calendarItems = scheduleItems.length ? scheduleItems : [
   { date: '日程調整中', title: '設計・製作', phase: 'DEVELOPMENT' },
   { date: '日程調整中', title: '走行・検証', phase: 'TEST', isNext: true },
   { date: '2027.08.23–28', title: '学生フォーミュラ日本大会', phase: 'EVENT' },
@@ -16,34 +16,37 @@ const calendarItems = scheduleItems.length ? scheduleItems.slice(0, 3) : [
 ---
 
 <WireframeLayout title="ホーム">
-  <section class:list={['home-lead', { 'home-lead--empty': !leadStory }]} aria-labelledby="lead-news-title">
-    <div class="home-lead-media" aria-hidden="true">
-      {leadStory?.image && <img src={leadStory.image} alt="" />}
-    </div>
-    <div class="home-lead-copy">
-      {leadStory ? (
-        <>
-          <p class="section-label">{leadStory.category} / LATEST NEWS</p>
-          <h1 id="lead-news-title">{leadStory.title}</h1>
-          <a class="home-arrow-link" href={leadStory.href} aria-label="記事を見る">↗</a>
-        </>
-      ) : (
-        <>
+  <section class:list={['home-lead', { 'home-lead--empty': !leadStory }]} aria-label="最新ニュース" data-hero>
+    {leadStory ? stories.map((story, index) => (
+      <article class="home-lead-slide" data-hero-slide={index} aria-hidden={index === 0 ? 'false' : 'true'}>
+        <div class="home-lead-media" aria-hidden="true">
+          {story.image && <img src={story.image} alt="" />}
+        </div>
+        <div class="home-lead-copy">
+          <p class="section-label">{story.category} / LATEST NEWS</p>
+          <h1 id={index === 0 ? 'lead-news-title' : undefined}>{story.title}</h1>
+          <a class="home-arrow-link" href={story.href} aria-label="記事を見る">↗</a>
+        </div>
+      </article>
+    )) : (
+      <>
+        <div class="home-lead-media" aria-hidden="true"></div>
+        <div class="home-lead-copy">
           <p class="section-label">WASEDA FORMULA PROJECT</p>
           <h1 id="lead-news-title">WFP</h1>
-        </>
-      )}
-    </div>
+        </div>
+      </>
+    )}
     {stories.length > 1 && (
       <>
         <div class="home-lead-controls" aria-label="メインニュースを移動">
-          <button type="button" aria-label="前のニュース">←</button><button type="button" aria-label="次のニュース">→</button>
+          <button type="button" data-hero-direction="-1" aria-label="前のニュース">←</button><button type="button" data-hero-direction="1" aria-label="次のニュース">→</button>
         </div>
         <ol class="home-lead-stories">
           {stories.map((story, index) => (
-            <li><a href={story.href} aria-current={index === 0 ? 'true' : undefined}>
+            <li><button type="button" data-hero-select={index} aria-current={index === 0 ? 'true' : undefined}>
               <span>0{index + 1}</span><small>{story.category}</small><strong>{story.title}</strong>
-            </a></li>
+            </button></li>
           ))}
         </ol>
       </>
@@ -62,7 +65,7 @@ const calendarItems = scheduleItems.length ? scheduleItems.slice(0, 3) : [
         <div><strong data-countdown-minutes>00</strong><span>MIN</span></div>
       </div>
     </header>
-    <div class="home-roadmap-track">
+    <div class="home-roadmap-track" data-drag-scroll>
       {calendarItems.map((event, index) => (
         <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
           <div class="home-roadmap-visual" aria-hidden="true"><span>0{index + 1}</span></div>
@@ -139,6 +142,89 @@ const calendarItems = scheduleItems.length ? scheduleItems.slice(0, 3) : [
   </section>
 
   <script>
+    function setupHero() {
+      const hero = document.querySelector('[data-hero]');
+      if (!(hero instanceof HTMLElement)) return;
+      const slides = Array.from(hero.querySelectorAll('[data-hero-slide]'));
+      const selectors = Array.from(hero.querySelectorAll('[data-hero-select]'));
+      if (!slides.length) return;
+      let current = 0;
+      const show = (next) => {
+        current = (next + slides.length) % slides.length;
+        slides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== current)));
+        selectors.forEach((selector, index) => {
+          if (index === current) selector.setAttribute('aria-current', 'true');
+          else selector.removeAttribute('aria-current');
+        });
+      };
+      selectors.forEach((selector, index) => selector.addEventListener('click', () => show(index)));
+      hero.querySelectorAll('[data-hero-direction]').forEach((button) => {
+        button.addEventListener('click', () => show(current + Number(button.getAttribute('data-hero-direction'))));
+      });
+    }
+
+    function setupDragScroll() {
+      document.querySelectorAll('[data-drag-scroll]').forEach((track) => {
+        if (!(track instanceof HTMLElement)) return;
+        let startX = 0;
+        let startScroll = 0;
+        let dragging = false;
+        track.addEventListener('pointerdown', (event) => {
+          if (!(event instanceof PointerEvent) || event.pointerType === 'touch') return;
+          dragging = true;
+          startX = event.clientX;
+          startScroll = track.scrollLeft;
+          track.setPointerCapture(event.pointerId);
+          track.classList.add('is-dragging');
+        });
+        track.addEventListener('pointermove', (event) => {
+          if (!dragging || !(event instanceof PointerEvent)) return;
+          track.scrollLeft = startScroll - (event.clientX - startX);
+        });
+        const stop = () => {
+          dragging = false;
+          track.classList.remove('is-dragging');
+        };
+        track.addEventListener('pointerup', stop);
+        track.addEventListener('pointercancel', stop);
+      });
+    }
+
+    function setupRoadmapCarousel() {
+      const track = document.querySelector('.home-roadmap-track');
+      if (!(track instanceof HTMLElement)) return;
+      const cards = Array.from(track.querySelectorAll('.home-roadmap-card'));
+      let scheduled = false;
+      const updateCurrent = () => {
+        const trackCenter = track.getBoundingClientRect().left + track.clientWidth / 2;
+        let closest = cards[0];
+        let closestDistance = Number.POSITIVE_INFINITY;
+        cards.forEach((card) => {
+          const rect = card.getBoundingClientRect();
+          const distance = Math.abs(rect.left + rect.width / 2 - trackCenter);
+          if (distance < closestDistance) {
+            closest = card;
+            closestDistance = distance;
+          }
+        });
+        cards.forEach((card) => {
+          if (card === closest) card.setAttribute('aria-current', 'date');
+          else card.removeAttribute('aria-current');
+        });
+        scheduled = false;
+      };
+      track.addEventListener('scroll', () => {
+        if (scheduled) return;
+        scheduled = true;
+        window.requestAnimationFrame(updateCurrent);
+      }, { passive: true });
+      const initial = cards.find((card) => card.getAttribute('aria-current') === 'date') ?? cards[0];
+      window.setTimeout(() => {
+        initial?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+        updateCurrent();
+      }, 100);
+    }
+
     function setupCountdown() {
       const countdown = document.querySelector('[data-countdown]');
       if (!(countdown instanceof HTMLElement)) return;
@@ -156,7 +242,13 @@ const calendarItems = scheduleItems.length ? scheduleItems.slice(0, 3) : [
       update();
       window.setInterval(update, 60000);
     }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupCountdown, { once: true });
-    else setupCountdown();
+    function setupHome() {
+      setupHero();
+      setupDragScroll();
+      setupRoadmapCarousel();
+      setupCountdown();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupHome, { once: true });
+    else setupHome();
   </script>
 </WireframeLayout>
