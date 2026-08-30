@@ -62,6 +62,70 @@ const categories = ['ALL', 'EVENT', 'DEVELOPMENT', 'TEAM', 'SPONSOR'];
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupNewsFilters, { once: true });
     else setupNewsFilters();
   </script>
+</WireframeLayout>---
+import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { getNewsArticles } from '../data/news';
+
+const newsArticles = await getNewsArticles();
+const categories = ['ALL', 'EVENT', 'DEVELOPMENT', 'TEAM', 'SPONSOR'];
+---
+
+<WireframeLayout title="ニュース">
+  <header class="page-intro">
+    <p class="section-label">NEWS</p>
+    <h1>ニュース</h1>
+  </header>
+
+  <section class="content-section" aria-labelledby="news-list-heading">
+    <header class="section-heading">
+      <p class="section-index">01</p>
+      <div><p class="section-label">ALL STORIES</p><h2 id="news-list-heading">記事一覧</h2></div>
+    </header>
+
+    {newsArticles.length ? (
+      <>
+        <nav class="news-filter" aria-label="ニュースのカテゴリ">
+          {categories.map((category) => (
+            <button type="button" data-news-filter={category} aria-pressed={category === 'ALL' ? 'true' : 'false'}>
+              {category}
+            </button>
+          ))}
+        </nav>
+        <div class="news-index" data-news-index>
+          {newsArticles.map((article) => (
+            <article class="news-card" data-news-category={article.category}>
+              {article.image && <a class="news-card-media" href={article.href}><img src={article.image} alt={article.imageAlt} /></a>}
+              <div>
+                <p class="section-label">{article.category} / <time datetime={article.publishedAtIso}>{article.publishedAt}</time></p>
+                <h3><a href={article.href}>{article.title}</a></h3>
+                <p>{article.summary}</p>
+                <a class="news-card-link" href={article.href}>記事を読む <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </>
+    ) : (
+      <div class="news-empty"><p>ニュースは公開準備中です。</p></div>
+    )}
+  </section>
+
+  <script>
+    function setupNewsFilters() {
+      const buttons = Array.from(document.querySelectorAll('[data-news-filter]'));
+      const cards = Array.from(document.querySelectorAll('[data-news-category]'));
+      buttons.forEach((button) => button.addEventListener('click', () => {
+        const category = button.getAttribute('data-news-filter');
+        buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        cards.forEach((card) => {
+          const show = category === 'ALL' || card.getAttribute('data-news-category') === category;
+          card.toggleAttribute('hidden', !show);
+        });
+      }));
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupNewsFilters, { once: true });
+    else setupNewsFilters();
+  </script>
 </WireframeLayout>
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
