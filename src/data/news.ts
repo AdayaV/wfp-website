@@ -42,7 +42,7 @@ export interface NewsArticle {
 // 段階的な移行中も既存ページを生成できるよう残す互換用データです。
 export const newsArticles: NewsArticle[] = [];
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 const newsEndpoint = import.meta.env.MICROCMS_NEWS_ENDPOINT || 'news';
