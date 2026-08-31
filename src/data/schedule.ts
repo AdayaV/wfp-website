@@ -11,7 +11,7 @@ export interface MicroCMSEventEntry {
   title: string;
   startDate: string;
   endDate?: string;
-  phase: SchedulePhase;
+  phase: SchedulePhase | SchedulePhase[];
   location?: string;
   summary?: string;
   image?: MicroCMSImage;
@@ -90,7 +90,7 @@ export async function getScheduleItems(): Promise<ScheduleItem[]> {
     id: entry.id,
     date: formatDateRange(entry.startDate, entry.endDate),
     title: entry.title,
-    phase: entry.phase,
+    phase: Array.isArray(entry.phase) ? (entry.phase[0] || 'EVENT') : entry.phase,
     image: entry.image?.url,
     location: entry.location,
     summary: entry.summary,
