@@ -2,7 +2,9 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getScheduleItems } from '../data/schedule';
 
-const scheduleItems = await getScheduleItems();\n\nconst phases = [
+const scheduleItems = await getScheduleItems();
+
+const phases = [
   { id: 'development', label: 'DEVELOPMENT', title: '設計・製作' },
   { id: 'test', label: 'TEST', title: '走行・検証' },
   { id: 'event', label: 'EVENT', title: '大会・イベント' },
@@ -26,7 +28,14 @@ const scheduleItems = await getScheduleItems();\n\nconst phases = [
           </header>
           <ol class="schedule-list">
             {items.map((item) => (
-              <li>\n                <time>{item.date}</time>\n                <div>\n                  <strong>{item.title}</strong>\n                  {item.location && <span class="schedule-location">{item.location}</span>}\n                  {item.summary && <p>{item.summary}</p>}\n                </div>\n              </li>
+              <li>
+                <time>{item.date}</time>
+                <div>
+                  <strong>{item.title}</strong>
+                  {item.location && <span class="schedule-location">{item.location}</span>}
+                  {item.summary && <p>{item.summary}</p>}
+                </div>
+              </li>
             ))}
           </ol>
         </section>
