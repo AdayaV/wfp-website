@@ -46,12 +46,16 @@ const apiKey = import.meta.env.MICROCMS_API_KEY;
 const eventsEndpoint = import.meta.env.MICROCMS_EVENTS_ENDPOINT || 'events';
 
 function formatDate(value: string) {
-  const date = new Date(value);
-  return [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, '0'),
-    String(date.getDate()).padStart(2, '0'),
-  ].join('.');
+  const parts = new Intl.DateTimeFormat('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date(value));
+  const datePart = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? '';
+
+  return [datePart('year'), datePart('month'), datePart('day')].join('.');
 }
 
 function formatDateRange(startDate: string, endDate?: string) {
