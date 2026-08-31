@@ -76,7 +76,7 @@ jobs:
         env:
           MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
-          MICROCMS_NEWS_ENDPOINT: news
+          MICROCMS_NEWS_ENDPOINT: news\n          MICROCMS_EVENTS_ENDPOINT: events
         working-directory: ${{ env.BUILD_PATH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
