@@ -69,10 +69,14 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
     <div class="home-roadmap-track" data-drag-scroll>
       {calendarItems.map((event, index) => (
         <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
-          <div class="home-roadmap-visual" aria-hidden="true">\n            {event.image && <img src={event.image} alt="" />}\n            <span>0{index + 1}</span>\n          </div>
+          <div class="home-roadmap-visual" aria-hidden="true">
+            {event.image && <img src={event.image} alt="" />}
+            <span>0{index + 1}</span>
+          </div>
           <div class="home-roadmap-card-copy">
             <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
-            <h3>{event.title}</h3>\n            {event.location && <p class="home-roadmap-location">{event.location}</p>}
+            <h3>{event.title}</h3>
+            {event.location && <p class="home-roadmap-location">{event.location}</p>}
           </div>
         </article>
       ))}
