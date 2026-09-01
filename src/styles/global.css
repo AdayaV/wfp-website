@@ -1228,7 +1228,7 @@ html, body { overflow-x: clip; }
   z-index: 100;
   top: 24px;
   left: 50%;
-  width: min(calc(100% - 48px), 1120px);
+  width: min(calc(100% - clamp(48px, 5vw, 96px)), 1600px);
   margin: 0;
   padding: 8px 12px 8px 20px;
   border: 1px solid #333;
