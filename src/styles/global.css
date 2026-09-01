@@ -1115,35 +1115,3 @@ html, body { overflow-x: clip; }
   .home-block-heading h2 { font-size: clamp(30px, 9vw, 44px); }
   .news-sidebar { grid-template-columns: 1fr; }
 }
-
-
-/* Use the available canvas on desktop monitors without making laptop layouts too wide. */
-@media (min-width: 1400px) {
-  body {
-    width: calc(100% - 96px);
-    max-width: 1720px;
-    padding-inline: 0;
-  }
-
-  .site-header {
-    padding-top: 8px;
-  }
-
-  .home-lead {
-    min-height: clamp(650px, 42vw, 780px);
-  }
-
-  .home-lead-copy {
-    max-width: min(900px, 62%);
-    padding-inline: clamp(42px, 4vw, 72px);
-  }
-
-  .home-lead-stories {
-    width: calc(100% - clamp(84px, 8vw, 144px));
-    margin-inline: clamp(42px, 4vw, 72px);
-  }
-
-  .home-roadmap-heading {
-    width: min(calc(100% - 96px), 1520px);
-  }
-}
