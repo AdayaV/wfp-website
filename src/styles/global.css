@@ -1054,34 +1054,52 @@ html, body { overflow-x: clip; }
 .home-lead-slide { inset: 0 0 138px; }
 .home-lead-stories { grid-row: 2; align-self: end; }
 
-/* Use the available canvas on desktop monitors without making laptop layouts too wide. */
+/* On large monitors, extend visual backgrounds while keeping controls laptop-sized. */
 @media (min-width: 1400px) {
   body {
-    width: calc(100% - 96px);
-    max-width: 1720px;
-    padding-inline: 0;
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  .site-header,
+  .site-footer {
+    width: min(calc(100% - 32px), 1120px);
+    margin-inline: auto;
   }
 
   .site-header {
-    padding-top: 8px;
+    padding-top: 24px;
+  }
+
+  main > :not(.home-lead):not(.home-roadmap) {
+    width: min(calc(100% - 32px), 1120px);
+    margin-inline: auto;
   }
 
   .home-lead {
-    min-height: clamp(650px, 42vw, 780px);
+    width: 100%;
+    min-height: clamp(620px, 36vw, 760px);
   }
 
   .home-lead-copy {
-    max-width: min(900px, 62%);
-    padding-inline: clamp(42px, 4vw, 72px);
+    width: min(calc(100% - 80px), 1120px);
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: 40px;
   }
 
   .home-lead-stories {
-    width: calc(100% - clamp(84px, 8vw, 144px));
-    margin-inline: clamp(42px, 4vw, 72px);
+    width: min(calc(100% - 80px), 1120px);
+    margin-inline: auto;
+  }
+
+  .home-lead-controls {
+    right: max(40px, calc((100% - 1120px) / 2 + 40px));
   }
 
   .home-roadmap-heading {
-    width: min(calc(100% - 96px), 1520px);
+    width: min(calc(100% - 80px), 1120px);
   }
 }
 
