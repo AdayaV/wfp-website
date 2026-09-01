@@ -1549,7 +1549,7 @@ body {
   align-self: stretch;
   display: grid;
   grid-template-rows: repeat(4, minmax(0, 1fr));
-  margin: 14px 0 0 -1px;
+  margin: 0;
   background: #080808;
 }
 
@@ -1570,8 +1570,8 @@ body {
 .home-latest-list a::before {
   position: absolute;
   z-index: -1;
-  inset: -1px -1px -1px 0;
-  border: 1px solid #333;
+  inset: 0;
+  border: 0;
   background: #080808;
   content: '';
   transition: left .42s ease, background-color .42s ease;
@@ -1773,4 +1773,14 @@ body {
   .home-latest-list a[aria-current="true"]::before {
     left: 0;
   }
+}
+
+/* The site uses spacing and surface contrast instead of visible frames. */
+:where(*, *::before, *::after) {
+  border-width: 0 !important;
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }
