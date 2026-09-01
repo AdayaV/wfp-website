@@ -1366,6 +1366,46 @@ body {
   background: #151515;
 }
 
+.home-lead-article-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-lead-article-link h1 {
+  transition: opacity .2s ease;
+}
+
+.home-lead-article-link:hover h1,
+.home-lead-article-link:focus-visible h1 {
+  opacity: .72;
+}
+
+.home-latest-list a {
+  grid-template-columns: minmax(0, 1fr) 24px;
+}
+
+.home-latest-list strong {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.home-latest-list p {
+  display: -webkit-box;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.6;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 /* Keep the hero artwork full-bleed while its story controls float over the image. */
 .home-lead {
   grid-template-rows: 1fr;
@@ -1401,6 +1441,17 @@ body {
 
 .home-lead-controls {
   bottom: 154px;
+}
+
+@media (min-width: 701px) {
+  .home-lead {
+    height: clamp(650px, calc(100svh - 72px), 920px);
+    min-height: 650px;
+  }
+
+  .home-lead-media img {
+    object-position: center center;
+  }
 }
 
 @media (max-width: 700px) {

@@ -25,9 +25,11 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
           {story.image && <img src={story.image} alt="" />}
         </div>
         <div class="home-lead-copy">
-          <p class="section-label">{story.category} / LATEST NEWS</p>
-          <h1 id={index === 0 ? 'lead-news-title' : undefined}>{story.title}</h1>
-          <a class="home-arrow-link" href={story.href} aria-label="記事を見る">↗</a>
+          <a class="home-lead-article-link" href={story.href} aria-label={`${story.title}の記事を見る`}>
+            <p class="section-label">{story.category} / LATEST NEWS</p>
+            <h1 id={index === 0 ? 'lead-news-title' : undefined}>{story.title}</h1>
+            <span class="home-arrow-link" aria-hidden="true">↗</span>
+          </a>
         </div>
       </article>
     )) : (
@@ -96,10 +98,9 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
           {leadStory.image && <img src={leadStory.image} alt="" data-latest-image />}
         </a>
         <ol class="home-latest-list">
-          {stories.map((story, index) => (
+          {stories.map((story) => (
             <li><a href={story.href} data-latest-story data-image={story.image || ''} data-title={story.title}>
-              <span class="home-latest-number">0{index + 1}</span>
-              <div><small>{story.category} · {story.publishedAt}</small><strong>{story.title}</strong></div>
+              <div><strong>{story.title}</strong><p>{story.summary}</p></div>
               <span aria-hidden="true">↗</span>
             </a></li>
           ))}
