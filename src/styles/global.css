@@ -48,6 +48,48 @@ main {
   padding: 24px 0;
 }
 
+.social-dock {
+  position: fixed;
+  z-index: 900;
+  top: 50%;
+  right: 0;
+  display: grid;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d7d7d7;
+  border-right: 0;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .18);
+  transform: translateY(-50%);
+}
+
+.social-dock a {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  color: #000;
+  background: #fff;
+  transition: background-color .2s ease;
+}
+
+.social-dock a + a {
+  border-top: 1px solid #d7d7d7;
+}
+
+.social-dock a:hover,
+.social-dock a:focus-visible {
+  background: #ededed;
+}
+
+.social-dock svg {
+  width: 23px;
+  height: 23px;
+  display: block;
+  fill: currentColor;
+}
+
 .site-footer {
   display: flex;
   align-items: flex-end;
@@ -1273,6 +1315,16 @@ body:not(.is-home) main {
 }
 
 @media (max-width: 700px) {
+  .social-dock a {
+    width: 48px;
+    height: 48px;
+  }
+
+  .social-dock svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .site-header,
   .is-home .site-header {
     top: 12px;
