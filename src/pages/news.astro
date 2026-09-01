@@ -4,61 +4,109 @@ import { getNewsArticles } from '../data/news';
 
 const newsArticles = await getNewsArticles();
 const categories = ['ALL', 'EVENT', 'DEVELOPMENT', 'TEAM', 'SPONSOR'];
+const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.slice(0, 4)))];
 ---
 
 <WireframeLayout title="ニュース">
-  <header class="page-intro">
-    <p class="section-label">NEWS</p>
-    <h1>ニュース</h1>
+  <header class="news-page-intro">
+    <div>
+      <p class="section-label">WASEDA FORMULA PROJECT</p>
+      <h1><strong>ALL THE LATEST</strong><span>NEWS</span></h1>
+    </div>
+    <p>WFPの活動、マシン開発、イベントに関する最新情報をお届けします。</p>
   </header>
 
-  <section class="content-section" aria-labelledby="news-list-heading">
-    <header class="section-heading">
-      <p class="section-index">01</p>
-      <div><p class="section-label">ALL STORIES</p><h2 id="news-list-heading">記事一覧</h2></div>
-    </header>
-
-    {newsArticles.length ? (
-      <>
-        <nav class="news-filter" aria-label="ニュースのカテゴリ">
+  <section class="news-catalogue" aria-labelledby="news-list-heading">
+    <aside class="news-sidebar" aria-label="ニュースの絞り込み">
+      <div class="news-filter-group">
+        <p>カテゴリー</p>
+        <div class="news-filter-list">
           {categories.map((category) => (
             <button type="button" data-news-filter={category} aria-pressed={category === 'ALL' ? 'true' : 'false'}>
-              {category}
+              <span aria-hidden="true"></span>{category === 'ALL' ? 'すべて' : category}
             </button>
           ))}
-        </nav>
-        <div class="news-index" data-news-index>
+        </div>
+      </div>
+      {years.length > 0 && (
+        <div class="news-filter-group">
+          <p>年別</p>
+          <div class="news-filter-list">
+            <button type="button" data-news-year="ALL" aria-pressed="true"><span aria-hidden="true"></span>すべて</button>
+            {years.map((year) => (
+              <button type="button" data-news-year={year} aria-pressed="false"><span aria-hidden="true"></span>{year}</button>
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+
+    <div class="news-catalogue-main">
+      <header class="news-catalogue-heading">
+        <p class="section-label">LATEST STORIES</p>
+        <h2 id="news-list-heading">最新ニュース</h2>
+        <p><span data-news-count>{newsArticles.length}</span> ARTICLES</p>
+      </header>
+
+      {newsArticles.length ? (
+        <div class="news-grid" data-news-index>
           {newsArticles.map((article) => (
-            <article class="news-card" data-news-category={article.category}>
-              {article.image && <a class="news-card-media" href={article.href}><img src={article.image} alt={article.imageAlt} /></a>}
-              <div>
-                <p class="section-label">{article.category} / <time datetime={article.publishedAtIso}>{article.publishedAt}</time></p>
+            <article class="news-tile" data-news-category={article.category} data-news-year={article.publishedAtIso.slice(0, 4)}>
+              <a class="news-tile-media" href={article.href}>
+                {article.image ? <img src={article.image} alt={article.imageAlt} /> : <span>WFP NEWS</span>}
+              </a>
+              <div class="news-tile-copy">
+                <p class="news-tile-meta">{article.category} <time datetime={article.publishedAtIso}>{article.publishedAt}</time></p>
                 <h3><a href={article.href}>{article.title}</a></h3>
                 <p>{article.summary}</p>
-                <a class="news-card-link" href={article.href}>記事を読む <span aria-hidden="true">↗</span></a>
+                <a class="news-tile-arrow" href={article.href} aria-label={article.title + 'を読む'}>↗</a>
               </div>
             </article>
           ))}
         </div>
-      </>
-    ) : (
-      <div class="news-empty"><p>ニュースは公開準備中です。</p></div>
-    )}
+      ) : (
+        <div class="news-empty news-empty--catalogue">
+          <p class="section-label">COMING SOON</p>
+          <p>ニュースは公開準備中です。</p>
+        </div>
+      )}
+    </div>
   </section>
 
   <script>
     function setupNewsFilters() {
-      const buttons = Array.from(document.querySelectorAll('[data-news-filter]'));
+      const categoryButtons = Array.from(document.querySelectorAll('[data-news-filter]'));
+      const yearButtons = Array.from(document.querySelectorAll('[data-news-year]'));
       const cards = Array.from(document.querySelectorAll('[data-news-category]'));
-      buttons.forEach((button) => button.addEventListener('click', () => {
-        const category = button.getAttribute('data-news-filter');
-        buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      const count = document.querySelector('[data-news-count]');
+      let category = 'ALL';
+      let year = 'ALL';
+
+      const update = () => {
+        let visible = 0;
         cards.forEach((card) => {
-          const show = category === 'ALL' || card.getAttribute('data-news-category') === category;
+          const categoryMatches = category === 'ALL' || card.getAttribute('data-news-category') === category;
+          const yearMatches = year === 'ALL' || card.getAttribute('data-news-year') === year;
+          const show = categoryMatches && yearMatches;
           card.toggleAttribute('hidden', !show);
+          if (show) visible += 1;
         });
+        if (count) count.textContent = String(visible);
+      };
+
+      categoryButtons.forEach((button) => button.addEventListener('click', () => {
+        category = button.getAttribute('data-news-filter') || 'ALL';
+        categoryButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        update();
+      }));
+
+      yearButtons.forEach((button) => button.addEventListener('click', () => {
+        year = button.getAttribute('data-news-year') || 'ALL';
+        yearButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+        update();
       }));
     }
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupNewsFilters, { once: true });
     else setupNewsFilters();
   </script>
