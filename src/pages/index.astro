@@ -269,19 +269,28 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
       const image = media?.querySelector('[data-latest-image]');
       if (!(media instanceof HTMLAnchorElement) || !(image instanceof HTMLImageElement)) return;
 
-      document.querySelectorAll('[data-latest-story]').forEach((story) => {
-        if (!(story instanceof HTMLAnchorElement)) return;
-        const activate = () => {
-          const nextImage = story.dataset.image;
-          if (!nextImage) return;
+      const storyLinks = Array.from(document.querySelectorAll('[data-latest-story]'))
+        .filter((story): story is HTMLAnchorElement => story instanceof HTMLAnchorElement);
+
+      const activateStory = (story: HTMLAnchorElement) => {
+        storyLinks.forEach((link) => link.removeAttribute('aria-current'));
+        story.setAttribute('aria-current', 'true');
+        const nextImage = story.dataset.image;
+        if (nextImage) {
           image.src = nextImage;
           image.alt = '';
-          media.href = story.href;
-          media.setAttribute('aria-label', story.dataset.title || '記事を見る');
-        };
-        story.addEventListener('mouseenter', activate);
-        story.addEventListener('focus', activate);
+        }
+        media.href = story.href;
+        media.setAttribute('aria-label', story.dataset.title || '記事を見る');
+      };
+
+      storyLinks.forEach((story) => {
+        if (!(story instanceof HTMLAnchorElement)) return;
+        story.addEventListener('mouseenter', () => activateStory(story));
+        story.addEventListener('focus', () => activateStory(story));
       });
+
+      if (storyLinks[0]) activateStory(storyLinks[0]);
     }
 
     function setupHome() {
