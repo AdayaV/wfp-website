@@ -11,10 +11,11 @@ const navigation = [
   { label: 'ホーム', href: siteRoot },
   { label: 'ニュース', href: siteRoot + 'news/' },
   { label: 'チーム', href: siteRoot + 'team/' },
+  { label: 'スケジュール', href: siteRoot + 'schedule/' },
   { label: 'マシン', href: siteRoot + 'machine/' },
   { label: 'スポンサー', href: siteRoot + 'sponsors/' },
-  { label: 'スケジュール', href: siteRoot + 'schedule/' },
 ];
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
 
 <!doctype html>
@@ -25,11 +26,14 @@ const navigation = [
     <meta name="description" content="Waseda Formula Project（WFP）の公式ウェブサイト" />
     <title>{title} | Waseda Formula Project</title>
   </head>
-  <body>
+  <body class:list={{ 'is-home': title === 'ホーム' }}>
     <header class="site-header">
       <a class="site-mark" href={siteRoot}>WFP</a>
       <nav aria-label="メインナビゲーション">
-        {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
+        {navigation.map((item) => {
+          const itemPath = new URL(item.href).pathname.replace(/\/+$/, '') || '/';
+          return <a href={item.href} aria-current={currentPath === itemPath ? 'page' : undefined}>{item.label}</a>;
+        })}
       </nav>
     </header>
     <main>

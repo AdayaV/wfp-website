@@ -17,8 +17,12 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #000;
+  min-height: 64px;
+  padding: 8px 12px 8px 20px;
+  border: 0;
+  color: #111;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .22);
 }
 
 .site-header nav,
@@ -461,6 +465,47 @@ h2 {
 .home-sponsor-grid strong {
   font-size: 12px;
   line-height: 1.4;
+}
+
+.site-header nav {
+  flex-wrap: nowrap;
+  gap: 2px;
+}
+
+.site-header nav a {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 0 13px;
+  color: #222;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color .18s ease, background-color .18s ease;
+}
+
+.site-header nav a:hover,
+.site-header nav a:focus-visible {
+  background: #eee;
+}
+
+.site-header nav a[aria-current="page"] {
+  color: #fff;
+  background: #111;
+}
+
+.is-home .site-header {
+  position: absolute;
+  z-index: 50;
+  top: 24px;
+  left: 50%;
+  width: min(calc(100% - 48px), 1120px);
+  transform: translateX(-50%);
+}
+
+.is-home main {
+  padding-top: 0;
 }
 
 .home-sponsor-grid img,
@@ -1176,6 +1221,49 @@ html, body { overflow-x: clip; }
   .news-sidebar { grid-template-columns: 1fr; }
 }
 
+/* Final island-navigation sizing after the legacy responsive rules above. */
+@media (min-width: 1400px) {
+  .site-header,
+  .is-home .site-header {
+    padding: 8px 12px 8px 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .site-header,
+  .is-home .site-header {
+    width: calc(100% - 24px);
+    min-height: 56px;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    padding: 7px 8px 7px 14px;
+  }
+
+  .is-home .site-header {
+    top: 12px;
+  }
+
+  .site-header nav {
+    width: auto;
+    min-width: 0;
+    flex: 1;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .site-header nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-header nav a {
+    min-height: 38px;
+    padding-inline: 10px;
+    font-size: 11px;
+  }
+}
+
 /* Sponsor marks sit directly on the page instead of inside individual cards. */
 .home-sponsor-grid,
 .sponsor-grid {
@@ -1451,6 +1539,11 @@ body {
     height: calc(100vh - 72px);
     min-height: calc(100vh - 72px);
     max-height: none;
+  }
+
+  .is-home .home-lead {
+    height: 100vh;
+    min-height: 100vh;
   }
 
   .home-lead-media img {
