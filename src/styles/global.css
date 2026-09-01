@@ -1175,3 +1175,53 @@ html, body { overflow-x: clip; }
   .home-block-heading h2 { font-size: clamp(30px, 9vw, 44px); }
   .news-sidebar { grid-template-columns: 1fr; }
 }
+
+/* Sponsor marks sit directly on the page instead of inside individual cards. */
+.home-sponsor-grid,
+.sponsor-grid {
+  border: 0;
+  column-gap: clamp(20px, 4vw, 56px);
+  row-gap: clamp(26px, 4vw, 52px);
+}
+
+.home-sponsor-grid li,
+.sponsor-grid li {
+  min-height: 104px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 0;
+  text-align: center;
+  background: transparent;
+}
+
+.home-sponsor-grid li > span,
+.sponsor-logo-placeholder {
+  display: none;
+}
+
+.home-sponsor-grid strong,
+.sponsor-grid strong {
+  font-size: clamp(13px, 1.25vw, 18px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+  .home-sponsor-grid,
+  .sponsor-grid {
+    column-gap: 18px;
+    row-gap: 28px;
+  }
+
+  .home-sponsor-grid li,
+  .sponsor-grid li {
+    min-height: 82px;
+    padding: 8px 4px;
+  }
+
+  .home-sponsor-grid strong,
+  .sponsor-grid strong {
+    font-size: 13px;
+  }
+}
