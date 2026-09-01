@@ -280,6 +280,7 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
           image.src = nextImage;
           image.alt = '';
         }
+        image.classList.remove('is-changing');
         media.href = story.href;
         media.setAttribute('aria-label', story.dataset.title || '記事を見る');
       };
@@ -290,7 +291,10 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
 
         if (imageChangeTimer !== undefined) window.clearTimeout(imageChangeTimer);
         if (immediate) updateMedia(story);
-        else imageChangeTimer = window.setTimeout(() => updateMedia(story), 520);
+        else {
+          image.classList.add('is-changing');
+          imageChangeTimer = window.setTimeout(() => updateMedia(story), 520);
+        }
       };
 
       storyLinks.forEach((story) => {
