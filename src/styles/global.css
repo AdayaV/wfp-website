@@ -1318,3 +1318,32 @@ body {
 .home-sponsors {
   padding-block: clamp(56px, 7vw, 92px);
 }
+
+/* Give the latest-news image and list a deliberate separation on dark backgrounds. */
+.home-latest-layout {
+  gap: 24px;
+}
+
+.home-latest-list {
+  margin: 0;
+  background: #080808;
+}
+
+.home-latest-list a {
+  padding: 26px 28px;
+  border-color: #333;
+}
+
+@media (max-width: 700px) {
+  .home-latest-layout {
+    gap: 18px;
+  }
+
+  .home-latest-list {
+    margin: 0;
+  }
+
+  .home-latest-list a {
+    padding: 22px 20px;
+  }
+}
