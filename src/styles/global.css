@@ -1118,15 +1118,41 @@ html, body { overflow-x: clip; }
 @media (max-width: 700px) {
   body { padding-inline: 16px; font-size: 15px; }
   .site-header nav { width: 100%; gap: 7px 12px; font-size: 13px; }
-  .home-lead { min-height: 720px; grid-template-rows: minmax(360px, 1fr) auto; }
-  .home-lead-slide { inset: 0 0 220px; }
-  .home-lead-copy { max-width: 100%; padding: 110px 20px 24px; }
-  .home-lead-copy h1 { font-size: clamp(34px, 11vw, 52px); }
-  .home-lead-controls { right: 20px; bottom: 236px; }
-  .home-lead-stories { width: calc(100% - 32px); grid-template-columns: 1fr 1fr; margin: 0 16px 16px; }
-  .home-lead-stories button, .home-lead-stories li:nth-child(2n) button { min-height: 94px; border-right: 1px solid #555; border-bottom: 1px solid #555; }
-  .home-lead-stories li:nth-child(2n) button { border-right: 0; }
-  .home-lead-stories li:nth-last-child(-n + 2) button { border-bottom: 0; }
+  .home-lead {
+    width: calc(100% + 32px);
+    min-height: 690px;
+    grid-template-rows: minmax(400px, 1fr) 104px;
+    margin-inline: -16px;
+    border-inline: 0;
+  }
+  .home-lead-slide { inset: 0 0 104px; }
+  .home-lead-copy { max-width: 100%; padding: 110px 22px 34px; }
+  .home-lead-copy h1 { font-size: clamp(36px, 10vw, 48px); }
+  .home-lead-controls { right: 16px; bottom: 16px; }
+  .home-lead-controls button { width: 68px; height: 72px; font-size: 20px; }
+  .home-lead-stories {
+    width: calc(100% - 176px);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0 160px 16px 16px;
+    background: transparent;
+  }
+  .home-lead-stories button,
+  .home-lead-stories li:nth-child(2n) button {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-right: 6px solid #050505;
+    border-bottom: 0;
+    color: #bbb;
+    background: #343434;
+  }
+  .home-lead-stories li:last-child button { border-right: 0; }
+  .home-lead-stories button[aria-current="true"] { border-bottom: 5px solid #fff; color: #fff; background: #080808; }
+  .home-lead-stories span { grid-row: auto; font-size: 18px; }
+  .home-lead-stories small,
+  .home-lead-stories strong { display: none; }
   .home-roadmap-heading { width: calc(100% - 32px); }
   .home-roadmap-heading h2 { font-size: clamp(30px, 9vw, 44px); }
   .home-roadmap-countdown strong { font-size: clamp(30px, 10vw, 48px); }
