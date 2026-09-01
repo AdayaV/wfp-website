@@ -1784,3 +1784,73 @@ body {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
+
+/* Give large displays the same broad editorial canvas used by the visual references. */
+@media (min-width: 1400px) {
+  main > :not(.home-lead):not(.home-roadmap),
+  .site-footer {
+    width: min(calc(100% - 96px), 1400px);
+    max-width: none;
+    margin-inline: auto;
+  }
+
+  .home-lead-copy,
+  .home-lead-stories,
+  .home-roadmap-heading {
+    width: min(calc(100% - 96px), 1400px);
+  }
+
+  .home-lead-controls {
+    right: max(48px, calc((100% - 1400px) / 2 + 48px));
+  }
+
+  .news-page-intro {
+    min-height: 390px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr);
+    gap: 96px;
+    padding-block: 94px 72px;
+  }
+
+  .news-page-intro h1 {
+    font-size: clamp(72px, 5vw, 92px);
+  }
+
+  .news-page-intro > p {
+    max-width: 520px;
+    font-size: 19px;
+  }
+
+  .news-catalogue {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 72px;
+    padding-block: 84px 128px;
+  }
+
+  .news-catalogue-heading h2 {
+    font-size: 58px;
+  }
+
+  .news-grid {
+    gap: 54px 24px;
+  }
+
+  .news-tile h3 {
+    font-size: 21px;
+  }
+
+  .news-tile-copy > p:not(.news-tile-meta) {
+    font-size: 14px;
+  }
+
+  .home-latest-media {
+    min-height: 650px;
+  }
+
+  .home-latest-list strong {
+    font-size: 20px;
+  }
+
+  .home-latest-list p {
+    font-size: 14px;
+  }
+}
