@@ -1488,19 +1488,29 @@ body {
 /* Join the latest-news list to its image and let the hovered story lean into it. */
 .home-latest-layout {
   gap: 0;
+  align-items: stretch;
 }
 
 .home-latest-list {
   position: relative;
   z-index: 2;
-  margin: 14px 0 -14px -18px;
+  align-self: stretch;
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  margin: 14px 0 0;
   background: #080808;
 }
 
+.home-latest-list li {
+  min-height: 0;
+}
+
 .home-latest-list a {
+  height: 100%;
+  min-height: 0;
   padding: 26px 28px;
   border-color: #333;
-  transition: background-color .2s ease, transform .2s ease, width .2s ease;
+  transition: background-color .52s ease, margin-left .52s ease, width .52s ease, padding-left .52s ease;
 }
 
 .home-latest {
@@ -1622,11 +1632,15 @@ body {
   }
 
   .home-latest-list {
+    display: block;
     margin: 0;
   }
 
   .home-latest-list a {
+    height: auto;
+    min-height: 120px;
     padding: 22px 20px;
+    transition: background-color .3s ease;
   }
 
   .home-latest {

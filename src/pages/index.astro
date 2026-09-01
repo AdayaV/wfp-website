@@ -272,9 +272,9 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
       const storyLinks = Array.from(document.querySelectorAll('[data-latest-story]'))
         .filter((story): story is HTMLAnchorElement => story instanceof HTMLAnchorElement);
 
-      const activateStory = (story: HTMLAnchorElement) => {
-        storyLinks.forEach((link) => link.removeAttribute('aria-current'));
-        story.setAttribute('aria-current', 'true');
+      let imageChangeTimer: number | undefined;
+
+      const updateMedia = (story: HTMLAnchorElement) => {
         const nextImage = story.dataset.image;
         if (nextImage) {
           image.src = nextImage;
@@ -284,13 +284,22 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
         media.setAttribute('aria-label', story.dataset.title || '記事を見る');
       };
 
+      const activateStory = (story: HTMLAnchorElement, immediate = false) => {
+        storyLinks.forEach((link) => link.removeAttribute('aria-current'));
+        story.setAttribute('aria-current', 'true');
+
+        if (imageChangeTimer !== undefined) window.clearTimeout(imageChangeTimer);
+        if (immediate) updateMedia(story);
+        else imageChangeTimer = window.setTimeout(() => updateMedia(story), 520);
+      };
+
       storyLinks.forEach((story) => {
         if (!(story instanceof HTMLAnchorElement)) return;
         story.addEventListener('mouseenter', () => activateStory(story));
         story.addEventListener('focus', () => activateStory(story));
       });
 
-      if (storyLinks[0]) activateStory(storyLinks[0]);
+      if (storyLinks[0]) activateStory(storyLinks[0], true);
     }
 
     function setupHome() {
