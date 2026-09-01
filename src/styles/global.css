@@ -1221,6 +1221,57 @@ html, body { overflow-x: clip; }
   .news-sidebar { grid-template-columns: 1fr; }
 }
 
+/* Unified floating navigation: the same black island follows every page. */
+.site-header,
+.is-home .site-header {
+  position: fixed;
+  z-index: 100;
+  top: 24px;
+  left: 50%;
+  width: min(calc(100% - 48px), 1120px);
+  margin: 0;
+  padding: 8px 12px 8px 20px;
+  border: 1px solid #333;
+  color: #fff;
+  background: rgba(7, 7, 7, .94);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .34);
+  transform: translateX(-50%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.site-header .site-mark,
+.site-header nav a {
+  color: #fff;
+}
+
+.site-header nav a:hover,
+.site-header nav a:focus-visible {
+  background: #252525;
+}
+
+.site-header nav a[aria-current="page"] {
+  color: #111;
+  background: #fff;
+}
+
+body:not(.is-home) main {
+  padding-top: 112px;
+}
+
+@media (max-width: 700px) {
+  .site-header,
+  .is-home .site-header {
+    top: 12px;
+    width: calc(100% - 24px);
+    padding: 7px 8px 7px 14px;
+  }
+
+  body:not(.is-home) main {
+    padding-top: 88px;
+  }
+}
+
 /* Final island-navigation sizing after the legacy responsive rules above. */
 @media (min-width: 1400px) {
   .site-header,
