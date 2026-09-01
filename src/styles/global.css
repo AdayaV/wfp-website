@@ -469,14 +469,14 @@ h2 {
 
 .site-header nav {
   flex-wrap: nowrap;
-  gap: 2px;
+  gap: 8px;
 }
 
 .site-header nav a {
   display: flex;
   align-items: center;
-  min-height: 42px;
-  padding: 0 13px;
+  min-height: 52px;
+  padding: 0 16px;
   color: #222;
   font-size: 13px;
   font-weight: 600;
@@ -1229,6 +1229,7 @@ html, body { overflow-x: clip; }
   top: 24px;
   left: 50%;
   width: min(calc(100% - clamp(48px, 5vw, 96px)), 1600px);
+  min-height: 78px;
   margin: 0;
   padding: 8px 12px 8px 20px;
   border: 1px solid #333;
@@ -1249,7 +1250,7 @@ html, body { overflow-x: clip; }
 }
 
 .site-header nav {
-  margin-left: 28px;
+  margin-left: 36px;
 }
 
 .site-header .site-mark,
