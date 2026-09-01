@@ -1,8 +1,33 @@
+export type SponsorTierId = 'platinum' | 'gold' | 'silver';
+
+export interface Sponsor {
+  id?: string;
+  name: string;
+  logo?: string;
+  logoAlt?: string;
+  website?: string;
+  displayOrder?: number;
+}
+
 export interface SponsorTier {
-  id: string;
+  id: SponsorTierId;
   label: string;
   labelEn: string;
-  sponsors: string[];
+  sponsors: Sponsor[];
+}
+
+interface MicroCMSSponsorEntry {
+  id: string;
+  name: string;
+  tier: string | string[];
+  logo?: { url: string; width: number; height: number };
+  logoAlt?: string;
+  website?: string;
+  displayOrder?: number;
+}
+
+interface MicroCMSListResponse {
+  contents: MicroCMSSponsorEntry[];
 }
 
 export const sponsorTiers: SponsorTier[] = [
@@ -31,7 +56,7 @@ export const sponsorTiers: SponsorTier[] = [
       '株式会社三五',
       '有限会社馬場製作所',
       '株式会社スリーボンド',
-    ],
+    ].map((name) => ({ name })),
   },
   {
     id: 'gold',
@@ -50,7 +75,7 @@ export const sponsorTiers: SponsorTier[] = [
       '株式会社LINK JAPAN',
       'MOTUL Japan株式会社',
       '株式会社ソリノ',
-    ],
+    ].map((name) => ({ name })),
   },
   {
     id: 'silver',
@@ -85,6 +110,48 @@ export const sponsorTiers: SponsorTier[] = [
       '株式会社小野測器',
       '株式会社モトリティ',
       'スパルジャパン株式会社',
-    ],
+    ].map((name) => ({ name })),
   },
 ];
+
+const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = import.meta.env.MICROCMS_API_KEY;
+const sponsorsEndpoint = import.meta.env.MICROCMS_SPONSORS_ENDPOINT || 'sponsors';
+
+function normalizeTier(value: MicroCMSSponsorEntry['tier']): SponsorTierId {
+  const raw = (Array.isArray(value) ? value[0] : value || 'silver').toLowerCase();
+  return raw === 'platinum' || raw === 'gold' ? raw : 'silver';
+}
+
+export async function getSponsorTiers(): Promise<SponsorTier[]> {
+  if (!serviceDomain || !apiKey) return sponsorTiers;
+
+  try {
+    const url = new URL('https://' + serviceDomain + '.microcms.io/api/v1/' + sponsorsEndpoint);
+    url.searchParams.set('limit', '100');
+    url.searchParams.set('orders', 'displayOrder');
+
+    const response = await fetch(url, { headers: { 'X-MICROCMS-API-KEY': apiKey } });
+    if (!response.ok) throw new Error(String(response.status));
+
+    const data = await response.json() as MicroCMSListResponse;
+    if (!data.contents.length) return sponsorTiers;
+
+    return sponsorTiers.map((tier) => ({
+      ...tier,
+      sponsors: data.contents
+        .filter((entry) => normalizeTier(entry.tier) === tier.id)
+        .map((entry) => ({
+          id: entry.id,
+          name: entry.name,
+          logo: entry.logo?.url,
+          logoAlt: entry.logoAlt || entry.name,
+          website: entry.website,
+          displayOrder: entry.displayOrder,
+        })),
+    }));
+  } catch (error) {
+    console.warn('microCMS sponsors request failed. Static sponsors will be used.', error);
+    return sponsorTiers;
+  }
+}

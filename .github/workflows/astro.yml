@@ -78,6 +78,7 @@ jobs:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           MICROCMS_NEWS_ENDPOINT: news
           MICROCMS_EVENTS_ENDPOINT: events
+          MICROCMS_SPONSORS_ENDPOINT: sponsors
         working-directory: ${{ env.BUILD_PATH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

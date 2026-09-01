@@ -1,6 +1,8 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
-import { sponsorTiers } from '../data/sponsors';
+import { getSponsorTiers } from '../data/sponsors';
+
+const sponsorTiers = await getSponsorTiers();
 ---
 
 <WireframeLayout title="スポンサー">
@@ -23,7 +25,19 @@ import { sponsorTiers } from '../data/sponsors';
 
           <ul class="sponsor-grid">
             {tier.sponsors.map((sponsor) => (
-              <li><span class="sponsor-logo-placeholder" aria-hidden="true">ロゴ</span><strong>{sponsor}</strong></li>
+              <li>
+                {sponsor.website ? (
+                  <a href={sponsor.website} target="_blank" rel="noreferrer">
+                    {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+                    <strong>{sponsor.name}</strong>
+                  </a>
+                ) : (
+                  <>
+                    {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+                    <strong>{sponsor.name}</strong>
+                  </>
+                )}
+              </li>
             ))}
           </ul>
         </section>

@@ -2,11 +2,12 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getNewsArticles } from '../data/news';
 import { getScheduleItems } from '../data/schedule';
-import { sponsorTiers } from '../data/sponsors';
+import { getSponsorTiers } from '../data/sponsors';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
 const stories = (await getNewsArticles()).slice(0, 4);
 const leadStory = stories[0];
+const sponsorTiers = await getSponsorTiers();
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
 const scheduleItems = await getScheduleItems();
 const calendarItems = scheduleItems.length ? scheduleItems : [
@@ -91,12 +92,12 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
     </header>
     {stories.length ? (
       <div class="home-latest-layout">
-        <a class="home-latest-media" href={leadStory.href} aria-label={leadStory.title}>
-          {leadStory.image && <img src={leadStory.image} alt="" />}
+        <a class="home-latest-media" href={leadStory.href} aria-label={leadStory.title} data-latest-media>
+          {leadStory.image && <img src={leadStory.image} alt="" data-latest-image />}
         </a>
         <ol class="home-latest-list">
           {stories.map((story, index) => (
-            <li><a href={story.href}>
+            <li><a href={story.href} data-latest-story data-image={story.image || ''} data-title={story.title}>
               <span class="home-latest-number">0{index + 1}</span>
               <div><small>{story.category} · {story.publishedAt}</small><strong>{story.title}</strong></div>
               <span aria-hidden="true">↗</span>
@@ -141,7 +142,19 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
     </header>
     <ul class="home-sponsor-grid">
       {platinumSponsors.map((sponsor) => (
-        <li><span aria-hidden="true">ロゴ</span><strong>{sponsor}</strong></li>
+        <li>
+          {sponsor.website ? (
+            <a href={sponsor.website} target="_blank" rel="noreferrer">
+              {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+              <strong>{sponsor.name}</strong>
+            </a>
+          ) : (
+            <>
+              {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+              <strong>{sponsor.name}</strong>
+            </>
+          )}
+        </li>
       ))}
     </ul>
   </section>
@@ -249,11 +262,33 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
       update();
       window.setInterval(update, 60000);
     }
+
+    function setupLatestNewsPreview() {
+      const media = document.querySelector('[data-latest-media]');
+      const image = media?.querySelector('[data-latest-image]');
+      if (!(media instanceof HTMLAnchorElement) || !(image instanceof HTMLImageElement)) return;
+
+      document.querySelectorAll('[data-latest-story]').forEach((story) => {
+        if (!(story instanceof HTMLAnchorElement)) return;
+        const activate = () => {
+          const nextImage = story.dataset.image;
+          if (!nextImage) return;
+          image.src = nextImage;
+          image.alt = '';
+          media.href = story.href;
+          media.setAttribute('aria-label', story.dataset.title || '記事を見る');
+        };
+        story.addEventListener('mouseenter', activate);
+        story.addEventListener('focus', activate);
+      });
+    }
+
     function setupHome() {
       setupHero();
       setupDragScroll();
       setupRoadmapCarousel();
       setupCountdown();
+      setupLatestNewsPreview();
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupHome, { once: true });
     else setupHome();
