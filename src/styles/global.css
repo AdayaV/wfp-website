@@ -1332,19 +1332,22 @@ body {
   padding-block: clamp(56px, 7vw, 92px);
 }
 
-/* Give the latest-news image and list a deliberate separation on dark backgrounds. */
+/* Join the latest-news list to its image and let the hovered story lean into it. */
 .home-latest-layout {
-  gap: 24px;
+  gap: 0;
 }
 
 .home-latest-list {
-  margin: 0;
+  position: relative;
+  z-index: 2;
+  margin: 14px 0 -14px -18px;
   background: #080808;
 }
 
 .home-latest-list a {
   padding: 26px 28px;
   border-color: #333;
+  transition: background-color .2s ease, transform .2s ease, width .2s ease;
 }
 
 .home-latest {
@@ -1358,12 +1361,51 @@ body {
 
 .home-latest-list a:hover,
 .home-latest-list a:focus-visible {
+  width: calc(100% + 14px);
+  transform: translateX(-14px);
   background: #151515;
+}
+
+/* Keep the hero artwork full-bleed while its story controls float over the image. */
+.home-lead {
+  grid-template-rows: 1fr;
+}
+
+.home-lead-slide {
+  inset: 0;
+}
+
+.home-lead-copy {
+  padding-bottom: 180px;
+}
+
+.home-lead-stories {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  width: min(calc(100% - 80px), 1120px);
+  margin: 0;
+  transform: translateX(-50%);
+  background: transparent;
+}
+
+.home-lead-stories button {
+  background: rgba(30, 30, 30, .66);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.home-lead-stories button[aria-current="true"] {
+  background: rgba(5, 5, 5, .86);
+}
+
+.home-lead-controls {
+  bottom: 154px;
 }
 
 @media (max-width: 700px) {
   .home-latest-layout {
-    gap: 18px;
+    gap: 0;
   }
 
   .home-latest-list {
@@ -1376,5 +1418,45 @@ body {
 
   .home-latest {
     padding: 64px 20px 76px;
+  }
+
+  .home-lead {
+    grid-template-rows: 1fr;
+  }
+
+  .home-lead-slide {
+    inset: 0;
+  }
+
+  .home-lead-copy {
+    padding-bottom: 130px;
+  }
+
+  .home-lead-stories {
+    left: 16px;
+    bottom: 16px;
+    width: calc(100% - 176px);
+    margin: 0;
+    transform: none;
+  }
+
+  .home-lead-controls {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .home-lead-stories button,
+  .home-lead-stories li:nth-child(2n) button {
+    background: rgba(30, 30, 30, .68);
+  }
+
+  .home-lead-stories button[aria-current="true"] {
+    background: rgba(5, 5, 5, .88);
+  }
+
+  .home-latest-list a:hover,
+  .home-latest-list a:focus-visible {
+    width: 100%;
+    transform: none;
   }
 }
