@@ -225,7 +225,9 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
       }, { passive: true });
       const initial = cards.find((card) => card.getAttribute('aria-current') === 'date') ?? cards[0];
       window.setTimeout(() => {
-        initial?.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+        if (initial instanceof HTMLElement) {
+          track.scrollLeft = initial.offsetLeft - (track.clientWidth - initial.clientWidth) / 2;
+        }
         updateCurrent();
       }, 100);
     }
