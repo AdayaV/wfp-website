@@ -9,7 +9,7 @@ export interface MicroCMSImage {
 export interface MicroCMSNewsEntry {
   id: string;
   title: string;
-  category: NewsCategory;
+  category: NewsCategory | NewsCategory[];
   summary: string;
   body: string;
   image?: MicroCMSImage;
@@ -39,13 +39,16 @@ export interface NewsArticle {
   imageAlt: string;
 }
 
-// 段階的な移行中も既存ページを生成できるよう残す互換用データです。
 export const newsArticles: NewsArticle[] = [];
 
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : import.meta.env.BASE_URL + '/';
 const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 const newsEndpoint = import.meta.env.MICROCMS_NEWS_ENDPOINT || 'news';
+
+export function getNewsCategory(category: MicroCMSNewsEntry['category']): NewsCategory {
+  return Array.isArray(category) ? (category[0] || 'TEAM') : category;
+}
 
 export function toNewsArticle(entry: MicroCMSNewsEntry): NewsArticle {
   const publishedAtIso = entry.publishedAt.slice(0, 10);
@@ -54,7 +57,7 @@ export function toNewsArticle(entry: MicroCMSNewsEntry): NewsArticle {
     title: entry.title,
     publishedAt: publishedAtIso.replaceAll('-', '.'),
     publishedAtIso,
-    category: entry.category,
+    category: getNewsCategory(entry.category),
     summary: entry.summary,
     href: base + 'news/' + entry.id + '/',
     image: entry.image?.url,
