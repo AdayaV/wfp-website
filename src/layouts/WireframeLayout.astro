@@ -36,6 +36,12 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
         })}
       </nav>
     </header>
+    <script>
+      const header = document.querySelector('.site-header');
+      const updateHeaderShadow = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+      updateHeaderShadow();
+      window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+    </script>
     <main>
       <slot />
     </main>

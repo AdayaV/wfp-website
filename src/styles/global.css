@@ -1234,10 +1234,22 @@ html, body { overflow-x: clip; }
   border: 1px solid #333;
   color: #fff;
   background: rgba(7, 7, 7, .94);
-  box-shadow: 0 10px 34px rgba(0, 0, 0, .34);
+  box-shadow: none;
   transform: translateX(-50%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+}
+
+.site-header.is-scrolled {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .58);
+}
+
+.site-header {
+  justify-content: flex-start;
+}
+
+.site-header nav {
+  margin-left: 28px;
 }
 
 .site-header .site-mark,
@@ -1302,6 +1314,7 @@ body:not(.is-home) main {
     gap: 0;
     overflow-x: auto;
     scrollbar-width: none;
+    margin-left: 6px;
   }
 
   .site-header nav::-webkit-scrollbar {
