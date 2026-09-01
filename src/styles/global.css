@@ -1549,7 +1549,7 @@ body {
   align-self: stretch;
   display: grid;
   grid-template-rows: repeat(4, minmax(0, 1fr));
-  margin: 14px 0 0;
+  margin: 14px 0 0 -1px;
   background: #080808;
 }
 
@@ -1574,7 +1574,7 @@ body {
   border: 1px solid #333;
   background: #080808;
   content: '';
-  transition: left .52s ease, background-color .52s ease;
+  transition: left .42s ease, background-color .42s ease;
 }
 
 .home-latest {
@@ -1583,11 +1583,18 @@ body {
 }
 
 .home-latest-media img {
+  position: absolute;
+  inset: 0;
   opacity: 1;
-  transition: opacity .52s ease;
+  transition: opacity .42s ease;
 }
 
-.home-latest-media img.is-changing {
+.home-latest-media {
+  position: relative;
+}
+
+.home-latest-media img.is-incoming,
+.home-latest-media img.is-leaving {
   opacity: 0;
 }
 

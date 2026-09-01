@@ -266,21 +266,43 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
 
     function setupLatestNewsPreview() {
       const media = document.querySelector('[data-latest-media]');
-      const image = media?.querySelector('[data-latest-image]');
+      let image = media?.querySelector('[data-latest-image]');
       if (!(media instanceof HTMLAnchorElement) || !(image instanceof HTMLImageElement)) return;
 
       const storyLinks = Array.from(document.querySelectorAll('[data-latest-story]'))
         .filter((story): story is HTMLAnchorElement => story instanceof HTMLAnchorElement);
 
-      let imageChangeTimer: number | undefined;
+      let transitionId = 0;
 
-      const updateMedia = (story: HTMLAnchorElement) => {
+      const updateMedia = (story: HTMLAnchorElement, immediate = false) => {
         const nextImage = story.dataset.image;
-        if (nextImage) {
+        if (nextImage && immediate) {
           image.src = nextImage;
           image.alt = '';
+        } else if (nextImage && nextImage !== image.src) {
+          const currentTransition = ++transitionId;
+          const previousImage = image;
+          const incomingImage = image.cloneNode() as HTMLImageElement;
+          incomingImage.src = nextImage;
+          incomingImage.alt = '';
+          incomingImage.removeAttribute('data-latest-image');
+          incomingImage.classList.add('is-incoming');
+          media.append(incomingImage);
+
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            previousImage.classList.add('is-leaving');
+            incomingImage.classList.remove('is-incoming');
+          }));
+
+          window.setTimeout(() => {
+            if (currentTransition !== transitionId) return;
+            media.querySelectorAll('img').forEach((candidate) => {
+              if (candidate !== incomingImage) candidate.remove();
+            });
+            incomingImage.setAttribute('data-latest-image', '');
+            image = incomingImage;
+          }, 420);
         }
-        image.classList.remove('is-changing');
         media.href = story.href;
         media.setAttribute('aria-label', story.dataset.title || '記事を見る');
       };
@@ -289,12 +311,7 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
         storyLinks.forEach((link) => link.removeAttribute('aria-current'));
         story.setAttribute('aria-current', 'true');
 
-        if (imageChangeTimer !== undefined) window.clearTimeout(imageChangeTimer);
-        if (immediate) updateMedia(story);
-        else {
-          image.classList.add('is-changing');
-          imageChangeTimer = window.setTimeout(() => updateMedia(story), 520);
-        }
+        updateMedia(story, immediate);
       };
 
       storyLinks.forEach((story) => {
