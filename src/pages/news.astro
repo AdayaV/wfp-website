@@ -16,7 +16,7 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
     <p>WFPの活動、マシン開発、イベントに関する最新情報をお届けします。</p>
   </header>
 
-  <section class="news-catalogue" aria-labelledby="news-list-heading">
+  <section class="news-catalogue" aria-label="ニュース一覧">
     <aside class="news-sidebar" aria-label="ニュースの絞り込み">
       <div class="news-filter-group">
         <p>カテゴリー</p>
@@ -43,8 +43,6 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
 
     <div class="news-catalogue-main">
       <header class="news-catalogue-heading">
-        <p class="section-label">LATEST STORIES</p>
-        <h2 id="news-list-heading">最新ニュース</h2>
         <p><span data-news-count>{newsArticles.length}</span> ARTICLES</p>
       </header>
 

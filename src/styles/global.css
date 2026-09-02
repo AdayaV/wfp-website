@@ -1139,7 +1139,7 @@ h2 {
 .news-sidebar{display:grid;align-content:start;gap:34px}.news-filter-group>p{margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid #000;font-size:13px;font-weight:700;letter-spacing:.06em}
 .news-filter-list{border:1px solid #ddd;border-bottom:0}.news-filter-list button{width:100%;display:flex;align-items:center;gap:12px;padding:13px 14px;border:0;border-bottom:1px solid #ddd;color:#111;text-align:left;background:#fff;font:inherit;font-size:12px;cursor:pointer}
 .news-filter-list button span{width:11px;height:11px;border:1px solid #bbb}.news-filter-list button[aria-pressed="true"]{font-weight:700}.news-filter-list button[aria-pressed="true"] span{border-color:#000;background:#000}
-.news-catalogue-heading{display:grid;grid-template-columns:1fr auto;align-items:end;margin-bottom:28px}.news-catalogue-heading .section-label{grid-column:1/-1}.news-catalogue-heading h2{font-size:clamp(34px,4vw,52px);font-weight:650}.news-catalogue-heading>p:last-child{margin:0 0 5px;color:#666;font-size:10px;letter-spacing:.1em}
+.news-catalogue-heading{display:flex;justify-content:flex-end;align-items:center;margin-bottom:20px}.news-catalogue-heading>p{margin:0;color:#666;font-size:10px;letter-spacing:.1em}
 .news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:42px 18px}.news-tile{position:relative;min-width:0}.news-tile[hidden]{display:none}
 .news-tile-media{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#777;background:#ededed;text-decoration:none}.news-tile-media img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}.news-tile:hover .news-tile-media img{transform:scale(1.025)}
 .news-tile-copy{position:relative;padding:15px 30px 0 0}.news-tile-meta{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;color:#666;font-size:10px;font-weight:700;letter-spacing:.07em}.news-tile h3{margin:0 0 10px;font-size:19px;font-weight:650;line-height:1.25}.news-tile h3 a{text-decoration:none}.news-tile-copy>p:not(.news-tile-meta){display:-webkit-box;overflow:hidden;margin:0;color:#666;font-size:13px;line-height:1.55;-webkit-line-clamp:2;-webkit-box-orient:vertical}.news-tile-arrow{position:absolute;top:12px;right:2px;font-size:24px;text-decoration:none}
@@ -1824,10 +1824,6 @@ body {
     grid-template-columns: 250px minmax(0, 1fr);
     gap: 72px;
     padding-block: 84px 128px;
-  }
-
-  .news-catalogue-heading h2 {
-    font-size: 58px;
   }
 
   .news-grid {
