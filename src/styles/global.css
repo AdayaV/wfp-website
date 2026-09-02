@@ -1857,15 +1857,24 @@ body {
 
 /* Formula-team-inspired sponsor hierarchy. */
 .sponsors-page {
-  padding: clamp(150px, 14vw, 230px) 0 clamp(100px, 10vw, 160px);
+  padding: 0 0 clamp(100px, 10vw, 160px);
+  background: transparent;
+  box-shadow: none;
+  clip-path: none;
 }
 
 .sponsors-intro {
-  min-height: clamp(280px, 30vw, 430px);
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
+  min-height: clamp(430px, 44vw, 660px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+  align-items: end;
+  gap: clamp(48px, 8vw, 140px);
   padding: 0 0 clamp(70px, 8vw, 120px);
+  color: #fff;
+  padding: clamp(150px, 14vw, 230px) 0 clamp(70px, 8vw, 120px);
+  background: #050505;
+  box-shadow: 0 0 0 100vmax #050505;
+  clip-path: inset(0 -100vmax);
 }
 
 .sponsors-intro .section-label {
@@ -1881,9 +1890,22 @@ body {
   letter-spacing: -.065em;
 }
 
+.sponsors-intro-copy {
+  margin: 0 0 .08em;
+  font-size: clamp(18px, 1.55vw, 25px);
+  font-weight: 650;
+  line-height: 1.65;
+  letter-spacing: .035em;
+}
+
 .sponsor-tiers {
   display: grid;
   gap: clamp(110px, 12vw, 190px);
+  padding: clamp(100px, 10vw, 160px) 0 0;
+  color: #111;
+  background: #fff;
+  box-shadow: 0 0 0 100vmax #fff;
+  clip-path: inset(0 -100vmax);
 }
 
 .sponsor-tier {
@@ -1897,8 +1919,9 @@ body {
 
 .sponsor-tier-heading .section-label {
   margin-bottom: 12px;
-  font-size: 12px;
-  letter-spacing: .18em;
+  color: #777;
+  font-size: 13px;
+  letter-spacing: .22em;
 }
 
 .sponsor-tier-heading h2 {
@@ -1907,6 +1930,18 @@ body {
   font-weight: 650;
   line-height: 1;
   letter-spacing: -.045em;
+}
+
+.sponsor-tier--platinum .sponsor-tier-heading h2 {
+  font-size: clamp(48px, 5.2vw, 78px);
+}
+
+.sponsor-tier--gold .sponsor-tier-heading h2 {
+  font-size: clamp(40px, 4.4vw, 66px);
+}
+
+.sponsor-tier--silver .sponsor-tier-heading h2 {
+  font-size: clamp(34px, 3.8vw, 56px);
 }
 
 .sponsor-count {
@@ -2027,16 +2062,27 @@ body {
 
 @media (max-width: 700px) {
   .sponsors-page {
-    padding: 118px 0 90px;
+    padding: 0 0 90px;
   }
 
   .sponsors-intro {
-    min-height: 220px;
-    padding-bottom: 58px;
+    min-height: 380px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 118px 0 58px;
   }
 
   .sponsors-intro h1 {
     font-size: clamp(58px, 18vw, 82px);
+  }
+
+  .sponsors-intro-copy {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .sponsor-tiers {
+    padding-top: 74px;
   }
 
   .sponsor-tiers {
