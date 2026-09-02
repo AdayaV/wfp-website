@@ -2041,14 +2041,6 @@ body {
   max-height: 52px;
 }
 
-.sponsors-page .sponsor-has-logo strong {
-  margin-top: 10px;
-  color: #777;
-  font-size: 11px !important;
-  font-weight: 600;
-  letter-spacing: .03em;
-}
-
 @media (max-width: 900px) {
   .sponsors-page .sponsor-tier--platinum .sponsor-grid,
   .sponsors-page .sponsor-tier--gold .sponsor-grid {

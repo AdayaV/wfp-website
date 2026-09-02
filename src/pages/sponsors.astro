@@ -32,12 +32,12 @@ const sponsorTiers = await getSponsorTiers();
                 {sponsor.website ? (
                   <a href={sponsor.website} target="_blank" rel="noreferrer">
                     {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
-                    <strong>{sponsor.name}</strong>
+                    {!sponsor.logo && <strong>{sponsor.name}</strong>}
                   </a>
                 ) : (
                   <>
                     {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
-                    <strong>{sponsor.name}</strong>
+                    {!sponsor.logo && <strong>{sponsor.name}</strong>}
                   </>
                 )}
               </li>
