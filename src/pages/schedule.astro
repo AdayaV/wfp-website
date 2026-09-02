@@ -12,34 +12,42 @@ const phases = [
 ---
 
 <WireframeLayout title="スケジュール">
-  <header class="page-intro">
-    <p class="section-label">SCHEDULE</p>
-    <h1>スケジュール</h1>
-  </header>
+  <div class="schedule-page">
+    <header class="page-intro schedule-intro">
+      <div>
+        <p class="section-label">ROAD TO FSAEJ 2027</p>
+        <h1>スケジュール</h1>
+      </div>
+      <p>設計から走行検証、そして大会へ。<br />WFPの一年を3つのフェーズで追います。</p>
+    </header>
 
-  <div class="section-list">
-    {phases.map((phase, index) => {
-      const items = scheduleItems.filter((item) => item.phase.toLowerCase() === phase.id);
-      return (
-        <section class="content-section" aria-labelledby={`${phase.id}-heading`}>
-          <header class="section-heading">
-            <p class="section-index">0{index + 1}</p>
-            <div><p class="section-label">{phase.label}</p><h2 id={`${phase.id}-heading`}>{phase.title}</h2></div>
-          </header>
-          <ol class="schedule-list">
-            {items.map((item) => (
-              <li>
-                <time>{item.date}</time>
-                <div>
-                  <strong>{item.title}</strong>
-                  {item.location && <span class="schedule-location">{item.location}</span>}
-                  {item.summary && <p>{item.summary}</p>}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      );
-    })}
+    <div class="section-list schedule-phases">
+      {phases.map((phase, index) => {
+        const items = scheduleItems.filter((item) => item.phase.toLowerCase() === phase.id);
+        return (
+          <section class={`content-section schedule-phase schedule-phase--${phase.id}`} aria-labelledby={`${phase.id}-heading`}>
+            <header class="section-heading schedule-phase-heading">
+              <p class="section-index">0{index + 1}</p>
+              <div><p class="section-label">{phase.label}</p><h2 id={`${phase.id}-heading`}>{phase.title}</h2></div>
+              <p class="schedule-phase-count"><strong>{items.length}</strong><span>STOPS</span></p>
+            </header>
+            <ol class="schedule-list">
+              {items.map((item, itemIndex) => (
+                <li class:list={{ 'is-next': item.isNext }}>
+                  <p class="schedule-sequence">{String(itemIndex + 1).padStart(2, '0')}</p>
+                  <time datetime={item.startDateIso}>{item.date}</time>
+                  <div>
+                    <strong>{item.title}</strong>
+                    {item.location && <span class="schedule-location">{item.location}</span>}
+                    {item.summary && <p>{item.summary}</p>}
+                  </div>
+                  <span class="schedule-arrow" aria-hidden="true">↗</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        );
+      })}
+    </div>
   </div>
 </WireframeLayout>
