@@ -25,7 +25,7 @@ const sponsorTiers = await getSponsorTiers();
 
           <ul class="sponsor-grid">
             {tier.sponsors.map((sponsor) => (
-              <li>
+              <li class:list={{ 'sponsor-has-logo': Boolean(sponsor.logo) }}>
                 {sponsor.website ? (
                   <a href={sponsor.website} target="_blank" rel="noreferrer">
                     {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}

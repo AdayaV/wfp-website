@@ -1854,3 +1854,222 @@ body {
     font-size: 14px;
   }
 }
+
+/* Formula-team-inspired sponsor hierarchy. */
+.sponsors-page {
+  padding: clamp(150px, 14vw, 230px) 0 clamp(100px, 10vw, 160px);
+}
+
+.sponsors-intro {
+  min-height: clamp(280px, 30vw, 430px);
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  padding: 0 0 clamp(70px, 8vw, 120px);
+}
+
+.sponsors-intro .section-label {
+  margin-bottom: 18px;
+  font-size: 13px;
+  letter-spacing: .2em;
+}
+
+.sponsors-intro h1 {
+  font-size: clamp(68px, 8vw, 124px);
+  font-weight: 750;
+  line-height: .9;
+  letter-spacing: -.065em;
+}
+
+.sponsor-tiers {
+  display: grid;
+  gap: clamp(110px, 12vw, 190px);
+}
+
+.sponsor-tier {
+  padding: 0;
+}
+
+.sponsor-tier-heading {
+  align-items: flex-end;
+  margin-bottom: clamp(42px, 5vw, 76px);
+}
+
+.sponsor-tier-heading .section-label {
+  margin-bottom: 12px;
+  font-size: 12px;
+  letter-spacing: .18em;
+}
+
+.sponsor-tier-heading h2 {
+  margin: 0;
+  font-size: clamp(34px, 4vw, 62px);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -.045em;
+}
+
+.sponsor-count {
+  color: #777;
+}
+
+.sponsor-count strong {
+  font-size: clamp(30px, 3vw, 46px);
+  font-weight: 400;
+}
+
+.sponsors-page .sponsor-grid {
+  width: 100%;
+  align-items: stretch;
+  column-gap: clamp(28px, 3.4vw, 58px);
+  row-gap: clamp(42px, 5vw, 78px);
+}
+
+.sponsors-page .sponsor-tier--platinum .sponsor-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.sponsors-page .sponsor-tier--gold .sponsor-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.sponsors-page .sponsor-tier--silver .sponsor-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.sponsors-page .sponsor-grid li {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  text-align: center;
+}
+
+.sponsors-page .sponsor-tier--platinum .sponsor-grid li {
+  min-height: 150px;
+}
+
+.sponsors-page .sponsor-tier--gold .sponsor-grid li {
+  min-height: 118px;
+}
+
+.sponsors-page .sponsor-tier--silver .sponsor-grid li {
+  min-height: 88px;
+}
+
+.sponsors-page .sponsor-grid li > a {
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.sponsors-page .sponsor-grid li > a:hover,
+.sponsors-page .sponsor-grid li > a:focus-visible {
+  opacity: .65;
+  transform: scale(1.025);
+}
+
+.sponsors-page .sponsor-grid strong {
+  max-width: 100%;
+  display: block;
+  overflow-wrap: anywhere;
+  color: #111;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -.025em;
+}
+
+.sponsors-page .sponsor-tier--platinum .sponsor-grid strong {
+  font-size: clamp(18px, 1.55vw, 25px);
+}
+
+.sponsors-page .sponsor-tier--gold .sponsor-grid strong {
+  font-size: clamp(15px, 1.15vw, 19px);
+}
+
+.sponsors-page .sponsor-tier--silver .sponsor-grid strong {
+  font-size: clamp(12px, .9vw, 15px);
+}
+
+.sponsors-page .sponsor-grid img {
+  width: min(82%, 260px);
+  height: auto;
+  max-height: 108px;
+  object-fit: contain;
+}
+
+.sponsors-page .sponsor-tier--gold .sponsor-grid img {
+  max-height: 78px;
+}
+
+.sponsors-page .sponsor-tier--silver .sponsor-grid img {
+  max-height: 52px;
+}
+
+.sponsors-page .sponsor-has-logo strong {
+  margin-top: 10px;
+  color: #777;
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+@media (max-width: 900px) {
+  .sponsors-page .sponsor-tier--platinum .sponsor-grid,
+  .sponsors-page .sponsor-tier--gold .sponsor-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sponsors-page .sponsor-tier--silver .sponsor-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .sponsors-page {
+    padding: 118px 0 90px;
+  }
+
+  .sponsors-intro {
+    min-height: 220px;
+    padding-bottom: 58px;
+  }
+
+  .sponsors-intro h1 {
+    font-size: clamp(58px, 18vw, 82px);
+  }
+
+  .sponsor-tiers {
+    gap: 96px;
+  }
+
+  .sponsor-tier-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 44px;
+  }
+
+  .sponsor-count {
+    margin-top: 14px;
+  }
+
+  .sponsors-page .sponsor-tier--platinum .sponsor-grid,
+  .sponsors-page .sponsor-tier--gold .sponsor-grid,
+  .sponsors-page .sponsor-tier--silver .sponsor-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 22px;
+    row-gap: 38px;
+  }
+
+  .sponsors-page .sponsor-tier--platinum .sponsor-grid li,
+  .sponsors-page .sponsor-tier--gold .sponsor-grid li,
+  .sponsors-page .sponsor-tier--silver .sponsor-grid li {
+    min-height: 92px;
+  }
+
+  .sponsors-page .sponsor-tier--platinum .sponsor-grid strong,
+  .sponsors-page .sponsor-tier--gold .sponsor-grid strong,
+  .sponsors-page .sponsor-tier--silver .sponsor-grid strong {
+    font-size: 13px;
+  }
+}
