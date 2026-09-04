@@ -1,29 +1,19 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
-
-const sections = [
-  { label: 'CURRENT MACHINE', title: '2027年度マシン' },
-  { label: 'DEVELOPMENT', title: '開発' },
-  { label: 'ARCHIVE', title: '歴代マシン' },
-];
+import { getMachines } from '../data/machines';
+const machines = await getMachines();
 ---
 
 <WireframeLayout title="マシン">
-  <header class="page-intro">
-    <p class="section-label">MACHINE</p>
-    <h1>マシン</h1>
-  </header>
-
-  <div class="section-list">
-    {sections.map((section, index) => (
-      <section class="content-section content-section--split" aria-labelledby={`machine-section-${index}`}>
-        <header class="section-heading">
-          <p class="section-index">0{index + 1}</p>
-          <div><p class="section-label">{section.label}</p><h2 id={`machine-section-${index}`}>{section.title}</h2></div>
-        </header>
-        <div class="section-media-slot" aria-hidden="true"></div>
-        <div class="section-copy-slot" aria-hidden="true"></div>
-      </section>
-    ))}
-  </div>
+  <main class="machine-page">
+    <header class="machine-hero">
+      <p class="section-label">WASEDA FORMULA PROJECT</p>
+      <h1><strong>BUILT TO</strong><span>COMPETE.</span></h1>
+      <p>一台ごとに、挑戦の記録がある。<br />WFPが積み重ねてきた歴代マシン。</p>
+    </header>
+    <section class="machine-archive" aria-labelledby="machine-archive-heading">
+      <header><p class="machine-section-number">01</p><div><p class="section-label">MACHINE ARCHIVE</p><h2 id="machine-archive-heading">歴代マシン</h2></div><p><strong>{machines.length}</strong><span>MACHINES</span></p></header>
+      {machines.length ? <ol class="machine-grid">{machines.map((machine, index) => <li><figure><img src={machine.image} width={machine.width} height={machine.height} alt={`${machine.year}年度マシン`} loading={index > 1 ? 'lazy' : 'eager'} /><figcaption><span>{String(index + 1).padStart(2, '0')}</span><strong>{machine.year}</strong><small>WFP MACHINE</small></figcaption></figure></li>)}</ol> : <div class="machine-empty"><p class="section-label">ARCHIVE COMING SOON</p><p>歴代マシンの写真はmicroCMSから追加できます。</p></div>}
+    </section>
+  </main>
 </WireframeLayout>

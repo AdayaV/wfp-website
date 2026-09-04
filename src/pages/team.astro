@@ -1,29 +1,84 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
+import { getTeamMembers } from '../data/members';
 
-const sections = [
-  { label: 'ABOUT', title: 'WFPについて' },
-  { label: 'ORGANIZATION', title: 'チーム体制' },
-  { label: 'ACTIVITY', title: '活動について' },
-];
+const members = await getTeamMembers();
+const divisions = [...new Set(members.map((member) => member.division))];
 ---
 
 <WireframeLayout title="チーム">
-  <header class="page-intro">
-    <p class="section-label">TEAM</p>
-    <h1>チーム</h1>
-  </header>
+  <div class="team-page">
+    <header class="team-intro">
+      <div>
+        <p class="section-label">WASEDA FORMULA PROJECT</p>
+        <h1><strong>ONE TEAM.</strong><span>ONE GOAL.</span></h1>
+      </div>
+      <p>学生自らが組織をつくり、<br />一台のフォーミュラカーを<br />設計・製作・走行させる。</p>
+    </header>
 
-  <div class="section-list">
-    {sections.map((section, index) => (
-      <section class="content-section content-section--split" aria-labelledby={`team-section-${index}`}>
-        <header class="section-heading">
-          <p class="section-index">0{index + 1}</p>
-          <div><p class="section-label">{section.label}</p><h2 id={`team-section-${index}`}>{section.title}</h2></div>
-        </header>
-        <div class="section-media-slot" aria-hidden="true"></div>
-        <div class="section-copy-slot" aria-hidden="true"></div>
-      </section>
-    ))}
+    <section class="team-about" aria-labelledby="team-about-heading">
+      <p class="team-section-number">01</p>
+      <div>
+        <p class="section-label">ABOUT WFP</p>
+        <h2 id="team-about-heading">ものづくりを通じて、<br />チームで挑む。</h2>
+      </div>
+      <p>早稲田大学の学生が主体となり、企画、設計、製作、走行、運営までを担います。それぞれの専門性を持ち寄り、学生フォーミュラ日本大会を目指して活動しています。</p>
+    </section>
+
+    <section class="team-organization" aria-labelledby="team-organization-heading">
+      <header class="team-section-heading">
+        <p class="team-section-number">02</p>
+        <div>
+          <p class="section-label">ORGANIZATION</p>
+          <h2 id="team-organization-heading">チーム体制</h2>
+        </div>
+        <p><strong>{members.length}</strong><span>MEMBERS</span></p>
+      </header>
+
+      {members.length ? (
+        <div class="team-divisions">
+          {divisions.map((division, divisionIndex) => (
+            <section class="team-division" aria-labelledby={`division-${divisionIndex}`}>
+              <header>
+                <p>{String(divisionIndex + 1).padStart(2, '0')}</p>
+                <h3 id={`division-${divisionIndex}`}>{division}</h3>
+              </header>
+              <ul class="team-member-grid">
+                {members.filter((member) => member.division === division).map((member) => (
+                  <li>
+                    <div class="team-member-photo">
+                      {member.photo ? <img src={member.photo} alt={`${member.name}のプロフィール写真`} /> : <span>{member.name.slice(0, 1)}</span>}
+                    </div>
+                    <div class="team-member-copy">
+                      <p class="team-member-role">{member.role}</p>
+                      <h4>{member.name}</h4>
+                      {member.grade && <p class="team-member-grade">{member.grade}</p>}
+                      {member.department && <p class="team-member-department">{member.department}</p>}
+                      {member.units.length > 0 && (
+                        <ul class="team-member-units" aria-label="所属班">
+                          {member.units.map((unit) => <li>{unit}</li>)}
+                        </ul>
+                      )}
+                      {member.profile && <p class="team-member-profile">{member.profile}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div class="team-empty">
+          <p class="section-label">MEMBERS COMING SOON</p>
+          <p>メンバー情報はmicroCMSから追加できます。</p>
+        </div>
+      )}
+    </section>
+
+    <section class="team-activity" aria-labelledby="team-activity-heading">
+      <p class="team-section-number">03</p>
+      <div><p class="section-label">ACTIVITY</p><h2 id="team-activity-heading">設計から大会まで。</h2></div>
+      <p>車両開発だけでなく、スポンサー対応、広報、コスト審査、プレゼンテーションまで、チーム運営のすべてが活動領域です。</p>
+    </section>
   </div>
 </WireframeLayout>
