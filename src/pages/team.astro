@@ -3,7 +3,7 @@ import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getTeamMembers } from '../data/members';
 
 const members = await getTeamMembers();
-const divisions = [...new Set(members.map((member) => member.division))];
+const divisions = [...new Set(members.flatMap((member) => member.divisions))];
 ---
 
 <WireframeLayout title="チーム">
@@ -44,7 +44,7 @@ const divisions = [...new Set(members.map((member) => member.division))];
                 <h3 id={`division-${divisionIndex}`}>{division}</h3>
               </header>
               <ul class="team-member-grid">
-                {members.filter((member) => member.division === division).map((member) => (
+                {members.filter((member) => member.divisions.includes(division)).map((member) => (
                   <li>
                     <div class="team-member-photo">
                       {member.photo ? <img src={member.photo} alt={`${member.name}のプロフィール写真`} /> : <span>{member.name.slice(0, 1)}</span>}
