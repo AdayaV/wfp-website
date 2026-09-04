@@ -9,6 +9,7 @@ interface MicroCMSMemberEntry {
   name: string;
   role: string;
   division: string;
+  additionalDivisions?: string[] | string;
   unit?: string[] | string;
   grade?: string;
   department?: string;
@@ -25,7 +26,7 @@ export interface TeamMember {
   id: string;
   name: string;
   role: string;
-  division: string;
+  divisions: string[];
   units: string[];
   grade?: string;
   department?: string;
@@ -61,7 +62,14 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
     id: member.id,
     name: member.name,
     role: member.role,
-    division: member.division,
+    divisions: [
+      member.division,
+      ...(Array.isArray(member.additionalDivisions)
+        ? member.additionalDivisions
+        : member.additionalDivisions
+          ? [member.additionalDivisions]
+          : []),
+    ].filter((division, index, all) => division && all.indexOf(division) === index),
     units: Array.isArray(member.unit) ? member.unit : member.unit ? [member.unit] : [],
     grade: member.grade,
     department: member.department,
