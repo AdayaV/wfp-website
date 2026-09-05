@@ -2746,3 +2746,20 @@ body {
   .home-lead:not(:has(.home-lead-controls)) .home-lead-stories { width: calc(100% - 32px); margin-right: 16px; }
   .home-latest-placeholder { min-height: 120px; padding: 22px 20px; }
 }
+
+
+/* Keep microCMS machine photos in a consistent landscape frame. */
+.machine-grid-media {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #181818;
+}
+
+.machine-grid-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
