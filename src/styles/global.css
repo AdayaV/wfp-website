@@ -2763,3 +2763,31 @@ body {
   object-fit: cover;
   object-position: center;
 }
+
+
+/* WFP logo lockup in the floating navigation. */
+.site-header .site-mark {
+  width: 70px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  padding: 4px 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.site-header .site-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+@media (max-width: 700px) {
+  .site-header .site-mark {
+    width: 58px;
+    height: 40px;
+    padding: 3px 5px;
+  }
+}
