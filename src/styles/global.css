@@ -2661,3 +2661,50 @@ body {
   color: #777;
   transform: none;
 }
+
+/* Final content states */
+.team-organization {
+  color: #f4f4f4;
+  background: #050505;
+  box-shadow: 0 0 0 100vmax #050505;
+}
+
+.team-section-heading .team-section-number { color: #333; }
+.team-section-heading > p strong { color: #f4f4f4; }
+.team-member-role,
+.team-member-grade,
+.team-member-department,
+.team-member-profile { color: #aaa; }
+.team-member-units li { color: #111; background: #f4f4f4; }
+.team-empty { background: #111; }
+
+.home-roadmap-empty,
+.schedule-empty {
+  min-height: 280px;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  text-align: center;
+  color: #aaa;
+  background: #111;
+}
+
+.home-roadmap-empty {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.home-roadmap-empty p,
+.schedule-empty p { margin: 0; }
+
+.schedule-page .schedule-list li,
+.schedule-page .schedule-list .schedule-arrow { transition: none; }
+.schedule-page .schedule-list li:hover {
+  z-index: auto;
+  background: #111;
+  transform: none;
+}
+.schedule-page .schedule-list li:hover .schedule-arrow {
+  color: #777;
+  transform: none;
+}
