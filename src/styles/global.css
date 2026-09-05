@@ -2956,3 +2956,12 @@ textarea {
     letter-spacing: -0.01em;
   }
 }
+
+
+/* Keep navigation compact while retaining right-edge alignment */
+@media (min-width: 701px) {
+  .site-header > nav {
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
