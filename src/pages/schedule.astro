@@ -21,8 +21,9 @@ const phases = [
       <p>設計から走行検証、そして大会へ。<br />WFPの一年を3つのフェーズで追います。</p>
     </header>
 
-    <div class="section-list schedule-phases">
-      {phases.map((phase, index) => {
+    {scheduleItems.length ? (
+      <div class="section-list schedule-phases">
+        {phases.map((phase, index) => {
         const items = scheduleItems.filter((item) => item.phase.toLowerCase() === phase.id);
         return (
           <section class={`content-section schedule-phase schedule-phase--${phase.id}`} aria-labelledby={`${phase.id}-heading`}>
@@ -47,7 +48,13 @@ const phases = [
             </ol>
           </section>
         );
-      })}
-    </div>
+        })}
+      </div>
+    ) : (
+      <div class="schedule-empty">
+        <p class="section-label">COMING SOON</p>
+        <p>スケジュールは公開準備中です。</p>
+      </div>
+    )}
   </div>
 </WireframeLayout>
