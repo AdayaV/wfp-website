@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap");
 
@@ -2929,5 +2930,29 @@ textarea {
 @media (max-width: 700px) {
   .site-header .site-mark-name {
     font-size: 16px;
+  }
+}
+
+
+/* Refined technical wordmark and full-width navigation rhythm */
+.site-header .site-mark-name {
+  font-family: "Oxanium", "Arial Narrow", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+@media (min-width: 701px) {
+  .site-header > nav {
+    flex: 1 1 auto;
+    justify-content: space-between;
+    margin-left: 36px;
+  }
+}
+
+@media (max-width: 700px) {
+  .site-header .site-mark-name {
+    font-size: 16px;
+    letter-spacing: -0.01em;
   }
 }
