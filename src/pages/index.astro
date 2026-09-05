@@ -10,11 +10,7 @@ const leadStory = stories[0];
 const sponsorTiers = await getSponsorTiers();
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
 const scheduleItems = await getScheduleItems();
-const calendarItems = scheduleItems.length ? scheduleItems : [
-  { date: '日程調整中', title: '設計・製作', phase: 'DEVELOPMENT' },
-  { date: '日程調整中', title: '走行・検証', phase: 'TEST', isNext: true },
-  { date: '2027.08.23–28', title: '学生フォーミュラ日本大会', phase: 'EVENT' },
-];
+const calendarItems = scheduleItems;
 ---
 
 <WireframeLayout title="ホーム">
@@ -69,22 +65,31 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
         <div><strong data-countdown-minutes>00</strong><span>MIN</span></div>
       </div>
     </header>
-    <div class="home-roadmap-track" data-drag-scroll>
-      {calendarItems.map((event, index) => (
-        <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
-          <div class="home-roadmap-visual" aria-hidden="true">
-            {event.image && <img src={event.image} alt="" />}
-            <span>0{index + 1}</span>
-          </div>
-          <div class="home-roadmap-card-copy">
-            <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
-            <h3>{event.title}</h3>
-            {event.location && <p class="home-roadmap-location">{event.location}</p>}
-          </div>
-        </article>
-      ))}
-    </div>
-    <a class="home-roadmap-all" href={siteRoot + 'schedule/'}>全予定を見る <span aria-hidden="true">↗</span></a>
+    {calendarItems.length ? (
+      <>
+        <div class="home-roadmap-track" data-drag-scroll>
+          {calendarItems.map((event, index) => (
+            <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
+              <div class="home-roadmap-visual" aria-hidden="true">
+                {event.image && <img src={event.image} alt="" />}
+                <span>0{index + 1}</span>
+              </div>
+              <div class="home-roadmap-card-copy">
+                <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
+                <h3>{event.title}</h3>
+                {event.location && <p class="home-roadmap-location">{event.location}</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+        <a class="home-roadmap-all" href={siteRoot + 'schedule/'}>全予定を見る <span aria-hidden="true">↗</span></a>
+      </>
+    ) : (
+      <div class="home-roadmap-empty">
+        <p class="section-label">COMING SOON</p>
+        <p>スケジュールは公開準備中です。</p>
+      </div>
+    )}
   </section>
 
   <section class="home-latest" aria-labelledby="latest-news-heading">
@@ -108,8 +113,8 @@ const calendarItems = scheduleItems.length ? scheduleItems : [
       </div>
     ) : (
       <div class="home-latest-empty">
+        <p class="section-label">COMING SOON</p>
         <p>ニュースは公開準備中です。</p>
-        <a href={siteRoot + 'news/'}>NEWSへ <span aria-hidden="true">↗</span></a>
       </div>
     )}
   </section>
