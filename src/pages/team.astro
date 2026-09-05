@@ -3,73 +3,83 @@ import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getTeamMembers } from '../data/members';
 
 const members = await getTeamMembers();
-const unitNames = ['パワートレイン班', 'サスペンション班', 'エアロ班', 'フレーム班', 'デザイン班', 'コスト班', 'プレゼン班', 'PR班'];
-const groups = [
-  { title: 'チーム運営', members: members.filter((member) => member.divisions.includes('マネジメント')) },
-  ...unitNames.map((unit) => ({ title: unit, members: members.filter((member) => member.units.includes(unit)) })),
-].filter((group) => group.members.length > 0);
 
-const sortGroupMembers = (groupMembers: typeof members) => [...groupMembers].sort((a, b) => {
-  const isLead = (role: string) => /CHIEF|LEADER|チーフ|リーダー/i.test(role);
-  return Number(isLead(b.role)) - Number(isLead(a.role)) || a.sortOrder - b.sortOrder;
-});
+// 2026年度の体制表を表示上の正とする。microCMS上で兼班を編集できる状態は
+// 保ちつつ、誤登録によって別班のCHIEFが先頭に来ないよう班ごとに並びを定義する。
+const groupRoster = [
+  {
+    title: 'チーム運営',
+    names: ['大和田 龍', '佐々木 将博', '関 慶太', '平野 舜介', '小玉 耀介', '瀧澤 怜', '寺尾 智成', '中岡 嶺'],
+    roles: { '大和田 龍': 'TEAM PRINCIPAL', '佐々木 将博': 'GENERAL MANAGER', '関 慶太': 'MANAGEMENT CHIEF', '平野 舜介': 'MANAGEMENT MANAGER', '小玉 耀介': 'ACCOUNTING' },
+  },
+  {
+    title: 'パワートレイン班',
+    names: ['関 慶太', '姫野 淳', '千原 丈', '藤原 光瑠', '狩野 貴裕', '中村 泰正', '足立 純也', '岡原 拓音', '小玉 耀介', '斉藤 瑠来', '佐々木 将博', '豊田 雄介', '吉田 峻太朗', '井上 脩', '袁 子熙', '瀧澤 怜', '竹ノ谷 美希'],
+    roles: { '関 慶太': 'CHIEF', '姫野 淳': 'MANAGER' },
+  },
+  {
+    title: 'サスペンション班',
+    names: ['水戸 彩葉', '平井 伶於奈', '稲葉 摩人', '細井 敬哲', '藤原 光瑠', '山崎 嘉乃', '近藤 尚哉', '中村 泰正', '香村 純花', '佐々木 将博', '平野 舜介', '松本 真慧', '井上 建人', '袁 子熙', '鈴木 悠太', '田村 智道', '寺尾 智成', '二國 悠生', '根岸 倫弘'],
+    roles: { '水戸 彩葉': 'CHIEF', '平井 伶於奈': 'MANAGER' },
+  },
+  {
+    title: 'エアロ班',
+    names: ['大和田 龍', '小林 悠真', '狩野 貴裕', '只野 陽向太', '大塚 海斗', '香村 純花', '豊田 雄介', '平井 伶於奈', '瀧澤 怜', '竹ノ谷 美希', '寺尾 智成', '中岡 嶺', '二國 悠生', '村松 由唯'],
+    roles: { '大和田 龍': 'CHIEF', '小林 悠真': 'MANAGER' },
+  },
+  {
+    title: 'フレーム班',
+    names: ['近藤 尚哉', '斉藤 瑠来', '千原 丈', '大和田 龍', '只野 陽向太', '山崎 嘉乃', '水戸 彩葉', '足立 純也', '小玉 耀介', '小林 悠真', '佐々木 将博', '井上 建人', '鈴木 悠太', '田村 智道', '根岸 倫弘', '村松 由唯'],
+    roles: { '近藤 尚哉': 'CHIEF', '斉藤 瑠来': 'MANAGER' },
+  },
+  { title: 'デザイン班', names: ['藤原 光瑠', '狩野 貴裕'], roles: { '藤原 光瑠': 'CHIEF', '狩野 貴裕': 'MANAGER' } },
+  { title: 'コスト班', names: ['関 慶太', '大塚 海斗'], roles: { '関 慶太': 'CHIEF', '大塚 海斗': 'MANAGER' } },
+  { title: 'プレゼン班', names: ['吉田 峻太朗'], roles: { '吉田 峻太朗': 'MANAGER' } },
+  { title: 'PR班', names: ['小林 悠真', '中村 泰正', '足立 純也', '斉藤 瑠来', '佐々木 将博', '豊田 雄介', '吉田 峻太朗'], roles: {} },
+];
+
+const normalizeName = (name: string) => name.replace(/\s/g, '').replace('斎', '斉');
+const memberByName = new Map(members.map((member) => [normalizeName(member.name), member]));
+const groups = groupRoster
+  .map((group) => ({
+    title: group.title,
+    members: group.names
+      .map((name) => {
+        const member = memberByName.get(normalizeName(name));
+        return member ? { ...member, displayRole: group.roles[name as keyof typeof group.roles] } : undefined;
+      })
+      .filter((member): member is (typeof members)[number] => Boolean(member)),
+  }))
+  .filter((group) => group.members.length > 0);
 ---
 
 <WireframeLayout title="チーム">
   <div class="team-page">
     <header class="team-intro">
-      <div>
-        <p class="section-label">WASEDA FORMULA PROJECT</p>
-        <h1><strong>ONE TEAM.</strong><span>ONE GOAL.</span></h1>
-      </div>
+      <div><p class="section-label">WASEDA FORMULA PROJECT</p><h1><strong>ONE TEAM.</strong><span>ONE GOAL.</span></h1></div>
       <p>学生自らが組織をつくり、<br />一台のフォーミュラカーを<br />設計・製作・走行させる。</p>
     </header>
-
     <section class="team-about" aria-labelledby="team-about-heading">
-      <p class="team-section-number">01</p>
-      <div>
-        <p class="section-label">ABOUT WFP</p>
-        <h2 id="team-about-heading">ものづくりを通じて、<br />チームで挑む。</h2>
-      </div>
+      <p class="team-section-number">01</p><div><p class="section-label">ABOUT WFP</p><h2 id="team-about-heading">ものづくりを通じて、<br />チームで挑む。</h2></div>
       <p>早稲田大学の学生が主体となり、企画、設計、製作、走行、運営までを担います。それぞれの専門性を持ち寄り、学生フォーミュラ日本大会を目指して活動しています。</p>
     </section>
-
     <section class="team-organization" aria-labelledby="team-organization-heading">
-      <header class="team-section-heading">
-        <p class="team-section-number">02</p>
-        <div>
-          <p class="section-label">ORGANIZATION</p>
-          <h2 id="team-organization-heading">チーム体制</h2>
-        </div>
-        <p><strong>{members.length}</strong><span>MEMBERS</span></p>
-      </header>
-
+      <header class="team-section-heading"><p class="team-section-number">02</p><div><p class="section-label">ORGANIZATION</p><h2 id="team-organization-heading">チーム体制</h2></div><p><strong>{members.length}</strong><span>MEMBERS</span></p></header>
       {members.length ? (
         <div class="team-divisions">
           {groups.map((group, groupIndex) => (
             <section class="team-division" aria-labelledby={`group-${groupIndex}`}>
-              <header>
-                <p>{String(groupIndex + 1).padStart(2, '0')}</p>
-                <h3 id={`group-${groupIndex}`}>{group.title}</h3>
-              </header>
+              <header><p>{String(groupIndex + 1).padStart(2, '0')}</p><h3 id={`group-${groupIndex}`}>{group.title}</h3></header>
               <ul class="team-member-grid">
-                {sortGroupMembers(group.members).map((member) => (
+                {group.members.map((member) => (
                   <li>
-                    {member.photo && (
-                      <div class="team-member-photo">
-                        <img src={member.photo} alt={`${member.name}のプロフィール写真`} />
-                      </div>
-                    )}
+                    {member.photo && (<div class="team-member-photo"><img src={member.photo} alt={`${member.name}のプロフィール写真`} /></div>)}
                     <div class="team-member-copy">
-                      <p class="team-member-role">{member.role}</p>
+                      {member.displayRole && <p class="team-member-role">{member.displayRole}</p>}
                       <h4>{member.name}</h4>
                       {member.grade && <p class="team-member-grade">{member.grade}</p>}
                       {member.department && <p class="team-member-department">{member.department}</p>}
-                      {member.units.length > 0 && (
-                        <ul class="team-member-units" aria-label="所属班">
-                          {member.units.map((unit) => <li>{unit}</li>)}
-                        </ul>
-                      )}
+                      {member.units.length > 0 && (<ul class="team-member-units" aria-label="所属班">{member.units.map((unit) => <li>{unit}</li>)}</ul>)}
                       {member.profile && <p class="team-member-profile">{member.profile}</p>}
                     </div>
                   </li>
@@ -78,17 +88,10 @@ const sortGroupMembers = (groupMembers: typeof members) => [...groupMembers].sor
             </section>
           ))}
         </div>
-      ) : (
-        <div class="team-empty">
-          <p class="section-label">MEMBERS COMING SOON</p>
-          <p>メンバー情報はmicroCMSから追加できます。</p>
-        </div>
-      )}
+      ) : (<div class="team-empty"><p class="section-label">MEMBERS COMING SOON</p><p>メンバー情報はmicroCMSから追加できます。</p></div>)}
     </section>
-
     <section class="team-activity" aria-labelledby="team-activity-heading">
-      <p class="team-section-number">03</p>
-      <div><p class="section-label">ACTIVITY</p><h2 id="team-activity-heading">設計から大会まで。</h2></div>
+      <p class="team-section-number">03</p><div><p class="section-label">ACTIVITY</p><h2 id="team-activity-heading">設計から大会まで。</h2></div>
       <p>車両開発だけでなく、スポンサー対応、広報、コスト審査、プレゼンテーションまで、チーム運営のすべてが活動領域です。</p>
     </section>
   </div>
