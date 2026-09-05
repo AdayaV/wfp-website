@@ -11,7 +11,7 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
   <header class="news-page-intro">
     <div>
       <p class="section-label">WASEDA FORMULA PROJECT</p>
-      <h1><strong>ALL THE LATEST</strong><span>NEWS</span></h1>
+      <h1><strong>LATEST</strong><span>NEWS</span></h1>
     </div>
     <p>WFPの活動、マシン開発、イベントに関する最新情報をお届けします。</p>
   </header>
@@ -33,41 +33,28 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
           <p>年別</p>
           <div class="news-filter-list">
             <button type="button" data-news-year="ALL" aria-pressed="true"><span aria-hidden="true"></span>すべて</button>
-            {years.map((year) => (
-              <button type="button" data-news-year={year} aria-pressed="false"><span aria-hidden="true"></span>{year}</button>
-            ))}
+            {years.map((year) => (<button type="button" data-news-year={year} aria-pressed="false"><span aria-hidden="true"></span>{year}</button>))}
           </div>
         </div>
       )}
     </aside>
 
     <div class="news-catalogue-main">
-      <header class="news-catalogue-heading">
-        <p><span data-news-count>{newsArticles.length}</span> ARTICLES</p>
-      </header>
-
+      <header class="news-catalogue-heading"><p><span data-news-count>{newsArticles.length}</span> ARTICLES</p></header>
       {newsArticles.length ? (
         <div class="news-grid" data-news-index>
           {newsArticles.map((article) => (
             <article class="news-tile" data-news-category={article.category} data-news-year={article.publishedAtIso.slice(0, 4)}>
-              <a class="news-tile-media" href={article.href}>
-                {article.image ? <img src={article.image} alt={article.imageAlt} /> : <span>WFP NEWS</span>}
-              </a>
+              <a class="news-tile-media" href={article.href}>{article.image ? <img src={article.image} alt={article.imageAlt} /> : <span>WFP NEWS</span>}</a>
               <div class="news-tile-copy">
                 <p class="news-tile-meta">{article.category} <time datetime={article.publishedAtIso}>{article.publishedAt}</time></p>
-                <h3><a href={article.href}>{article.title}</a></h3>
-                <p>{article.summary}</p>
+                <h3><a href={article.href}>{article.title}</a></h3><p>{article.summary}</p>
                 <a class="news-tile-arrow" href={article.href} aria-label={article.title + 'を読む'}>↗</a>
               </div>
             </article>
           ))}
         </div>
-      ) : (
-        <div class="news-empty news-empty--catalogue">
-          <p class="section-label">COMING SOON</p>
-          <p>ニュースは公開準備中です。</p>
-        </div>
-      )}
+      ) : (<div class="news-empty news-empty--catalogue"><p class="section-label">COMING SOON</p><p>ニュースは公開準備中です。</p></div>)}
     </div>
   </section>
 
@@ -79,7 +66,6 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
       const count = document.querySelector('[data-news-count]');
       let category = 'ALL';
       let year = 'ALL';
-
       const update = () => {
         let visible = 0;
         cards.forEach((card) => {
@@ -91,20 +77,17 @@ const years = [...new Set(newsArticles.map((article) => article.publishedAtIso.s
         });
         if (count) count.textContent = String(visible);
       };
-
       categoryButtons.forEach((button) => button.addEventListener('click', () => {
         category = button.getAttribute('data-news-filter') || 'ALL';
         categoryButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
         update();
       }));
-
       yearButtons.forEach((button) => button.addEventListener('click', () => {
         year = button.getAttribute('data-news-year') || 'ALL';
         yearButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
         update();
       }));
     }
-
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupNewsFilters, { once: true });
     else setupNewsFilters();
   </script>
