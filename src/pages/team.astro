@@ -3,7 +3,16 @@ import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getTeamMembers } from '../data/members';
 
 const members = await getTeamMembers();
-const divisions = [...new Set(members.flatMap((member) => member.divisions))];
+const unitNames = ['パワートレイン班', 'サスペンション班', 'エアロ班', 'フレーム班', 'デザイン班', 'コスト班', 'プレゼン班', 'PR班'];
+const groups = [
+  { title: 'チーム運営', members: members.filter((member) => member.divisions.includes('マネジメント')) },
+  ...unitNames.map((unit) => ({ title: unit, members: members.filter((member) => member.units.includes(unit)) })),
+].filter((group) => group.members.length > 0);
+
+const sortGroupMembers = (groupMembers: typeof members) => [...groupMembers].sort((a, b) => {
+  const isLead = (role: string) => /CHIEF|LEADER|チーフ|リーダー/i.test(role);
+  return Number(isLead(b.role)) - Number(isLead(a.role)) || a.sortOrder - b.sortOrder;
+});
 ---
 
 <WireframeLayout title="チーム">
@@ -37,18 +46,20 @@ const divisions = [...new Set(members.flatMap((member) => member.divisions))];
 
       {members.length ? (
         <div class="team-divisions">
-          {divisions.map((division, divisionIndex) => (
-            <section class="team-division" aria-labelledby={`division-${divisionIndex}`}>
+          {groups.map((group, groupIndex) => (
+            <section class="team-division" aria-labelledby={`group-${groupIndex}`}>
               <header>
-                <p>{String(divisionIndex + 1).padStart(2, '0')}</p>
-                <h3 id={`division-${divisionIndex}`}>{division}</h3>
+                <p>{String(groupIndex + 1).padStart(2, '0')}</p>
+                <h3 id={`group-${groupIndex}`}>{group.title}</h3>
               </header>
               <ul class="team-member-grid">
-                {members.filter((member) => member.divisions.includes(division)).map((member) => (
+                {sortGroupMembers(group.members).map((member) => (
                   <li>
-                    <div class="team-member-photo">
-                      {member.photo ? <img src={member.photo} alt={`${member.name}のプロフィール写真`} /> : <span>{member.name.slice(0, 1)}</span>}
-                    </div>
+                    {member.photo && (
+                      <div class="team-member-photo">
+                        <img src={member.photo} alt={`${member.name}のプロフィール写真`} />
+                      </div>
+                    )}
                     <div class="team-member-copy">
                       <p class="team-member-role">{member.role}</p>
                       <h4>{member.name}</h4>
