@@ -28,9 +28,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
   </head>
   <body class:list={{ 'is-home': title === 'ホーム' }}>
     <header class="site-header">
-      <a class="site-mark" href={siteRoot} aria-label="Waseda Formula Project ホーム">
-        <img src={siteRoot + 'images/wfp_logo_alpha.png'} alt="Waseda Formula Project" />
-      </a>
+      <a class="site-mark" href={siteRoot}>WFP</a>
       <nav aria-label="メインナビゲーション">
         {navigation.map((item) => {
           const itemPath = new URL(item.href).pathname.replace(/\/+$/, '') || '/';
