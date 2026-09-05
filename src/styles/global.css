@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap");
+
 * {
   box-sizing: border-box;
 }
@@ -2873,5 +2875,29 @@ html {
   .site-header .site-mark-name {
     font-size: 9px;
     letter-spacing: 0.04em;
+  }
+}
+
+
+/* Unified motorsport typography */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+}
+
+.site-header .site-mark-name {
+  font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+}
+
+@media (max-width: 700px) {
+  .site-header .site-mark-name {
+    font-size: 11px;
+    letter-spacing: 0.035em;
   }
 }
