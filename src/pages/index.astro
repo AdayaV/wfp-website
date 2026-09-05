@@ -6,6 +6,7 @@ import { getSponsorTiers } from '../data/sponsors';
 
 const siteRoot = 'https://adayav.github.io/wfp-website/';
 const stories = (await getNewsArticles()).slice(0, 4);
+const storySlots = Array.from({ length: 4 }, (_, index) => stories[index]);
 const leadStory = stories[0];
 const sponsorTiers = await getSponsorTiers();
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
@@ -37,16 +38,26 @@ const calendarItems = scheduleItems;
         </div>
       </>
     )}
-    {stories.length > 1 && (
+    {leadStory && (
       <>
-        <div class="home-lead-controls" aria-label="メインニュースを移動">
-          <button type="button" data-hero-direction="-1" aria-label="前のニュース">←</button><button type="button" data-hero-direction="1" aria-label="次のニュース">→</button>
-        </div>
+        {stories.length > 1 && (
+          <div class="home-lead-controls" aria-label="メインニュースを移動">
+            <button type="button" data-hero-direction="-1" aria-label="前のニュース">←</button><button type="button" data-hero-direction="1" aria-label="次のニュース">→</button>
+          </div>
+        )}
         <ol class="home-lead-stories">
-          {stories.map((story, index) => (
-            <li><button type="button" data-hero-select={index} aria-current={index === 0 ? 'true' : undefined}>
-              <span>0{index + 1}</span><small>{story.category}</small><strong>{story.title}</strong>
-            </button></li>
+          {storySlots.map((story, index) => (
+            <li class:list={{ 'is-coming-soon': !story }}>
+              {story ? (
+                <button type="button" data-hero-select={index} aria-current={index === 0 ? 'true' : undefined}>
+                  <span>0{index + 1}</span><small>{story.category}</small><strong>{story.title}</strong>
+                </button>
+              ) : (
+                <div class="home-lead-story-placeholder">
+                  <span>0{index + 1}</span><small>COMING SOON</small><strong>次のニュースをお待ちください</strong>
+                </div>
+              )}
+            </li>
           ))}
         </ol>
       </>
@@ -103,11 +114,20 @@ const calendarItems = scheduleItems;
           {leadStory.image && <img src={leadStory.image} alt="" data-latest-image />}
         </a>
         <ol class="home-latest-list">
-          {stories.map((story) => (
-            <li><a href={story.href} data-latest-story data-image={story.image || ''} data-title={story.title}>
-              <div><strong>{story.title}</strong><p>{story.summary}</p></div>
-              <span aria-hidden="true">↗</span>
-            </a></li>
+          {storySlots.map((story, index) => (
+            <li class:list={{ 'is-coming-soon': !story }}>
+              {story ? (
+                <a href={story.href} data-latest-story data-image={story.image || ''} data-title={story.title}>
+                  <div><strong>{story.title}</strong><p>{story.summary}</p></div>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              ) : (
+                <div class="home-latest-placeholder">
+                  <span class="home-latest-number">0{index + 1}</span>
+                  <div><small>COMING SOON</small><strong>次のニュースをお待ちください</strong></div>
+                </div>
+              )}
+            </li>
           ))}
         </ol>
       </div>
