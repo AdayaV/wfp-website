@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap");
 
 * {
@@ -2899,5 +2900,22 @@ textarea {
   .site-header .site-mark-name {
     font-size: 11px;
     letter-spacing: 0.035em;
+  }
+}
+
+
+/* Full-height racing wordmark */
+.site-header .site-mark-name {
+  font-family: "Chakra Petch", "Arial Narrow", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.015em;
+}
+
+@media (max-width: 700px) {
+  .site-header .site-mark-name {
+    font-size: 16px;
+    letter-spacing: 0.01em;
   }
 }
