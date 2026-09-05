@@ -2648,3 +2648,16 @@ body {
 /* Machine archive powered by microCMS. */
 .machine-page{background:#050505;color:#fff}.machine-hero{min-height:74vh;padding:clamp(9rem,16vw,15rem) max(5vw,2rem) 6rem;display:grid;grid-template-columns:1.2fr .8fr;align-items:end;gap:4rem}.machine-hero .section-label{grid-column:1/-1;margin:0 0 -2rem}.machine-hero h1{margin:0;font-size:clamp(4.6rem,10vw,10.5rem);line-height:.76;letter-spacing:-.075em}.machine-hero h1 strong,.machine-hero h1 span{display:block}.machine-hero h1 span{color:#555}.machine-hero>p:last-child{margin:0 0 .8rem;font-size:clamp(1rem,1.35vw,1.35rem);line-height:1.9}.machine-archive{background:#f3f3f1;color:#080808;padding:clamp(5rem,9vw,9rem) max(5vw,2rem) 9rem}.machine-archive>header{display:grid;grid-template-columns:5rem 1fr auto;align-items:end;margin-bottom:4rem}.machine-section-number{color:#888;font-size:.8rem}.machine-archive h2{margin:.35rem 0 0;font-size:clamp(3rem,6vw,6.5rem);letter-spacing:-.06em}.machine-archive>header>p:last-child{display:flex;flex-direction:column;align-items:flex-end;margin:0}.machine-archive>header>p:last-child strong{font-size:3rem;line-height:1}.machine-archive>header>p:last-child span{font-size:.65rem;letter-spacing:.18em}.machine-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(1.5rem,3vw,3.5rem) 1.25rem}.machine-grid li{grid-column:span 6}.machine-grid li:nth-child(3n){grid-column:3/span 8}.machine-grid figure{margin:0}.machine-grid img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:#181818}.machine-grid figcaption{display:grid;grid-template-columns:3rem 1fr auto;align-items:baseline;gap:1rem;padding-top:1rem}.machine-grid figcaption span,.machine-grid figcaption small{color:#777;font-size:.68rem;letter-spacing:.13em}.machine-grid figcaption strong{font-size:clamp(2.4rem,5vw,5.5rem);letter-spacing:-.06em}.machine-empty{min-height:44vh;display:grid;place-content:center;text-align:center;color:#777}
 @media(max-width:760px){.machine-hero{min-height:70vh;grid-template-columns:1fr;gap:2rem;padding-inline:1.25rem}.machine-hero .section-label{margin:0}.machine-hero h1{font-size:clamp(3.5rem,18vw,6rem)}.machine-archive{padding-inline:1.25rem}.machine-archive>header{grid-template-columns:2rem 1fr}.machine-archive>header>p:last-child{display:none}.machine-grid li,.machine-grid li:nth-child(3n){grid-column:1/-1}}
+
+
+/* Schedule entries are informational, so they remain visually static. */
+.schedule-page .schedule-list li:hover {
+  z-index: auto;
+  background: #111;
+  transform: none;
+}
+
+.schedule-page .schedule-list li:hover .schedule-arrow {
+  color: #777;
+  transform: none;
+}
