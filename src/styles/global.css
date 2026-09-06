@@ -3245,3 +3245,59 @@ main.machine-page { padding-top: 0; }
   }
   .machine-page .machine-hero h1 { font-size: clamp(48px, 13vw, 80px); }
 }
+
+
+/* WFP burgundy accents: selected controls, directional cues and fine rules. */
+:root {
+  --wfp-burgundy: #800020;
+  --wfp-burgundy-hover: #9b2442;
+  --wfp-accent-on-dark: #cc7890;
+}
+.site-header nav a[aria-current="page"] {
+  color: #fff;
+  background: var(--wfp-burgundy);
+}
+.site-header nav a:hover, .site-header nav a:focus-visible {
+  color: #fff;
+  background: var(--wfp-burgundy-hover);
+}
+.home-lead-controls button, .button {
+  color: #fff;
+  background: var(--wfp-burgundy);
+}
+.home-lead-controls button:hover, .home-lead-controls button:focus-visible,
+.button:hover, .button:focus-visible {
+  color: #fff;
+  background: var(--wfp-burgundy-hover);
+}
+.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow {
+  color: var(--wfp-accent-on-dark);
+}
+.home-lead-stories button[aria-current="true"] {
+  box-shadow: inset 0 -4px 0 var(--wfp-burgundy-hover);
+  border-bottom-color: var(--wfp-burgundy-hover);
+}
+.home-lead-stories button[aria-current="true"] > span { color: var(--wfp-accent-on-dark); }
+.home-latest-list a[aria-current="true"]::before,
+.home-latest-list a:hover::before, .home-latest-list a:focus-visible::before {
+  box-shadow: inset 4px 0 0 var(--wfp-burgundy-hover);
+}
+.news-filter-list button[aria-pressed="true"] span, .editorial-article-meta > span {
+  background: var(--wfp-accent-on-dark);
+}
+.news-filter button[aria-pressed="true"] { color: #fff; background: var(--wfp-burgundy); }
+.home-block-heading .section-label::after,
+.home-section-heading .section-label::after,
+.home-roadmap-heading .section-label::after,
+.machine-archive header .section-label::after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 28px;
+  height: 3px;
+  margin-left: 12px;
+  background: var(--wfp-burgundy-hover);
+}
+.social-dock a:hover, .social-dock a:focus-visible { color: #fff; background: var(--wfp-burgundy); }
+.site-footer { border-bottom: 2px solid var(--wfp-burgundy) !important; }
+:where(a, button, input, select, textarea):focus-visible { outline-color: var(--wfp-accent-on-dark); }
