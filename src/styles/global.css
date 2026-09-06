@@ -3207,3 +3207,11 @@ main:has(> .sponsors-page) {
     height: 16px;
   }
 }
+
+
+/* Divider between the WFP mark and Formula SAE label */
+.team-intro .section-label img {
+  box-sizing: content-box;
+  padding-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, .38);
+}
