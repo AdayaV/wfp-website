@@ -43,12 +43,12 @@ const memberByName = new Map(members.map((member) => [normalizeName(member.name)
 const groups = groupRoster
   .map((group) => {
     const rosterNames = group.title === 'PR班'
-      ? Array.from(new Set([
+      ? Array.from(new Map([
           ...group.names,
           ...members
             .filter((member) => [...member.divisions, ...member.units].includes('PR班'))
             .map((member) => member.name),
-        ]))
+        ].map((name) => [normalizeName(name), name])).values())
       : group.names;
     return {
       title: group.title,
