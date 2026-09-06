@@ -3018,3 +3018,9 @@ textarea {
     gap: 8px;
   }
 }
+
+
+/* Give the final sponsor row breathing room before the dark footer */
+.sponsors-page {
+  padding-bottom: clamp(96px, 8vw, 140px);
+}
