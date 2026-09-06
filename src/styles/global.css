@@ -3189,3 +3189,21 @@ main:has(> .sponsors-page) {
     height: 26px;
   }
 }
+
+
+/* Keep the Formula SAE team mark intentionally subtle */
+.team-intro .section-label {
+  gap: 10px;
+}
+
+.team-intro .section-label img {
+  width: 28px;
+  height: 18px;
+}
+
+@media (max-width: 700px) {
+  .team-intro .section-label img {
+    width: 24px;
+    height: 16px;
+  }
+}
