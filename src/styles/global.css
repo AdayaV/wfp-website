@@ -3128,3 +3128,27 @@ main:has(> .sponsors-page) {
     line-height: 1.8;
   }
 }
+
+
+/* Dark team masthead */
+.team-intro {
+  color: #f4f4f4;
+  background: #050505;
+}
+
+.team-intro::after {
+  background: repeating-linear-gradient(45deg, transparent 0 6px, rgba(255, 255, 255, .065) 6px 8px);
+}
+
+.team-intro .section-label,
+.team-intro h1 {
+  color: #f4f4f4;
+}
+
+.team-intro h1 span {
+  color: #616161;
+}
+
+.team-intro > p {
+  color: #dedede;
+}
