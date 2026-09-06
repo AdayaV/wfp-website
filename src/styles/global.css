@@ -3301,3 +3301,15 @@ main.machine-page { padding-top: 0; }
 .social-dock a:hover, .social-dock a:focus-visible { color: #fff; background: var(--wfp-burgundy); }
 .site-footer { border-bottom: 2px solid var(--wfp-burgundy) !important; }
 :where(a, button, input, select, textarea):focus-visible { outline-color: var(--wfp-accent-on-dark); }
+
+
+/* Social dock: burgundy icons, with a stable white button surface. */
+.social-dock a {
+  color: var(--wfp-burgundy);
+  background: #fff;
+  transition: color .2s ease;
+}
+.social-dock a:hover, .social-dock a:focus-visible {
+  color: #bd3658;
+  background: #fff;
+}
