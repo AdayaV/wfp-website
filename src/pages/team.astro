@@ -46,11 +46,16 @@ const groups = groupRoster
     members: group.names
       .map((name) => {
         const member = memberByName.get(normalizeName(name));
-        return member ? { ...member, displayRole: group.roles[name as keyof typeof group.roles] } : undefined;
+        const displayRole = group.roles[name as keyof typeof group.roles];
+        const shouldDisplay = group.title === 'PR班' || Boolean(displayRole);
+        return member && shouldDisplay ? { ...member, displayRole } : undefined;
       })
       .filter((member): member is (typeof members)[number] => Boolean(member)),
   }))
   .filter((group) => group.members.length > 0);
+const displayedMemberCount = new Set(
+  groups.flatMap((group) => group.members.map((member) => member.id)),
+).size;
 ---
 
 <WireframeLayout title="チーム">
@@ -64,8 +69,8 @@ const groups = groupRoster
       <p>早稲田大学の学生が主体となり、企画、設計、製作、走行、運営までを担います。それぞれの専門性を持ち寄り、学生フォーミュラ日本大会を目指して活動しています。</p>
     </section>
     <section class="team-organization" aria-labelledby="team-organization-heading">
-      <header class="team-section-heading"><p class="team-section-number">02</p><div><p class="section-label">ORGANIZATION</p><h2 id="team-organization-heading">チーム体制</h2></div><p><strong>{members.length}</strong><span>MEMBERS</span></p></header>
-      {members.length ? (
+      <header class="team-section-heading"><p class="team-section-number">02</p><div><p class="section-label">ORGANIZATION</p><h2 id="team-organization-heading">チーム体制</h2></div><p><strong>{displayedMemberCount}</strong><span>MEMBERS</span></p></header>
+      {displayedMemberCount ? (
         <div class="team-divisions">
           {groups.map((group, groupIndex) => (
             <section class="team-division" aria-labelledby={`group-${groupIndex}`}>
