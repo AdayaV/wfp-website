@@ -3024,3 +3024,13 @@ textarea {
 .sponsors-page {
   padding-bottom: clamp(96px, 8vw, 140px);
 }
+
+
+/* Keep sponsor breathing room inside the white logo field */
+.sponsors-page {
+  padding-bottom: 0;
+}
+
+.sponsor-tiers {
+  padding-bottom: clamp(96px, 8vw, 140px);
+}
