@@ -3313,3 +3313,12 @@ main.machine-page { padding-top: 0; }
   color: #bd3658;
   background: #fff;
 }
+
+
+/* Burgundy social dock with white icons; hover changes only the icon. */
+.social-dock, .social-dock a { background: var(--wfp-burgundy); }
+.social-dock a { color: #fff; }
+.social-dock a:hover, .social-dock a:focus-visible {
+  background: var(--wfp-burgundy);
+  color: #e8a7b9;
+}
