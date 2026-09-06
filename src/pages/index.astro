@@ -118,7 +118,7 @@ const calendarItems = scheduleItems;
             <li class:list={{ 'is-coming-soon': !story }}>
               {story ? (
                 <a href={story.href} data-latest-story data-image={story.image || ''} data-title={story.title}>
-                  <div><strong>{story.title}</strong><p>{story.summary}</p></div>
+                  <div><strong>{story.title}</strong><p>{story.summary}</p><small class="mobile-news-count">0{index + 1} / 04</small></div>
                   <span aria-hidden="true">↗</span>
                 </a>
               ) : (
@@ -195,7 +195,10 @@ const calendarItems = scheduleItems;
       let current = 0;
       const show = (next) => {
         current = (next + slides.length) % slides.length;
-        slides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== current)));
+        slides.forEach((slide, index) => {
+          slide.setAttribute('aria-hidden', String(index !== current));
+          if (slide instanceof HTMLElement) slide.inert = index !== current;
+        });
         selectors.forEach((selector, index) => {
           if (index === current) selector.setAttribute('aria-current', 'true');
           else selector.removeAttribute('aria-current');
@@ -205,6 +208,7 @@ const calendarItems = scheduleItems;
       hero.querySelectorAll('[data-hero-direction]').forEach((button) => {
         button.addEventListener('click', () => show(current + Number(button.getAttribute('data-hero-direction'))));
       });
+      show(0);
     }
 
     function setupDragScroll() {
@@ -291,8 +295,10 @@ const calendarItems = scheduleItems;
 
     function setupLatestNewsPreview() {
       const media = document.querySelector('[data-latest-media]');
-      let image = media?.querySelector('[data-latest-image]');
-      if (!(media instanceof HTMLAnchorElement) || !(image instanceof HTMLImageElement)) return;
+      if (!(media instanceof HTMLAnchorElement) || media.dataset.previewReady) return;
+      media.dataset.previewReady = 'true';
+      let image = media.querySelector('img') ?? document.createElement('img');
+      media.append(image);
 
       const storyLinks = Array.from(document.querySelectorAll('[data-latest-story]'))
         .filter((story): story is HTMLAnchorElement => story instanceof HTMLAnchorElement);
@@ -300,7 +306,10 @@ const calendarItems = scheduleItems;
       let transitionId = 0;
 
       const updateMedia = (story: HTMLAnchorElement, immediate = false) => {
+        image = media.querySelector('img') ?? document.createElement('img');
+        if (!image.isConnected) media.append(image);
         const nextImage = story.dataset.image;
+        if (!nextImage) { media.replaceChildren(); }
         if (nextImage && immediate) {
           image.src = nextImage;
           image.alt = '';
@@ -333,6 +342,7 @@ const calendarItems = scheduleItems;
       };
 
       const activateStory = (story: HTMLAnchorElement, immediate = false) => {
+        if (matchMedia('(max-width: 700px)').matches) return;
         storyLinks.forEach((link) => link.removeAttribute('aria-current'));
         story.setAttribute('aria-current', 'true');
 
@@ -348,12 +358,52 @@ const calendarItems = scheduleItems;
       if (storyLinks[0]) activateStory(storyLinks[0], true);
     }
 
+    function setupMobileNews() {
+      const track = document.querySelector<HTMLOListElement>('.home-latest-list');
+      const media = document.querySelector<HTMLAnchorElement>('[data-latest-media]');
+      if (!track || !media) return;
+      const cards = Array.from(track.children) as HTMLElement[];
+      const mobile = window.matchMedia('(max-width: 700px)');
+      let current = -1;
+      const sync = () => {
+        if (!mobile.matches) return;
+        const start = track.getBoundingClientRect().left;
+        const index = cards.reduce((best, card, i) => Math.abs(card.getBoundingClientRect().left - start) < Math.abs(cards[best].getBoundingClientRect().left - start) ? i : best, 0);
+        if (index === current) return;
+        current = index;
+        const story = cards[index].querySelector<HTMLAnchorElement>('[data-latest-story]');
+        track.querySelectorAll('[data-latest-story]').forEach(link => link.removeAttribute('aria-current'));
+        story?.setAttribute('aria-current', 'true');
+        media.replaceChildren();
+        if (story?.dataset.image) {
+          const image = document.createElement('img'); image.src = story.dataset.image; image.alt = ''; media.append(image);
+        }
+        if (story) { media.href = story.href; media.setAttribute('aria-label', story.dataset.title || '記事を見る'); }
+        else { media.removeAttribute('href'); media.setAttribute('aria-label', 'COMING SOON'); }
+      };
+      track.addEventListener('scroll', sync, { passive: true });
+      let touchX = 0, touchY = 0, moved = false;
+      media.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; touchY = e.touches[0].clientY; moved = false; }, { passive: true });
+      media.addEventListener('touchend', e => {
+        if (!mobile.matches) return;
+        const dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY;
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+        moved = true;
+        const next = Math.max(0, Math.min(cards.length - 1, current + (dx < 0 ? 1 : -1)));
+        track.scrollBy({ left: cards[next].getBoundingClientRect().left - cards[current].getBoundingClientRect().left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      }, { passive: true });
+      media.addEventListener('click', e => { if (moved) { e.preventDefault(); moved = false; } });
+      mobile.addEventListener('change', () => { current = -1; if (mobile.matches) sync(); else { setupLatestNewsPreview(); track.querySelector<HTMLElement>('[data-latest-story]')?.dispatchEvent(new Event('mouseenter')); } });
+      sync();
+    }
+
     function setupHome() {
       setupHero();
       setupDragScroll();
       setupRoadmapCarousel();
       setupCountdown();
-      setupLatestNewsPreview();
+      if (!matchMedia('(max-width: 700px)').matches) setupLatestNewsPreview();
+      setupMobileNews();
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupHome, { once: true });
     else setupHome();
