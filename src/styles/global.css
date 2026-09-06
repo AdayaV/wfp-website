@@ -3169,3 +3169,23 @@ main:has(> .sponsors-page) {
     height: 26px;
   }
 }
+
+
+/* Size the inline WFP mark in the team eyebrow */
+.team-intro .section-label::before {
+  content: none;
+}
+
+.team-intro .section-label img {
+  display: block;
+  width: 46px;
+  height: 30px;
+  object-fit: contain;
+}
+
+@media (max-width: 700px) {
+  .team-intro .section-label img {
+    width: 40px;
+    height: 26px;
+  }
+}
