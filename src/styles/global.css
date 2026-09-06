@@ -3034,3 +3034,9 @@ textarea {
 .sponsor-tiers {
   padding-bottom: clamp(96px, 8vw, 140px);
 }
+
+
+/* The sponsor page owns its spacing; keep the black area footer-only. */
+main:has(> .sponsors-page) {
+  padding-bottom: 0;
+}
