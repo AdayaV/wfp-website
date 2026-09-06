@@ -3363,3 +3363,28 @@ main.machine-page { padding-top: 0; }
 .schedule-page .schedule-list .schedule-arrow,
 .schedule-page .schedule-list li:hover .schedule-arrow { color: var(--wfp-burgundy); }
 .editorial-article-meta > span { background: var(--wfp-burgundy); }
+
+
+/* News catalogue: align the arrow with the title, below the image metadata. */
+.news-tile-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  gap: 10px 14px;
+  padding: 15px 0 0;
+  align-items: start;
+}
+.news-tile-copy .news-tile-meta { grid-area: 1 / 1 / 2 / -1; margin: 0; }
+.news-tile-copy h3 { grid-area: 2 / 1; margin: 0; }
+.news-tile-copy > p:not(.news-tile-meta) { grid-area: 3 / 1 / 4 / -1; }
+.news-tile-copy .news-tile-arrow {
+  grid-area: 2 / 2;
+  position: static;
+  margin-top: 2px;
+  justify-self: end;
+  color: var(--wfp-burgundy);
+}
+.news-filter-list button[aria-pressed="true"] { box-shadow: inset 3px 0 0 var(--wfp-burgundy); }
+.news-filter-list button[aria-pressed="true"] span {
+  background: var(--wfp-burgundy);
+  border-color: var(--wfp-burgundy);
+}
