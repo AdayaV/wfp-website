@@ -3322,3 +3322,37 @@ main.machine-page { padding-top: 0; }
   background: var(--wfp-burgundy);
   color: #e8a7b9;
 }
+
+
+/* Unified line arrow: northeast at rest, east when its link is active. */
+:is(.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow, .schedule-arrow) {
+  display: inline-block;
+  width: var(--direction-arrow-size, 24px);
+  height: var(--direction-arrow-size, 24px);
+  flex-shrink: 0;
+  font-size: 0;
+  line-height: 0;
+  vertical-align: middle;
+}
+.home-arrow-link { --direction-arrow-size: 42px; }
+.home-latest-all > span { --direction-arrow-size: 20px; }
+:is(.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow, .schedule-arrow)::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M5 27L27 5M7 5H27V25' fill='none' stroke='black' stroke-width='3' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E") center / contain no-repeat;
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform 240ms cubic-bezier(.2,.7,.2,1);
+  pointer-events: none;
+}
+:is(a:hover, a:focus-visible) :is(.home-arrow-link, .home-latest-all > span, .home-latest-list a > span)::after,
+.news-tile-arrow:is(:hover, :focus-visible)::after,
+.news-tile:has(a:hover, a:focus-visible) .news-tile-arrow::after {
+  transform: rotate(45deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow, .schedule-arrow)::after { transition: none; }
+}
