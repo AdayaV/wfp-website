@@ -3356,3 +3356,10 @@ main.machine-page { padding-top: 0; }
 @media (prefers-reduced-motion: reduce) {
   :is(.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow, .schedule-arrow)::after { transition: none; }
 }
+
+
+/* Deep burgundy for directional arrows and the article date marker. */
+.home-arrow-link, .home-latest-all > span, .home-latest-list a > span, .news-tile-arrow,
+.schedule-page .schedule-list .schedule-arrow,
+.schedule-page .schedule-list li:hover .schedule-arrow { color: var(--wfp-burgundy); }
+.editorial-article-meta > span { background: var(--wfp-burgundy); }
