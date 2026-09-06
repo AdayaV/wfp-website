@@ -1381,6 +1381,57 @@ h2 {
 .home-roadmap-countdown>div{display:grid;justify-items:end}
 .home-roadmap-countdown strong{font-size:clamp(34px,4vw,62px);font-weight:400;line-height:.85;font-variant-numeric:tabular-nums}
 .home-roadmap-countdown span{margin-top:9px;color:#888;font-size:9px;letter-spacing:.16em}
+.home-roadmap-countdown{
+  position:relative;
+  display:grid;
+  grid-template-columns:1.35fr repeat(3,1fr);
+  align-items:stretch;
+  gap:0;
+  min-width:min(520px,48vw);
+  overflow:hidden;
+  border:1px solid #343434;
+  background:linear-gradient(145deg,#161616,#090909);
+  box-shadow:0 18px 48px rgba(0,0,0,.32);
+}
+.home-roadmap-countdown::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  top:0;
+  right:0;
+  left:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--wfp-burgundy) 0 32%,#303030 32% 100%);
+}
+.home-roadmap-countdown>div{
+  position:relative;
+  min-width:0;
+  display:grid;
+  align-content:center;
+  justify-items:start;
+  padding:20px 18px 17px;
+  border-left:1px solid #303030;
+}
+.home-roadmap-countdown>div:first-child{border-left:0}
+.home-roadmap-countdown strong{
+  font-family:"Oxanium","Arial Narrow",sans-serif;
+  font-size:clamp(32px,3.2vw,54px);
+  font-weight:550;
+  line-height:.9;
+  letter-spacing:-.045em;
+}
+.home-roadmap-countdown span{
+  margin-top:10px;
+  color:#8b8b8b;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2em;
+}
+.home-roadmap-countdown>div:last-child{
+  color:#fff;
+  background:var(--wfp-burgundy);
+}
+.home-roadmap-countdown>div:last-child span{color:rgba(255,255,255,.72)}
 .home-roadmap-track{width:100%;display:flex;align-items:center;gap:28px;overflow-x:auto;margin:0;padding:20px calc(50vw - min(280px,42vw)) 58px;scroll-padding-inline:calc(50vw - min(280px,42vw));scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;overscroll-behavior-inline:contain}
 .home-roadmap-track::-webkit-scrollbar{display:none}
 .home-roadmap-track.is-dragging{cursor:grabbing;scroll-snap-type:none;user-select:none}
@@ -3414,3 +3465,4 @@ main.machine-page { padding-top: 0; }
   outline: 2px solid var(--wfp-accent-on-dark);
   outline-offset: 5px;
 }
+

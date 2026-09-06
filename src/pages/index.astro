@@ -74,6 +74,7 @@ const calendarItems = scheduleItems;
         <div><strong data-countdown-days>000</strong><span>DAYS</span></div>
         <div><strong data-countdown-hours>00</strong><span>HOURS</span></div>
         <div><strong data-countdown-minutes>00</strong><span>MIN</span></div>
+        <div><strong data-countdown-seconds>00</strong><span>SEC</span></div>
       </div>
     </header>
     {calendarItems.length ? (
@@ -282,15 +283,17 @@ const calendarItems = scheduleItems;
       const days = countdown.querySelector('[data-countdown-days]');
       const hours = countdown.querySelector('[data-countdown-hours]');
       const minutes = countdown.querySelector('[data-countdown-minutes]');
+      const seconds = countdown.querySelector('[data-countdown-seconds]');
       const update = () => {
         const remaining = Math.max(0, target - Date.now());
-        const totalMinutes = Math.floor(remaining / 60000);
-        if (days) days.textContent = String(Math.floor(totalMinutes / 1440)).padStart(3, '0');
-        if (hours) hours.textContent = String(Math.floor((totalMinutes % 1440) / 60)).padStart(2, '0');
-        if (minutes) minutes.textContent = String(totalMinutes % 60).padStart(2, '0');
+        const totalSeconds = Math.floor(remaining / 1000);
+        if (days) days.textContent = String(Math.floor(totalSeconds / 86400)).padStart(3, '0');
+        if (hours) hours.textContent = String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, '0');
+        if (minutes) minutes.textContent = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        if (seconds) seconds.textContent = String(totalSeconds % 60).padStart(2, '0');
       };
       update();
-      window.setInterval(update, 60000);
+      window.setInterval(update, 1000);
     }
 
     function setupLatestNewsPreview() {
@@ -409,3 +412,4 @@ const calendarItems = scheduleItems;
     else setupHome();
   </script>
 </WireframeLayout>
+
