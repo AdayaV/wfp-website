@@ -11,12 +11,12 @@ interface Props {
 const { title } = Astro.props;
 const siteRoot = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const navigation = [
-  { label: 'ホーム', href: siteRoot },
-  { label: 'ニュース', href: siteRoot + 'news/' },
-  { label: 'チーム', href: siteRoot + 'team/' },
-  { label: 'スケジュール', href: siteRoot + 'schedule/' },
-  { label: 'マシン', href: siteRoot + 'machine/' },
-  { label: 'スポンサー', href: siteRoot + 'sponsors/' },
+  { label: 'Home', href: siteRoot },
+  { label: 'News', href: siteRoot + 'news/' },
+  { label: 'About Us', href: siteRoot + 'team/' },
+  { label: 'Machine', href: siteRoot + 'machine/' },
+  { label: 'Schedule', href: siteRoot + 'schedule/' },
+  { label: 'Sponsors', href: siteRoot + 'sponsors/' },
 ];
 const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
 ---
