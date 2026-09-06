@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap");
@@ -2987,5 +2988,25 @@ textarea {
 
   .site-header > nav a {
     font-size: 13px;
+  }
+}
+
+
+/* Extend the Japanese type system across the site */
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "M PLUS 1p", "Noto Sans JP", sans-serif;
+}
+
+.site-header > nav a {
+  font-size: 17px;
+}
+
+@media (max-width: 700px) {
+  .site-header > nav a {
+    font-size: 14px;
   }
 }
