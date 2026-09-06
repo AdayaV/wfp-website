@@ -28,6 +28,7 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content="Waseda Formula Project（WFP）の公式ウェブサイト" />
+    <link rel="icon" type="image/svg+xml" href={siteRoot + 'images/wfp_logo.svg'} />
     <title>{title} | Waseda Formula Project</title>
   </head>
   <body class:list={{ 'is-home': title === 'ホーム' }}>
