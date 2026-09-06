@@ -4,7 +4,7 @@ import { getNewsArticles } from '../data/news';
 import { getScheduleItems } from '../data/schedule';
 import { getSponsorTiers } from '../data/sponsors';
 
-const siteRoot = 'https://adayav.github.io/wfp-website/';
+const siteRoot = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const stories = (await getNewsArticles()).slice(0, 4);
 const storySlots = Array.from({ length: 4 }, (_, index) => stories[index]);
 const leadStory = stories[0];

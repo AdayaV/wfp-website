@@ -3159,7 +3159,7 @@ main:has(> .sponsors-page) {
   width: 46px;
   height: 30px;
   flex: 0 0 auto;
-  background: url("/wfp-website/images/wfp_logo.svg") center / contain no-repeat;
+  background: url("/images/wfp_logo.svg") center / contain no-repeat;
   transform: none;
 }
 
