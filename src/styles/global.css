@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@700;800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oxanium:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap");
@@ -2963,5 +2964,28 @@ textarea {
   .site-header > nav {
     justify-content: flex-end;
     gap: 12px;
+  }
+}
+
+
+/* Refine brand-to-navigation type balance */
+.site-header .site-mark-name {
+  font-size: 29px;
+}
+
+.site-header > nav a {
+  font-family: "M PLUS 1p", "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+}
+
+@media (max-width: 700px) {
+  .site-header .site-mark-name {
+    font-size: 15px;
+  }
+
+  .site-header > nav a {
+    font-size: 13px;
   }
 }
