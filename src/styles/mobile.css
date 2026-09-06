@@ -46,9 +46,12 @@
   .home-latest-layout { display: block; }
   .home-latest-media { min-height: 0; height: auto; aspect-ratio: 4 / 3; position: relative; }
   .home-latest-media img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .home-latest-list { display: flex; gap: 12px; width: 100%; margin: -24px 0 0; padding: 0 12px 8px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: 12px; position: relative; z-index: 2; background: transparent; }
+  .home-latest-list { display: flex; align-items: flex-start; gap: 12px; width: 100%; margin: -24px 0 0; padding: 0 12px 8px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-left: 12px; position: relative; z-index: 2; background: transparent; }
   .home-latest-list li { flex: 0 0 calc(100% - 24px); min-width: 0; scroll-snap-align: start; }
-  .home-latest-list li a, .home-latest-list li a:hover, .home-latest-list li a[aria-current="true"], .home-latest-placeholder { box-sizing: border-box; width: 100%; height: auto; min-height: 154px; margin: 0; padding: 18px; grid-template-columns: minmax(0,1fr) 24px; align-content: start; border: 1px solid #444; border-left: 5px solid var(--wfp-burgundy); background: #121212; transform: none; }
+  .home-latest-list li a, .home-latest-list li a:hover, .home-latest-list li a[aria-current="true"], .home-latest-placeholder { box-sizing: border-box; width: 100%; height: auto; min-height: 154px; margin: 0; padding: 18px; align-content: start; border: 1px solid #444; border-left: 5px solid var(--wfp-burgundy); background: #121212; transform: none; }
+  .home-latest-list li a, .home-latest-list li a:hover, .home-latest-list li a[aria-current="true"] { grid-template-columns: minmax(0,1fr) 24px; }
+  .home-latest-placeholder { grid-template-columns: 32px minmax(0,1fr); gap: 12px; }
+  .home-latest-placeholder > div { min-width: 0; }
   .home-latest-list li a::before { display: none; }
   .home-latest-list strong { font-size: 18px; }
   .home-latest-list p { display: -webkit-box; margin: 7px 0 0; line-height: 1.45; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
