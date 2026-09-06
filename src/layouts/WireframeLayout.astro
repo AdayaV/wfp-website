@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/mobile.css';
 
 
 interface Props {
@@ -35,7 +36,8 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
         <img src={siteRoot + 'images/wfp_logo.svg'} alt="" />
         <span class="site-mark-name">WASEDA FORMULA PROJECT</span>
       </a>
-      <nav aria-label="メインナビゲーション">
+      <button class="mobile-menu-toggle" aria-label="メニューを開く" aria-expanded="false" aria-controls="main-navigation"><span></span><span></span></button>
+      <nav id="main-navigation" aria-label="メインナビゲーション">
         {navigation.map((item) => {
           const itemPath = new URL(item.href, Astro.url).pathname.replace(/\/+$/, '') || '/';
           return <a href={item.href} aria-current={currentPath === itemPath ? 'page' : undefined}>{item.label}</a>;
@@ -47,6 +49,30 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
       const updateHeaderShadow = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
       updateHeaderShadow();
       window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+      const toggle = document.querySelector<HTMLButtonElement>('.mobile-menu-toggle');
+      const nav = document.querySelector<HTMLElement>('#main-navigation');
+      const mobile = window.matchMedia('(max-width: 1000px)');
+      const setMenu = (open: boolean) => {
+        toggle?.setAttribute('aria-expanded', String(open));
+        toggle?.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+        header?.classList.toggle('menu-open', open);
+        document.body.classList.toggle('menu-open', open);
+        if (nav) nav.inert = mobile.matches && !open;
+      };
+      toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+      document.addEventListener('keydown', (event) => {
+        if (toggle?.getAttribute('aria-expanded') !== 'true') return;
+        if (event.key === 'Escape') { setMenu(false); toggle.focus(); }
+        if (event.key === 'Tab') {
+          const items = [toggle, ...Array.from(nav?.querySelectorAll<HTMLAnchorElement>('a') ?? [])];
+          const first = items[0], last = items.at(-1);
+          if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+          else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+        }
+      });
+      nav?.addEventListener('click', () => setMenu(false));
+      mobile.addEventListener('change', () => setMenu(false));
+      setMenu(false);
     </script>
     <main>
       <slot />
@@ -76,4 +102,3 @@ const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
     </footer>
   </body>
 </html>
-
