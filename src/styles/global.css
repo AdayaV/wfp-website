@@ -3215,3 +3215,9 @@ main:has(> .sponsors-page) {
   padding-right: 10px;
   border-right: 1px solid rgba(255, 255, 255, .38);
 }
+
+
+.team-intro .section-label img {
+  border-right-width: 1px !important;
+  border-right-style: solid !important;
+}
