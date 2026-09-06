@@ -38,12 +38,21 @@ const groupRoster = [
   { title: 'PR班', names: ['小林 悠真', '中村 泰正', '足立 純也', '斉藤 瑠来', '佐々木 将博', '豊田 雄介', '吉田 峻太朗'], roles: {} },
 ];
 
-const normalizeName = (name: string) => name.replace(/\s/g, '').replace('斎', '斉');
+const normalizeName = (name: string) => name.replace(/\s/g, '').replace(/[斎齋齊]/g, '斉');
 const memberByName = new Map(members.map((member) => [normalizeName(member.name), member]));
 const groups = groupRoster
-  .map((group) => ({
-    title: group.title,
-    members: group.names
+  .map((group) => {
+    const rosterNames = group.title === 'PR班'
+      ? Array.from(new Set([
+          ...group.names,
+          ...members
+            .filter((member) => [...member.divisions, ...member.units].includes('PR班'))
+            .map((member) => member.name),
+        ]))
+      : group.names;
+    return {
+      title: group.title,
+      members: rosterNames
       .map((name) => {
         const member = memberByName.get(normalizeName(name));
         const displayRole = group.roles[name as keyof typeof group.roles];
@@ -51,7 +60,8 @@ const groups = groupRoster
         return member && shouldDisplay ? { ...member, displayRole } : undefined;
       })
       .filter((member): member is (typeof members)[number] => Boolean(member)),
-  }))
+    };
+  })
   .filter((group) => group.members.length > 0);
 const displayedMemberCount = new Set(
   groups.flatMap((group) => group.members.map((member) => member.id)),
