@@ -6,6 +6,7 @@ export interface Sponsor {
   logo?: string;
   logoAlt?: string;
   website?: string;
+  websites?: { name: string; url: string }[];
   displayOrder?: number;
 }
 
@@ -28,6 +29,55 @@ interface MicroCMSSponsorEntry {
 
 interface MicroCMSListResponse {
   contents: MicroCMSSponsorEntry[];
+}
+
+// Verified official sites. CMS URLs remain authoritative when supplied.
+const silverWebsites: Record<string, string> = {
+  '鷺宮製作所': 'https://www.saginomiya.co.jp/',
+  'アネブル': 'https://www.enable-os.co.jp/',
+  'デュポン・スタイロ': 'https://www.dupontstyro.co.jp/',
+  'オーゼットジャパン': 'https://www.ozracing.com/jp/',
+  'ミネベアミツミ': 'https://www.minebeamitsumi.com/',
+  '協永産業': 'https://www.kyoei-ind.co.jp/',
+  'ipgautomotive': 'https://www.ipg-automotive.com/jp/',
+  'ディクセル': 'https://www.dixcel.co.jp/',
+  '協和工業': 'https://www.kyowa-uj.com/',
+  'ネクト・プロ・レーシング': 'https://e-necto.com/',
+  '新栄': 'https://shinei-p.co.jp/',
+  'イグス': 'https://www.igus.co.jp/',
+  'エステック': 'https://s-tec.kanagawa.jp/',
+  '石原ラジエーター工業所': 'https://ishihara-radiator.com/',
+  'プロト': 'https://www.plotonline.com/',
+  'キノクニエンタープライズ': 'https://www.kinokuni-e.com/',
+  '七福金属': 'https://www.shichifuku.com/',
+  '住友電装': 'https://www.sws.co.jp/',
+  'shoraijapan': 'https://shoraipower.jp/',
+  '三研工業': 'https://sanken-mo.co.jp/',
+  'エフ・シー・シー': 'https://www.fcc-net.co.jp/',
+  'rushfactory': 'https://rushfactory.jp/',
+  'ハイレックスコーポレーション': 'https://www.hi-lex.co.jp/',
+  'totohouse': 'https://toto-house.jp/',
+  '小野測器': 'https://www.onosokki.com/',
+  'モトリティ': 'https://motolity.com/',
+  'スパルジャパン': 'https://www.spalautomotive.com/',
+};
+
+function normalizeSponsorName(name: string): string {
+  return name.normalize('NFKC').replace(/株式会社|有限会社|\s/g, '').toLowerCase();
+}
+
+export function withSponsorWebsite(sponsor: Sponsor): Sponsor {
+  if (sponsor.website?.trim()) return sponsor;
+  const key = normalizeSponsorName(sponsor.name);
+  // A joint listing must not send all three company names to just one company.
+  if (key === 'jhi/富士加飾/三菱ガス化学') {
+    return { ...sponsor, websites: [
+      { name: '株式会社JHI', url: 'https://www.jhi.co.jp/' },
+      { name: '富士加飾株式会社', url: 'https://www.fuji-d.jp/' },
+      { name: '三菱ガス化学株式会社', url: 'https://www.mgc.co.jp/' },
+    ] };
+  }
+  return { ...sponsor, website: silverWebsites[key] };
 }
 
 export const sponsorTiers: SponsorTier[] = [
@@ -110,7 +160,7 @@ export const sponsorTiers: SponsorTier[] = [
       '株式会社小野測器',
       '株式会社モトリティ',
       'スパルジャパン株式会社',
-    ].map((name) => ({ name })),
+    ].map((name) => withSponsorWebsite({ name })),
   },
 ];
 
@@ -141,7 +191,7 @@ export async function getSponsorTiers(): Promise<SponsorTier[]> {
       ...tier,
       sponsors: data.contents
         .filter((entry) => normalizeTier(entry.tier) === tier.id)
-        .map((entry) => ({
+        .map((entry) => withSponsorWebsite({
           id: entry.id,
           name: entry.name,
           logo: entry.logo?.url,
@@ -155,3 +205,4 @@ export async function getSponsorTiers(): Promise<SponsorTier[]> {
     return sponsorTiers;
   }
 }
+
