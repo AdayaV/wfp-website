@@ -66,18 +66,34 @@ function normalizeSponsorName(name: string): string {
   return name.normalize('NFKC').replace(/株式会社|有限会社|\s/g, '').toLowerCase();
 }
 
+// Official company logos; keep each partner in its own grid cell.
+const individualPartners: Sponsor[] = [
+  { name: '株式会社JHI', website: 'https://www.jhi.co.jp/', logo: 'https://www.jhi.co.jp/assets/img/common/logo.png' },
+  { name: '富士加飾株式会社', website: 'https://fuji-d.jp/', logo: 'https://fuji-d.jp/wp/wp-content/uploads/2019/08/logo.png' },
+  { name: '三菱ガス化学株式会社', website: 'https://www.mgc.co.jp/', logo: 'https://www.mgc.co.jp/shared/img/hdr-logo.svg' },
+];
+
 export function withSponsorWebsite(sponsor: Sponsor): Sponsor {
-  if (sponsor.website?.trim()) return sponsor;
   const key = normalizeSponsorName(sponsor.name);
-  // A joint listing must not send all three company names to just one company.
-  if (key === 'jhi/富士加飾/三菱ガス化学') {
-    return { ...sponsor, websites: [
-      { name: '株式会社JHI', url: 'https://www.jhi.co.jp/' },
-      { name: '富士加飾株式会社', url: 'https://www.fuji-d.jp/' },
-      { name: '三菱ガス化学株式会社', url: 'https://www.mgc.co.jp/' },
-    ] };
+  const partner = individualPartners.find((item) => normalizeSponsorName(item.name) === key);
+  if (partner) {
+    return { ...sponsor, logo: sponsor.logo || partner.logo, website: sponsor.website?.trim() || partner.website };
   }
+  if (sponsor.website?.trim()) return sponsor;
   return { ...sponsor, website: silverWebsites[key] };
+}
+
+export function expandJointSponsors(sponsors: Sponsor[]): Sponsor[] {
+  const existingNames = new Set(sponsors.map((sponsor) => normalizeSponsorName(sponsor.name)));
+  return sponsors.flatMap((sponsor) => {
+    if (normalizeSponsorName(sponsor.name) !== 'jhi/富士加飾/三菱ガス化学') {
+      return [withSponsorWebsite(sponsor)];
+    }
+    // Support the legacy CMS record without duplicating future individual records.
+    return individualPartners
+      .filter((partner) => !existingNames.has(normalizeSponsorName(partner.name)))
+      .map((partner) => ({ ...partner, id: `${sponsor.id || 'partner'}-${normalizeSponsorName(partner.name)}`, displayOrder: sponsor.displayOrder }));
+  });
 }
 
 export const sponsorTiers: SponsorTier[] = [
@@ -135,7 +151,9 @@ export const sponsorTiers: SponsorTier[] = [
       '株式会社鷺宮製作所',
       'アネブル',
       'デュポン・スタイロ株式会社',
-      '株式会社JHI/富士加飾株式会社/三菱ガス化学株式会社',
+      '株式会社JHI',
+      '富士加飾株式会社',
+      '三菱ガス化学株式会社',
       'オーゼットジャパン株式会社',
       'ミネベアミツミ株式会社',
       '協永産業株式会社',
@@ -189,7 +207,7 @@ export async function getSponsorTiers(): Promise<SponsorTier[]> {
 
     return sponsorTiers.map((tier) => ({
       ...tier,
-      sponsors: data.contents
+      sponsors: expandJointSponsors(data.contents
         .filter((entry) => normalizeTier(entry.tier) === tier.id)
         .map((entry) => withSponsorWebsite({
           id: entry.id,
@@ -198,7 +216,7 @@ export async function getSponsorTiers(): Promise<SponsorTier[]> {
           logoAlt: entry.logoAlt || entry.name,
           website: entry.website,
           displayOrder: entry.displayOrder,
-        })),
+        }))),
     }));
   } catch (error) {
     console.warn('microCMS sponsors request failed. Static sponsors will be used.', error);
