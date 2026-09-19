@@ -29,7 +29,13 @@ const sponsorTiers = await getSponsorTiers();
           <ul class="sponsor-grid">
             {tier.sponsors.map((sponsor) => (
               <li class:list={{ 'sponsor-has-logo': Boolean(sponsor.logo) }}>
-                {sponsor.website ? (
+                {sponsor.websites?.length ? (
+                  <div class="sponsor-company-links">
+                    {sponsor.websites.map((website) => (
+                      <a href={website.url} target="_blank" rel="noopener noreferrer"><strong>{website.name}</strong></a>
+                    ))}
+                  </div>
+                ) : sponsor.website ? (
                   <a href={sponsor.website} target="_blank" rel="noreferrer">
                     {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
                     {!sponsor.logo && <strong>{sponsor.name}</strong>}
@@ -48,3 +54,11 @@ const sponsorTiers = await getSponsorTiers();
     </div>
   </section>
 </WireframeLayout>
+
+<style>
+  .sponsor-company-links { display: grid; gap: 8px; text-align: center; }
+  .sponsor-company-links a { color: inherit; text-decoration: none; }
+  .sponsor-company-links a:hover { text-decoration: underline; }
+  .sponsor-company-links a:focus-visible { outline: 2px solid #800020; outline-offset: 4px; }
+</style>
+
