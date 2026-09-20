@@ -69,7 +69,7 @@ body:not(.is-home) main .section-label {
 }
 
 /* Full-bleed closing rule, without widening the footer's content. */
-body { padding-bottom: 0; }
+body { padding-bottom: 0; overflow-x: visible; }
 .site-footer {
   position: relative;
   border-bottom: 0 !important;
