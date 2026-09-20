@@ -141,3 +141,37 @@ body { padding-bottom: 0; overflow-x: visible; }
   pointer-events: none;
 }
 
+
+/* Roadmap: colour records the event state, not the selected carousel card. */
+.home-roadmap-track { scroll-snap-type: none; scroll-behavior: auto; }
+.home-roadmap-visual { background: #650d28; isolation: isolate; }
+.home-roadmap-visual img { filter: grayscale(1) contrast(.9) brightness(1.35); mix-blend-mode: luminosity; opacity: .8; pointer-events: none; }
+.home-roadmap-card.is-complete .home-roadmap-visual { background: #181818; }
+.home-roadmap-card.is-complete .home-roadmap-visual img { filter: none; mix-blend-mode: normal; opacity: 1; }
+.home-roadmap-visual::after { background: linear-gradient(0deg, #070707 0%, rgba(0,0,0,.15) 65%, transparent); }
+.home-roadmap-visual span { color: rgba(255,255,255,.5); }
+.home-roadmap-card-copy { color: #fff; }
+.home-roadmap-card-copy .roadmap-event-status { margin: 0 0 10px; font-size: 10px; letter-spacing: .12em; color: #edb9c8; }
+.home-roadmap-card.is-complete .roadmap-event-status { color: #ddd; }
+.home-roadmap-location { color: #ccc; }
+
+/* A simple timing display: days first, then hours : minutes : seconds. */
+.roadmap-timing { flex: 0 0 auto; width: min(440px, 100%); border-top: 2px solid var(--wfp-burgundy); padding-top: 12px; }
+.roadmap-timing-label { display: flex; justify-content: space-between; gap: 16px; margin: 0 0 20px; color: #bbb; font-size: 11px; letter-spacing: .08em; }
+.roadmap-timing-label time { color: #999; font-variant-numeric: tabular-nums; }
+.roadmap-timing .home-roadmap-countdown { min-width: 0; width: 100%; display: grid; grid-template-columns: 1.4fr repeat(3,1fr); gap: 0; overflow: visible; border: 0; background: none; box-shadow: none; }
+.roadmap-timing .home-roadmap-countdown::before { content: none; }
+.roadmap-timing .home-roadmap-countdown > div { min-height: 0; padding: 0 14px; border: 0; background: none; justify-items: center; }
+.roadmap-timing .home-roadmap-countdown > div:first-child { padding-left: 0; padding-right: 24px; border-right: 1px solid #444; justify-items: start; }
+.roadmap-timing .home-roadmap-countdown > div:nth-child(n+3)::before { content: ":"; position: absolute; left: -3px; top: 1px; font-size: 32px; font-weight: 400; color: #666; }
+.roadmap-timing .home-roadmap-countdown strong { font-family: Arial, sans-serif; font-size: clamp(36px, 3.5vw, 52px); font-weight: 500; line-height: 1; letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+.roadmap-timing .home-roadmap-countdown span { margin-top: 10px; color: #999; font-size: 9px; font-weight: 500; letter-spacing: .14em; }
+@media (max-width: 1000px) {
+  .home-roadmap-heading { flex-wrap: wrap; gap: 28px; }
+}
+@media (max-width: 700px) {
+  .roadmap-timing { width: 100%; }
+  .roadmap-timing .home-roadmap-countdown strong { font-size: clamp(32px, 9vw, 44px); }
+  .roadmap-timing .home-roadmap-countdown > div { padding-inline: 10px; }
+  .roadmap-timing .home-roadmap-countdown > div:first-child { padding-right: 16px; }
+}
