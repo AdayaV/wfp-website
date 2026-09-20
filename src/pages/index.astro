@@ -12,6 +12,13 @@ const sponsorTiers = await getSponsorTiers();
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
 const scheduleItems = await getScheduleItems();
 const calendarItems = scheduleItems;
+// End dates include the entire final calendar day in Japan.
+const eventEnd = (iso: string) => {
+  const date = new Date(iso);
+  if (!Number.isFinite(date.getTime())) return Infinity;
+  const day = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(date);
+  return new Date(day + 'T00:00:00+09:00').getTime() + 86400000;
+};
 ---
 
 <WireframeLayout title="ホーム">
@@ -70,24 +77,27 @@ const calendarItems = scheduleItems;
         <p class="section-label">ROAD TO FSAEJ 2027</p>
         <h2 id="roadmap-heading">大会までのスケジュール</h2>
       </div>
+      <div class="roadmap-timing"><p class="roadmap-timing-label">大会開幕まで <time datetime="2027-08-23">2027.08.23</time></p>
       <div class="home-roadmap-countdown" data-countdown data-target="2027-08-23T00:00:00+09:00" aria-label="2027年大会までのカウントダウン">
         <div><strong data-countdown-days>000</strong><span>DAYS</span></div>
         <div><strong data-countdown-hours>00</strong><span>HOURS</span></div>
         <div><strong data-countdown-minutes>00</strong><span>MIN</span></div>
         <div><strong data-countdown-seconds>00</strong><span>SEC</span></div>
       </div>
+      </div>
     </header>
     {calendarItems.length ? (
       <>
         <div class="home-roadmap-track" data-drag-scroll>
           {calendarItems.map((event, index) => (
-            <article class="home-roadmap-card" aria-current={event.isNext ? 'date' : undefined}>
+            <article class:list={['home-roadmap-card', { 'is-complete': Date.now() >= eventEnd(event.endDateIso || event.startDateIso) }]} data-event-end={eventEnd(event.endDateIso || event.startDateIso)} aria-current={event.isNext ? 'date' : undefined}>
               <div class="home-roadmap-visual" aria-hidden="true">
                 {event.image && <img src={event.image} alt="" />}
                 <span>0{index + 1}</span>
               </div>
               <div class="home-roadmap-card-copy">
                 <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
+                <p class="roadmap-event-status" data-event-status>{Date.now() >= eventEnd(event.endDateIso || event.startDateIso) ? '終了' : '開催予定'}</p>
                 <h3>{event.title}</h3>
                 {event.location && <p class="home-roadmap-location">{event.location}</p>}
               </div>
@@ -219,7 +229,7 @@ const calendarItems = scheduleItems;
         let startScroll = 0;
         let dragging = false;
         track.addEventListener('pointerdown', (event) => {
-          if (!(event instanceof PointerEvent) || event.pointerType === 'touch') return;
+          if (!(event instanceof PointerEvent) || event.pointerType === 'touch' || event.button !== 0) return;
           dragging = true;
           startX = event.clientX;
           startScroll = track.scrollLeft;
@@ -236,6 +246,8 @@ const calendarItems = scheduleItems;
         };
         track.addEventListener('pointerup', stop);
         track.addEventListener('pointercancel', stop);
+        track.addEventListener('lostpointercapture', stop);
+        track.addEventListener('dragstart', event => event.preventDefault());
       });
     }
 
@@ -243,6 +255,14 @@ const calendarItems = scheduleItems;
       const track = document.querySelector('.home-roadmap-track');
       if (!(track instanceof HTMLElement)) return;
       const cards = Array.from(track.querySelectorAll('.home-roadmap-card'));
+      const syncDates = () => cards.forEach(card => {
+        const complete = Date.now() >= Number(card.getAttribute('data-event-end'));
+        card.classList.toggle('is-complete', complete);
+        const status = card.querySelector('[data-event-status]');
+        if (status) status.textContent = complete ? '終了' : '開催予定';
+      });
+      syncDates();
+      window.setInterval(syncDates, 60000);
       let scheduled = false;
       const updateCurrent = () => {
         const trackCenter = track.getBoundingClientRect().left + track.clientWidth / 2;
