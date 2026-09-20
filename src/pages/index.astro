@@ -287,6 +287,57 @@ const eventEnd = (iso: string) => {
         scheduled = true;
         window.requestAnimationFrame(updateCurrent);
       }, { passive: true });
+      // Use a timed animation rather than the browser's fast native snap.
+      let snapFrame = 0;
+      let snapTimer = 0;
+      let pointerDown = false;
+      let snapping = false;
+      const cancelSnap = () => {
+        window.cancelAnimationFrame(snapFrame);
+        window.clearTimeout(snapTimer);
+        snapping = false;
+      };
+      const snapToNearest = () => {
+        if (pointerDown || !cards.length) return;
+        const center = track.getBoundingClientRect().left + track.clientWidth / 2;
+        const nearest = cards.reduce((best, card) => {
+          const distance = (item: Element) => {
+            const rect = item.getBoundingClientRect();
+            return Math.abs(rect.left + rect.width / 2 - center);
+          };
+          return distance(card) < distance(best) ? card : best;
+        });
+        const rect = nearest.getBoundingClientRect();
+        const start = track.scrollLeft;
+        const target = Math.max(0, Math.min(track.scrollWidth - track.clientWidth,
+          start + rect.left + rect.width / 2 - center));
+        if (Math.abs(target - start) < 1) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          track.scrollLeft = target;
+          return;
+        }
+        snapping = true;
+        const started = performance.now();
+        const animate = (now: number) => {
+          const progress = Math.min(1, (now - started) / 850);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          track.scrollLeft = start + (target - start) * eased;
+          if (progress < 1) snapFrame = requestAnimationFrame(animate);
+          else snapping = false;
+        };
+        snapFrame = requestAnimationFrame(animate);
+      };
+      const queueSnap = () => {
+        window.clearTimeout(snapTimer);
+        if (!pointerDown && !snapping) snapTimer = window.setTimeout(snapToNearest, 160);
+      };
+      track.addEventListener('pointerdown', () => { pointerDown = true; cancelSnap(); });
+      const release = () => { pointerDown = false; queueSnap(); };
+      track.addEventListener('pointerup', release);
+      track.addEventListener('pointercancel', release);
+      track.addEventListener('lostpointercapture', release);
+      track.addEventListener('wheel', cancelSnap, { passive: true });
+      track.addEventListener('scroll', queueSnap, { passive: true });
       const initial = cards.find((card) => card.getAttribute('aria-current') === 'date') ?? cards[0];
       window.setTimeout(() => {
         if (initial instanceof HTMLElement) {
