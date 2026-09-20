@@ -68,6 +68,23 @@ body:not(.is-home) main .section-label {
   body:not(.is-home) :is(.team-about, .team-activity) > p:last-child { font-size: 15px; }
 }
 
+/* Keep the actual stories and team information ahead of decorative filler. */
+.home-lead-stories[hidden] { display: none !important; }
+.home-lead-stories { grid-template-columns: repeat(var(--story-count, 4), minmax(0, 1fr)); }
+.home-latest-layout--single .home-latest-list { grid-template-rows: auto; }
+.home-latest-layout--single .home-latest-list > li { height: auto; }
+.home-latest-layout--single .home-latest-list > li > a { min-height: 0; height: auto; }
+.home-section--split { padding-block: clamp(40px, 5vw, 72px); border-top: 1px solid #292929; }
+.home-section--split .home-section-heading h2 { font-size: clamp(28px, 3.2vw, 44px); line-height: 1.2; letter-spacing: -.025em; }
+.home-section--split .home-section-copy p { font-size: 16px; line-height: 1.8; color: #bdbdbd; }
+.home-section--split .home-section-copy .button { background: none; border: 0; padding: 10px 0; color: #f4f4f4; box-shadow: none; text-decoration: none; }
+.home-section--split .home-section-copy .button:hover { color: #cc7890; }
+.home-roadmap-empty, .home-latest-empty, .schedule-empty { min-height: 0; padding: 32px 24px; background: transparent; border: 0; border-top: 1px solid #292929; text-align: left; place-content: start; }
+@media (min-width: 701px) {
+  .home-latest-layout--single { align-items: start; }
+  .home-latest-layout--single .home-latest-list { align-self: end; }
+}
+
 /* Full-bleed closing rule, without widening the footer's content. */
 body { padding-bottom: 0; overflow-x: visible; }
 .site-footer {
