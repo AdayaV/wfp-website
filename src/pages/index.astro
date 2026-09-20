@@ -182,12 +182,12 @@ const eventEnd = (iso: string) => {
         <li>
           {sponsor.website ? (
             <a href={sponsor.website} target="_blank" rel="noreferrer">
-              {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+              {sponsor.logo && <><img src={sponsor.logo} alt="" /><small class="sponsor-caption">{sponsor.name}</small></>}
               {!sponsor.logo && <strong>{sponsor.name}</strong>}
             </a>
           ) : (
             <>
-              {sponsor.logo && <img src={sponsor.logo} alt={sponsor.logoAlt || sponsor.name} />}
+              {sponsor.logo && <><img src={sponsor.logo} alt="" /><small class="sponsor-caption">{sponsor.name}</small></>}
               {!sponsor.logo && <strong>{sponsor.name}</strong>}
             </>
           )}
