@@ -70,14 +70,36 @@ const teamMemberCount = members.length;
   <div class="team-page">
     <header class="team-intro">
       <div><p class="section-label"><img src={import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'images/wfp_logo.svg'} alt="" />FORMULA SAE</p><h1><strong>WASEDA FORMULA</strong><strong>PROJECT</strong><span>TEAM</span></h1></div>
-      <p>早稲田大学の学生が主体となり、企画、設計、製作、走行、運営までを担うレーシングチームです。<br />それぞれの専門性を持ち寄り、一台のフォーミュラカーとともに学生フォーミュラ日本大会へ挑みます。</p>
+      <p>2009年に発足した、早稲田大学の学生によるレーシングチーム。<br />一台のフォーミュラカーを自分たちの手で企画・設計・製作し、学生フォーミュラ日本大会へ挑みます。教室で得た知識を、走るマシンへ。その挑戦を、世代を超えてつないでいます。</p>
     </header>
     <section class="team-about" aria-labelledby="team-about-heading">
       <p class="team-section-number">01</p><div><p class="section-label">ABOUT WFP</p><h2 id="team-about-heading">ものづくりを通じて、<br />チームで挑む。</h2></div>
-      <p>早稲田大学の学生が主体となり、企画、設計、製作、走行、運営までを担います。それぞれの専門性を持ち寄り、学生フォーミュラ日本大会を目指して活動しています。</p>
+      <div class="team-story-copy"><p class="team-philosophy">座学で学べないことを学び、<br />座学で学んだことを実践する。</p><p>これが、Waseda Formula Projectの活動の原点です。講義で学んだ理論を設計に落とし込み、部品をつくり、組み上げ、走らせる。テストで見つかった課題を次の改善へつなげながら、ものづくりの面白さと難しさに向き合っています。</p><p>目指すのは、速いマシンだけではありません。コストや工程を考え、仲間と議論し、自分たちの設計を伝える。その過程を通じて、一人ひとりが考え、行動する力を育んでいます。</p></div>
+    </section>
+    <section class="team-story-section" aria-labelledby="team-history-heading">
+      <header class="team-story-heading"><p class="team-section-number">02</p><div><p class="section-label">OUR HISTORY</p><h2 id="team-history-heading">挑戦を、次の世代へ。</h2></div></header>
+      <div class="team-story-body"><p>自動車部の学生フォーミュラ班としての活動を前身に、2009年、Waseda Formula Projectが発足。初出場から完走、全種目完遂へと、一歩ずつ経験を積み重ねてきました。先輩たちが残した技術と試行錯誤を受け継ぎ、次の一台へとつないでいます。</p>
+        <ol class="team-history-list">
+          <li><time>2009</time><div><h3>WFP発足</h3><p>Waseda Formula Projectとして、新たなスタートを切る。</p></div></li>
+          <li><time>2011</time><div><h3>大会初出場</h3><p>WFPとして初めて学生フォーミュラの舞台へ。</p></div></li>
+          <li><time>2013</time><div><h3>初のエンデュランス完走</h3><p>走り切る力を証明し、次の挑戦への足掛かりを築く。</p></div></li>
+          <li><time>2016</time><div><h3>初の全種目完遂</h3><p>チームとして初めて全種目を完遂。総合17位を獲得。</p></div></li>
+          <li><time>2019</time><div><h3>4年連続の全種目完遂</h3><p>継続的な開発と経験の蓄積により、総合16位を獲得。</p></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="team-story-section" aria-labelledby="team-formula-heading">
+      <header class="team-story-heading"><p class="team-section-number">03</p><div><p class="section-label">FORMULA STUDENT</p><h2 id="team-formula-heading">速さの先にある、<br />ものづくりの総合力。</h2></div></header>
+      <div class="team-story-body"><p>学生フォーミュラは、学生が自ら構想・設計・製作した車両で、ものづくりの総合力を競う競技です。コース上の速さだけでなく、設計の考え方、製造コスト、事業としての提案までが評価の対象。マシンをつくる力と、その価値を説明する力の両方が問われます。</p>
+        <div class="team-formula-grid">
+          <article><p class="section-label">INSPECTION</p><h3>車検</h3><p>車両が安全性やルールの要件を満たしているかを確認。走行による審査へ進むための最初の関門です。</p></article>
+          <article><p class="section-label">STATIC EVENTS</p><h3>静的審査</h3><p>設計の妥当性、製造コスト、プレゼンテーションを通じて、開発の根拠と車両の価値を伝えます。</p></article>
+          <article><p class="section-label">DYNAMIC EVENTS</p><h3>動的審査</h3><p>加速、旋回、周回走行などを通じて、マシンの運動性能や信頼性、効率を確かめます。</p></article>
+        </div>
+      </div>
     </section>
     <section class="team-organization" aria-labelledby="team-organization-heading">
-      <header class="team-section-heading"><p class="team-section-number">02</p><div><p class="section-label">ORGANIZATION</p><h2 id="team-organization-heading">チーム体制</h2></div><p><strong>{teamMemberCount}</strong><span>MEMBERS</span></p></header>
+      <header class="team-section-heading"><p class="team-section-number">04</p><div><p class="section-label">ORGANIZATION</p><h2 id="team-organization-heading">チーム体制</h2></div><p><strong>{teamMemberCount}</strong><span>MEMBERS</span></p></header>
       {teamMemberCount ? (
         <div class="team-divisions">
           {groups.map((group, groupIndex) => (
@@ -104,8 +126,38 @@ const teamMemberCount = members.length;
       ) : (<div class="team-empty"><p class="section-label">MEMBERS COMING SOON</p><p>メンバー情報はmicroCMSから追加できます。</p></div>)}
     </section>
     <section class="team-activity" aria-labelledby="team-activity-heading">
-      <p class="team-section-number">03</p><div><p class="section-label">ACTIVITY</p><h2 id="team-activity-heading">設計から大会まで。</h2></div>
-      <p>車両開発だけでなく、スポンサー対応、広報、コスト審査、プレゼンテーションまで、チーム運営のすべてが活動領域です。</p>
+      <p class="team-section-number">05</p><div><p class="section-label">ACTIVITY</p><h2 id="team-activity-heading">一台を走らせる、<br />すべてを自分たちで。</h2></div>
+      <p>車両の企画・設計・製作から、テスト走行、セッティング、ドライビングまで。さらに、資金やスケジュールの管理、スポンサーの皆さまとの連携、広報も学生自身が担います。異なる専門性を持つメンバーが力を合わせ、開発と運営の両面からチームを支えています。</p>
     </section>
   </div>
 </WireframeLayout>
+
+<style>
+  .team-story-copy, .team-story-body { color: #bdbdbd; font-size: 16px; line-height: 1.9; }
+  .team-story-copy p, .team-story-body > p { margin: 0 0 1.3em; }
+  .team-story-copy p:last-child { margin-bottom: 0; }
+  .team-story-copy .team-philosophy { color: #f4f4f4; font-weight: 700; }
+  .team-story-section { padding: clamp(56px, 7vw, 100px) 0; border-top: 1px solid #333; }
+  .team-story-heading { display: grid; grid-template-columns: clamp(70px, 8vw, 120px) minmax(0, 1fr); gap: clamp(28px, 5vw, 80px); align-items: start; margin-bottom: 36px; }
+  .team-story-heading h2 { margin: 0; font-size: clamp(28px, 3.2vw, 44px); font-weight: 700; line-height: 1.3; letter-spacing: -.035em; }
+  .team-story-body { margin-left: calc(clamp(70px, 8vw, 120px) + clamp(28px, 5vw, 80px)); }
+  .team-story-body > p { max-width: 850px; }
+  .team-history-list { list-style: none; padding: 0; margin: 36px 0 0; }
+  .team-history-list li { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 24px; padding: 22px 0; border-top: 1px solid #333; }
+  .team-history-list time { color: #cc7890; font-size: 24px; font-weight: 700; }
+  .team-history-list h3, .team-formula-grid h3 { margin: 0 0 8px; color: #f4f4f4; font-size: 20px; font-weight: 700; line-height: 1.4; }
+  .team-history-list p, .team-formula-grid article > p:last-child { margin: 0; }
+  .team-formula-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 36px; }
+  .team-formula-grid article { border-top: 3px solid #800020; padding-top: 20px; }
+  .team-formula-grid .section-label { color: #aaa; }
+  @media (max-width: 700px) {
+    .team-story-copy { grid-column: 2; }
+    .team-story-copy, .team-story-body { font-size: 15px; line-height: 1.8; }
+    .team-story-heading { grid-template-columns: 54px minmax(0, 1fr); gap: 18px; }
+    .team-story-body { margin-left: 0; }
+    .team-history-list li { grid-template-columns: 64px minmax(0, 1fr); gap: 16px; }
+    .team-history-list time { font-size: 21px; }
+    .team-formula-grid { grid-template-columns: 1fr; gap: 28px; }
+  }
+</style>
+
