@@ -101,6 +101,18 @@ body { padding-bottom: 0; overflow-x: visible; }
 }
 .site-footer { align-items: center; }
 .site-footer .section-label { margin-bottom: 0; }
+.site-footer .footer-signature {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.site-footer .footer-signature::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  background: var(--wfp-burgundy);
+}
 .site-footer::after {
   content: "";
   position: absolute;
