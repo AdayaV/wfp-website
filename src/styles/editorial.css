@@ -174,3 +174,25 @@ body { padding-bottom: 0; overflow-x: visible; }
   .roadmap-timing .home-roadmap-countdown strong { font-size: clamp(26px, 8vw, 34px); }
   .roadmap-timing .home-roadmap-countdown > div:nth-child(n+2)::before { font-size: clamp(25px, 7.8vw, 32px); }
 }
+
+/* Match both header labels and the vertical centres of their main content. */
+@media (min-width: 1001px) {
+  .home-roadmap-heading { align-items: flex-start; }
+  .home-roadmap-heading > div:first-child { min-width: 0; }
+  .home-roadmap-heading .section-label,
+  .home-roadmap-heading .roadmap-timing-label {
+    box-sizing: border-box;
+    height: 18px;
+    line-height: 18px;
+    padding-block: 0;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+  .home-roadmap-heading h2 {
+    display: flex;
+    align-items: center;
+    min-height: 62px;
+    margin-block: 0;
+  }
+  .home-roadmap-heading .home-roadmap-countdown { min-height: 62px; align-items: center; }
+}
