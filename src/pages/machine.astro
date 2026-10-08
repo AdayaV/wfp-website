@@ -172,6 +172,11 @@ const machineAnchor = (id: string) => `machine-${id}`;
 
   .machine-empty { min-height: 180px; padding: 32px 0; place-content: start; text-align: left; color: #aaa; }
 
+  @media (max-width: 767px) {
+    /* Keep copy clear of the fixed SNS rail without narrowing the photos. */
+    .machine-record-details { padding-right: 40px; }
+  }
+
   @media (max-width: 760px) {
     .machine-page .machine-archive { padding: 32px 0 64px; }
     .machine-archive > .machine-archive-heading { gap: 16px; margin-bottom: 20px; }
