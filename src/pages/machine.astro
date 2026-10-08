@@ -1,20 +1,190 @@
 ---
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getMachines } from '../data/machines';
+import { getMachineImageAttributes } from '../utils/machineImages';
+
 const machines = await getMachines();
+const machineAnchor = (id: string) => `machine-${id}`;
 ---
 
 <WireframeLayout title="マシン">
-  <main class="machine-page">
+  <div class="machine-page">
     <header class="machine-hero">
       <p class="section-label">WASEDA FORMULA PROJECT</p>
       <h1><strong>WFP</strong><span>MACHINES</span></h1>
-      <p>WFPが設計・製作してきた車両を、年度ごとに紹介します。</p>
+      <p>WFPが設計・製作してきた歴代マシンを、車両諸元や大会での記録とともに紹介します。</p>
     </header>
+
     <section class="machine-archive" aria-labelledby="machine-archive-heading">
-      <header><p class="machine-section-number">01</p><div><p class="section-label">MACHINE ARCHIVE</p><h2 id="machine-archive-heading">歴代マシン</h2></div><p><strong>{machines.length}</strong><span>MACHINES</span></p></header>
-      {machines.length ? <ol class="machine-grid">{machines.map((machine, index) => <li><figure><div class="machine-grid-media"><img src={machine.image} width={machine.width} height={machine.height} alt={`${machine.year}年度マシン`} loading={index > 1 ? 'lazy' : 'eager'} /></div><figcaption><span>{String(index + 1).padStart(2, '0')}</span><strong>{machine.year}</strong><small>WFP MACHINE</small></figcaption></figure></li>)}</ol> : <div class="machine-empty"><p class="section-label">ARCHIVE COMING SOON</p><p>歴代マシンの写真はmicroCMSから追加できます。</p></div>}
+      <header class="machine-archive-heading">
+        <div>
+          <p class="section-label">MACHINE ARCHIVE</p>
+          <h2 id="machine-archive-heading">歴代マシン</h2>
+        </div>
+        <p class="machine-archive-count"><strong>{machines.length}</strong><span>MACHINES</span></p>
+      </header>
+
+      {machines.length ? (
+        <>
+          <nav class="machine-year-nav" aria-label="年度からマシンを探す">
+            <ul>
+              {machines.map((machine) => (
+                <li><a href={`#${machineAnchor(machine.id)}`} aria-label={`${machine.name}を見る`}>{machine.year}</a></li>
+              ))}
+            </ul>
+          </nav>
+
+          <ol class="machine-records">
+            {machines.map((machine, index) => (
+              <li>
+                <article class="machine-record" id={machineAnchor(machine.id)} aria-labelledby={`${machineAnchor(machine.id)}-title`}>
+                  <div class:list={['machine-record-photo', { 'has-no-photo': !machine.image }]}>
+                    {machine.image ? (
+                      <img
+                        {...getMachineImageAttributes(machine.image)}
+                        width={machine.width}
+                        height={machine.height}
+                        alt={machine.imageAlt || machine.name}
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                    ) : (
+                      <p>写真準備中</p>
+                    )}
+                  </div>
+
+                  <div class="machine-record-details">
+                    <header>
+                      <p class="machine-record-year">{machine.year} SEASON</p>
+                      <h3 id={`${machineAnchor(machine.id)}-title`}>{machine.name}</h3>
+                    </header>
+
+                    {machine.description && <p class="machine-record-description">{machine.description}</p>}
+
+                    {(machine.competitionResult || machine.awards.length > 0) && (
+                      <section class="machine-achievements" aria-labelledby={`${machineAnchor(machine.id)}-results`}>
+                        <h4 id={`${machineAnchor(machine.id)}-results`}>成績・受賞</h4>
+                        {machine.competitionResult && <p class="machine-result">{machine.competitionResult}</p>}
+                        {machine.awards.length > 0 && (
+                          <ul class="machine-awards">
+                            {machine.awards.map((award) => <li>{award}</li>)}
+                          </ul>
+                        )}
+                      </section>
+                    )}
+
+                    {machine.specifications.length > 0 && (
+                      <section class="machine-specifications" aria-labelledby={`${machineAnchor(machine.id)}-specifications`}>
+                        <h4 id={`${machineAnchor(machine.id)}-specifications`}>車両諸元</h4>
+                        <dl>
+                          {machine.specifications.map((specification) => (
+                            <div><dt>{specification.label}</dt><dd>{specification.value}</dd></div>
+                          ))}
+                        </dl>
+                      </section>
+                    )}
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ol>
+        </>
+      ) : (
+        <div class="machine-empty"><p class="section-label">ARCHIVE COMING SOON</p><p>歴代マシンの情報は公開準備中です。</p></div>
+      )}
     </section>
-  </main>
+  </div>
 </WireframeLayout>
+
+<style>
+  .machine-page .machine-archive {
+    padding: 40px 0 96px;
+    color: #f4f4f4;
+    background: transparent;
+    border-top: 1px solid #333;
+  }
+
+  .machine-archive > .machine-archive-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .machine-archive-heading .section-label { margin: 0 0 8px; }
+  .machine-archive-heading h2 { margin: 0; }
+  .machine-archive .machine-archive-count { display: flex; gap: 4px; color: #aaa; }
+  .machine-archive .machine-archive-count strong { color: #f4f4f4; font-size: 32px; font-weight: 500; }
+
+  .machine-year-nav { margin-bottom: 48px; }
+  .machine-year-nav ul { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 0; padding: 0; list-style: none; }
+  .machine-year-nav a {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    border-bottom: 2px solid transparent;
+    color: #bdbdbd;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+  .machine-year-nav a:hover { border-color: var(--wfp-burgundy); color: #fff; }
+  .machine-year-nav a:focus-visible { outline: 2px solid var(--wfp-accent-on-dark); outline-offset: 4px; color: #fff; }
+
+  .machine-records { margin: 0; padding: 0; list-style: none; }
+  .machine-records > li + li { margin-top: 64px; padding-top: 64px; border-top: 1px solid #333; }
+  .machine-record {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(28px, 4vw, 64px);
+    scroll-margin-top: 120px;
+  }
+  .machine-record-photo {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: #121212;
+  }
+  .machine-record-photo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .machine-record-photo.has-no-photo { border: 1px solid #252525; background: #0b0b0b; }
+  .machine-record-photo > p { margin: 0; color: #888; font-size: 12px; letter-spacing: .08em; }
+
+  .machine-record-details { min-width: 0; }
+  .machine-record-year { margin: 0 0 6px; color: #a5a5a5; font-size: 11px; font-weight: 500; letter-spacing: .12em; }
+  .machine-record h3 { margin: 0; color: #fff; font-size: clamp(30px, 3.5vw, 46px); font-weight: 700; line-height: 1.2; letter-spacing: -.04em; overflow-wrap: anywhere; }
+  .machine-record-description { margin: 22px 0 0; color: #c6c6c6; font-size: 15px; line-height: 1.8; white-space: pre-line; }
+  .machine-achievements, .machine-specifications { margin-top: 30px; }
+  .machine-record h4 { margin: 0 0 12px; color: #a5a5a5; font-size: 12px; font-weight: 500; line-height: 1.5; letter-spacing: .08em; }
+  .machine-result { margin: 0; color: #f4f4f4; font-size: 16px; line-height: 1.7; white-space: pre-line; }
+  .machine-awards { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .machine-result + .machine-awards { margin-top: 12px; }
+  .machine-awards li { padding-left: 14px; border-left: 3px solid var(--wfp-burgundy); color: #f4f4f4; font-size: 17px; font-weight: 600; line-height: 1.6; }
+
+  .machine-specifications dl { margin: 0; border-top: 1px solid #383838; }
+  .machine-specifications dl > div { display: grid; grid-template-columns: minmax(84px, .75fr) minmax(0, 1.25fr); gap: 18px; padding: 11px 0; border-bottom: 1px solid #292929; }
+  .machine-specifications dt, .machine-specifications dd { margin: 0; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+  .machine-specifications dt { color: #aaa; }
+  .machine-specifications dd { color: #eee; }
+
+  .machine-empty { min-height: 180px; padding: 32px 0; place-content: start; text-align: left; color: #aaa; }
+
+  @media (max-width: 760px) {
+    .machine-page .machine-archive { padding: 32px 0 64px; }
+    .machine-archive > .machine-archive-heading { gap: 16px; margin-bottom: 20px; }
+    .machine-archive .machine-archive-count strong { font-size: 26px; }
+    .machine-archive .machine-archive-count span { font-size: 9px; }
+    .machine-year-nav { margin-bottom: 30px; }
+    .machine-year-nav ul { gap: 4px 18px; }
+    .machine-record { grid-template-columns: minmax(0, 1fr); gap: 24px; scroll-margin-top: 104px; }
+    .machine-records > li + li { margin-top: 40px; padding-top: 40px; }
+    .machine-record h3 { font-size: clamp(30px, 8vw, 40px); }
+    .machine-achievements, .machine-specifications { margin-top: 24px; }
+    .machine-specifications dl > div { grid-template-columns: minmax(76px, .7fr) minmax(0, 1.3fr); gap: 16px; }
+    .machine-specifications dt, .machine-specifications dd { font-size: 13px; }
+  }
+</style>
 
