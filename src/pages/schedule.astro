@@ -2,7 +2,7 @@
 import WireframeLayout from '../layouts/WireframeLayout.astro';
 import { getScheduleItems } from '../data/schedule';
 
-const scheduleItems = await getScheduleItems();
+const scheduleItems = (await getScheduleItems()).map((item, order) => ({ ...item, order }));
 
 const phases = [
   { id: 'development', label: 'DEVELOPMENT', title: '設計・製作' },
@@ -34,7 +34,7 @@ const phases = [
             </header>
             <ol class="schedule-list">
               {items.map((item, itemIndex) => (
-                <li class:list={{ 'is-next': item.isNext }}>
+                <li data-schedule-order={item.order} data-event-end={item.endsAt} class:list={{ 'is-next': item.isNext }}>
                   <p class="schedule-sequence">{String(itemIndex + 1).padStart(2, '0')}</p>
                   <time datetime={item.startDateIso}>{item.date}</time>
                   <div>
@@ -58,3 +58,20 @@ const phases = [
     )}
   </div>
 </WireframeLayout>
+
+<script>
+  import { nextScheduleIndex } from '../data/schedule-dates';
+
+  // Phase sections group the rows differently from the chronological CMS order.
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-schedule-order]'))
+    .sort((a, b) => Number(a.dataset.scheduleOrder) - Number(b.dataset.scheduleOrder));
+  if (rows.length) {
+    const endTimes = rows.map(row => Number(row.dataset.eventEnd));
+    const syncNext = () => {
+      const next = nextScheduleIndex(endTimes, Date.now());
+      rows.forEach((row, index) => row.classList.toggle('is-next', index === next));
+    };
+    syncNext();
+    window.setInterval(syncNext, 60000);
+  }
+</script>

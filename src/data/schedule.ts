@@ -1,3 +1,5 @@
+import { endOfScheduleDay, nextScheduleIndex } from './schedule-dates.ts';
+
 export type SchedulePhase = 'DEVELOPMENT' | 'TEST' | 'EVENT';
 
 export interface MicroCMSImage {
@@ -38,12 +40,10 @@ export interface ScheduleItem {
   summary?: string;
   startDateIso: string;
   endDateIso?: string;
-  isNext?: boolean;
+  endsAt: number;
+  isComplete: boolean;
+  isNext: boolean;
 }
-
-const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
-const apiKey = import.meta.env.MICROCMS_API_KEY;
-const eventsEndpoint = import.meta.env.MICROCMS_EVENTS_ENDPOINT || 'events';
 
 function formatDate(value: string) {
   const parts = new Intl.DateTimeFormat('ja-JP', {
@@ -64,6 +64,9 @@ function formatDateRange(startDate: string, endDate?: string) {
 }
 
 export async function getScheduleItems(): Promise<ScheduleItem[]> {
+  const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+  const apiKey = import.meta.env.MICROCMS_API_KEY;
+  const eventsEndpoint = import.meta.env.MICROCMS_EVENTS_ENDPOINT || 'events';
   if (!serviceDomain || !apiKey) {
     console.warn('microCMS is not configured. Schedule pages will be built without events.');
     return [];
@@ -84,13 +87,14 @@ export async function getScheduleItems(): Promise<ScheduleItem[]> {
   }
 
   const data = await response.json() as MicroCMSListResponse;
-  const now = Date.now();
-  const nextEventIndex = data.contents.findIndex((entry) => {
-    const finalDate = entry.endDate || entry.startDate;
-    return new Date(finalDate).getTime() >= now;
-  });
+  return buildScheduleItems(data.contents);
+}
 
-  return data.contents.map((entry, index) => ({
+export function buildScheduleItems(entries: MicroCMSEventEntry[], now = Date.now()): ScheduleItem[] {
+  const endTimes = entries.map(entry => endOfScheduleDay(entry.endDate || entry.startDate));
+  const nextEventIndex = nextScheduleIndex(endTimes, now);
+
+  return entries.map((entry, index) => ({
     id: entry.id,
     date: formatDateRange(entry.startDate, entry.endDate),
     title: entry.title,
@@ -100,6 +104,8 @@ export async function getScheduleItems(): Promise<ScheduleItem[]> {
     summary: entry.summary,
     startDateIso: entry.startDate,
     endDateIso: entry.endDate,
-    isNext: index === (nextEventIndex >= 0 ? nextEventIndex : Math.max(0, data.contents.length - 1)),
+    endsAt: endTimes[index],
+    isComplete: now >= endTimes[index],
+    isNext: index === nextEventIndex,
   }));
 }

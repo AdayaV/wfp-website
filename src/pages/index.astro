@@ -12,13 +12,6 @@ const sponsorTiers = await getSponsorTiers();
 const platinumSponsors = sponsorTiers.find((tier) => tier.id === 'platinum')?.sponsors ?? [];
 const scheduleItems = await getScheduleItems();
 const calendarItems = scheduleItems;
-// End dates include the entire final calendar day in Japan.
-const eventEnd = (iso: string) => {
-  const date = new Date(iso);
-  if (!Number.isFinite(date.getTime())) return Infinity;
-  const day = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(date);
-  return new Date(day + 'T00:00:00+09:00').getTime() + 86400000;
-};
 ---
 
 <WireframeLayout title="ホーム">
@@ -90,14 +83,14 @@ const eventEnd = (iso: string) => {
       <>
         <div class="home-roadmap-track" data-drag-scroll>
           {calendarItems.map((event, index) => (
-            <article class:list={['home-roadmap-card', { 'is-complete': Date.now() >= eventEnd(event.endDateIso || event.startDateIso) }]} data-event-end={eventEnd(event.endDateIso || event.startDateIso)} aria-current={event.isNext ? 'date' : undefined}>
+            <article class:list={['home-roadmap-card', { 'is-complete': event.isComplete }]} data-event-end={event.endsAt} aria-current={event.isNext ? 'date' : undefined}>
               <div class="home-roadmap-visual" aria-hidden="true">
                 {event.image && <img src={event.image} alt="" />}
                 <span>0{index + 1}</span>
               </div>
               <div class="home-roadmap-card-copy">
                 <div class="home-roadmap-meta"><p>{event.date}</p><span>{event.phase}</span></div>
-                <p class="roadmap-event-status" data-event-status>{Date.now() >= eventEnd(event.endDateIso || event.startDateIso) ? '終了' : '開催予定'}</p>
+                <p class="roadmap-event-status" data-event-status>{event.isComplete ? '終了' : '開催予定'}</p>
                 <h3>{event.title}</h3>
                 {event.location && <p class="home-roadmap-location">{event.location}</p>}
               </div>
@@ -338,7 +331,7 @@ const eventEnd = (iso: string) => {
       track.addEventListener('lostpointercapture', release);
       track.addEventListener('wheel', cancelSnap, { passive: true });
       track.addEventListener('scroll', queueSnap, { passive: true });
-      const initial = cards.find((card) => card.getAttribute('aria-current') === 'date') ?? cards[0];
+      const initial = cards.find((card) => !card.classList.contains('is-complete')) ?? cards[0];
       window.setTimeout(() => {
         if (initial instanceof HTMLElement) {
           track.scrollLeft = initial.offsetLeft - (track.clientWidth - initial.clientWidth) / 2;
